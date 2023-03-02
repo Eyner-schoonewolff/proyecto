@@ -1,27 +1,27 @@
-from flask import request
 import json
 
-class Login(object):
-    def __init__(self) -> None:
-        with open("informacion/cuentas.json", "r") as j:
-            self.__cuenta = json.load(j)
 
-    def __request_usuario(self):
-        return request.get_json()
+class Login:
+    def __init__(self, usuario, contraseña) -> None:
+        self.email=usuario
+        self.contraseña=contraseña
+        self.cuenta=self.cuentas()
 
-    @property
     def cuentas(self):
-        return self.__cuenta
-    
-    @cuentas.setter
-    def cuentas(self,cuentas):
-        self.__cuenta=cuentas
+        with open("informacion/cuentas.json", "r") as j:
+            self.cuenta = json.load(j)
+            return self.cuenta
 
     def usuario(self) -> bool:
-        email = self.__request_usuario()['email']
-        contraseña = self.__request_usuario()['contraseña']
+        email = self.email
+        contraseña = self.contraseña
 
-        for user in self.cuentas:
+        for user in self.cuenta:
             if (user['usuario'] == email and user['contraseña'] == contraseña):
                 return True
         return False
+
+
+class Registro(Login):
+    def __init__(self) -> None:
+        super().__init__()
