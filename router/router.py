@@ -12,19 +12,24 @@ verificacion = Login()
 
 @login.route("/", methods=["GET"])
 def index():
-    return render_template("/index.html")
+    # session['login']=False
+    logueado=session.get('login')
+    if not logueado:
+        return render_template("/index.html")
+    else:
+        return redirect(url_for('login.home'))
 
 
 @login.route("/home")
 def home():
     username = session.get('username')
     logueado = session.get('login')
-    print(logueado)
+    # print(logueado)
     if logueado:
-        session['login'] = True
+        # session['login'] = True
         return render_template("home.html", nombre=username)
     else:
-        session['login'] = False
+        # session['login'] = False
         return redirect(url_for('login.index'))
 
 
