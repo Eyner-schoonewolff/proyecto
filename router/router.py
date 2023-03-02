@@ -7,13 +7,19 @@ login = Blueprint('login', __name__, static_url_path='/static',
 
 login_manager = LoginManager()
 
-verificacion = Login()
+
+@login.route("/registrar")
+def registro():
+    logueado=session.get('login')
+    if not logueado:
+        return render_template("registrar.html")    
+    else:
+        return redirect(url_for('login.home'))
 
 
 @login.route("/", methods=["GET"])
 def index():
-    # session['login']=False
-    logueado=session.get('login')
+    logueado = session.get('login')
     if not logueado:
         return render_template("/index.html")
     else:
@@ -24,12 +30,12 @@ def index():
 def home():
     username = session.get('username')
     logueado = session.get('login')
-    # print(logueado)
+    print(logueado)
     if logueado:
-        # session['login'] = True
+        session['login'] = True
         return render_template("home.html", nombre=username)
     else:
-        # session['login'] = False
+        session['login'] = False
         return redirect(url_for('login.index'))
 
 
@@ -37,6 +43,9 @@ def home():
 def auth():
     usuario = request.get_json()
     email = usuario['email']
+    contraseña = usuario['contraseña']
+
+    verificacion = Login(usuario=email, contraseña=contraseña)
 
     if verificacion.usuario():
         session['login'] = True
@@ -53,3 +62,6 @@ def logout():
     logout_user()
     session['login'] = False
     return redirect(url_for('login.index'))
+
+
+
