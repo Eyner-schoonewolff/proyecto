@@ -1,0 +1,22 @@
+[
+    {
+        "rol": "cliente",
+        "usuario": "eyner_s",
+        "contraseña": "1234"
+    },
+    {
+        "rol": "contratista",
+        "usuario": "juan_12",
+        "contraseña": "123456"
+    },
+    {
+        "rol": "cliente",
+        "usuario": "laritza_",
+        "contraseña": "1010"
+    },
+    {
+        "rol": "contratista",
+        "usuario": "Miguel2003",
+        "contraseña": "0101"
+    }
+]
