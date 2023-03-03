@@ -8,5 +8,5 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'secret-key-goes-here'
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=3000)
 

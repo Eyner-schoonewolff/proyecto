@@ -1,11 +1,11 @@
 
 document.querySelector("#BotonLogin").addEventListener('click', () => {
     email = document.querySelector("#inputEmail").value
-    contraseña = document.querySelector("#inputContraseña").value
+    contrasenia = document.querySelector("#inputcontrasenia").value
 
     var datos = {
         email,
-        contraseña
+        contrasenia
     }
     $.ajax({
         url: '/auth',

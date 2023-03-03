@@ -27,12 +27,18 @@
                         <div class="card-body p-5">
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-8">
-                                    <form action="../usuario" method="POST" id="formulario">
+                                    <div id="formulario">
                                         <h2 class="fw-bold mb-5">Registro de cuenta</h2>
 
                                         <div class="form-outline mb-4">
                                             <label class="form-label">Rol</label>
-                                            <input id="rol" type="text" name="rol" class="form-control" />
+                                            <div class="form-group">
+                                                <select id="rol" type="text" name="rol" class="form-control text-center"
+                                                    id="select">
+                                                    <option value="cliente">cliente</option>
+                                                    <option value="contratista">contratista</option>
+                                                </select>
+                                            </div>
                                         </div>
 
                                         <!-- Email input -->
@@ -43,20 +49,20 @@
 
                                         <!-- Password input -->
                                         <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example4">Contraseña</label>
-                                            <input id="contraseña" type="password" name="contraseña"
+                                            <label class="form-label" for="form3Example4">contrasenia</label>
+                                            <input id="contrasenia" type="password" name="contrasenia"
                                                 class="form-control" />
                                         </div>
 
 
                                         <div class="mb-4 row justify-content-center">
-                                            <button type="submit" id="btn-registro"
+                                            <button type="button" id="btn-registro"
                                                 class="mb-1 m-1 p-2 btn btn-primary btn-lg btn-block"
                                                 disabled>Registrarte</button>
 
                                         </div>
+                                    </div>
                                 </div>
-                                </form>
 
                             </div>
                         </div>
@@ -71,6 +77,7 @@
 </body>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/button.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/registrar_usuario.js') }}"></script>
 
 
 </html>
