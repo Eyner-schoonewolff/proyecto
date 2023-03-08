@@ -30,7 +30,7 @@ def auth_register():
     if registro_usuario.existe(rol=rol, usuario=usuario, contrasenia=contrasenia):
         return {"registro": False, "home": "/registrar"}
 
-    print(registro_usuario.agregar())
+    registro_usuario.agregar()
     return {"registro": True, "home": "/"}
 
 
@@ -46,10 +46,11 @@ def index():
 @login.route("/home")
 def home():
     username = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login')
     if logueado:
         session['login'] = True
-        return render_template("home.html", nombre=username)
+        return render_template("home.html", nombre=username,tipo=tipo_usuario)
     else:
         session['login'] = False
         return redirect(url_for('login.index'))
@@ -63,10 +64,10 @@ def auth():
 
     verificacion = Login(usuario=email, contrasenia=contrasenia)
 
-    print(verificacion.cuentas())
     if verificacion.usuario():
         session['login'] = True
-        session['username'] = email
+        session['username'] = verificacion.nombre_usuario()
+        session['tipo_usuario']=verificacion.tipo_usuario()
         return {"login": True, "home": "/home"}
 
     session['login'] = False
