@@ -1,8 +1,9 @@
 document.querySelector('#formulario').addEventListener('keyup', () => {
+    const usuario =document.querySelector('#usuario')
+    const contrasenia =document.querySelector('#contrasenia')
     const btn = document.querySelector('#btn-registro')
-    const form = document.querySelector('#formulario')
     let desativar=false
-    if (form.rol.value == '' || form.usuario.value == '' || form.contraseña.value == '') {
+    if (usuario.value == '' || contrasenia.value == '') {
         desativar = true
     }
     if (desativar == true) {

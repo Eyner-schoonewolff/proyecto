@@ -26,37 +26,60 @@
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
                             <div class="row d-flex justify-content-center">
-                                <div class="col-lg-8">
-                                    <form action="../usuario" method="POST" id="formulario">
+                                <div class="col-lg-12">
+                                    <div id="formulario">
                                         <h2 class="fw-bold mb-5">Registro de cuenta</h2>
 
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label">Rol</label>
-                                            <input id="rol" type="text" name="rol" class="form-control" />
+                                        <div class="form-outline mb-4 m-1">
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <label class="form-label" for="form3Example3">Tipo de Usuario</label>
+                                                    <select id="rol" type="text" name="rol"
+                                                        class="form-control text-center" id="select">
+                                                        <option value="cliente">cliente</option>
+                                                        <option value="contratista">contratista</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-6">
+                                                    <label class="form-label" for="form3Example3">Usuario</label>
+                                                    <input id="usuario" type="text" name="usuario"
+                                                        class="form-control" required />
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <label for="ciudad" class="m-2">Ciudad</label>
+                                                    <input type="text" class="form-control" name="ciudad"
+                                                        placeholder="Nombre Ciudad" required>
+                                                </div>
+                                                <div class="col">
+                                                    <label for="titulos" class="m-2">Titulos</label>
+                                                    <input type="text" class="form-control" name="titulos"
+                                                        placeholder="Cantidad de titulos" required>
+                                                </div>
+
+                                            </div>
                                         </div>
 
-                                        <!-- Email input -->
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example3">Usuario</label>
-                                            <input id="usuario" type="text" name="usuario" class="form-control" />
-                                        </div>
+
 
                                         <!-- Password input -->
-                                        <div class="form-outline mb-4">
-                                            <label class="form-label" for="form3Example4">Contraseña</label>
-                                            <input id="contraseña" type="password" name="contraseña"
+                                        <!-- <div class="form-outline mb-4">
+                                            <label class="form-label" for="form3Example4">contrasenia</label>
+                                            <input id="contrasenia" type="password" name="contrasenia"
                                                 class="form-control" />
-                                        </div>
+                                        </div> -->
 
 
                                         <div class="mb-4 row justify-content-center">
-                                            <button type="submit" id="btn-registro"
+                                            <button type="button" id="btn-registro"
                                                 class="mb-1 m-1 p-2 btn btn-primary btn-lg btn-block"
                                                 disabled>Registrarte</button>
 
                                         </div>
+                                    </div>
                                 </div>
-                                </form>
 
                             </div>
                         </div>
@@ -71,6 +94,7 @@
 </body>
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/button.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/registrar_usuario.js') }}"></script>
 
 
 </html>
