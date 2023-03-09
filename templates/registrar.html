@@ -31,49 +31,63 @@
                                         <h2 class="fw-bold mb-5">Registro de cuenta</h2>
 
                                         <div class="form-outline mb-5">
-                                            <div class="row" >
-                                       
+
+                                            <div class="row">
                                                 <div class="col mb-2">
-                                                        <label class="form-label" for="form3Example3">nombre</label>
-                                                        <input id="usuario" type="text" name="usuario"
-                                                            class="form-control" required />
-    
+                                                    <label for="email" class="m-2">email</label>
+                                                    <input id="email" type="email" class="form-control" name="email"
+                                                        placeholder="" required>
+                                                </div>
+                                                <div class="col mb-2">
+                                                    <label for="password" class="m-2">contraseña</label>
+                                                    <input id="contrasenia" type="password" class="form-control"
+                                                        name="contrasenia" placeholder="contraseña" required>
                                                 </div>
 
                                             </div>
                                             <div class="row">
                                                 <div class="col-6 mb-2">
-                                                    <label class="form-label" for="form3Example3">Tipo de Usuario</label>
+                                                    <label class="form-label" for="form3Example3">Tipo de
+                                                        Usuario</label>
                                                     <select id="rol" type="text" name="rol"
                                                         class="form-control text-center" id="select">
-                                                        <option value="cliente">cliente</option>
-                                                        <option value="contratista">contratista</option>
+                                                        <option value="2">contratista</option>
+                                                        <option value="3">cliente</option>
                                                     </select>
                                                 </div>
+
                                                 <div class="col-6 mb-2">
-                                                        <label class="form-label" for="form3Example3">Tipo de documetno</label>
-                                                        <select id="documento" type="text" name="documento"
-                                                            class="form-control text-center" id="select">
-                                                            <option value="C.C">C.C</option>
-                                                            <option value="C.E">C.E</option>
-                                                        </select>
+                                                    <label class="form-label" for="form3Example3">nombre</label>
+                                                    <input id="nombre" type="text" name="nombre" class="form-control"
+                                                        required />
+
+                                                </div>
+
+
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col-6 mb-2">
+                                                    <label class="form-label" for="form3Example3">Tipo de
+                                                        documetno</label>
+                                                    <select id="documento" type="text" name="documento"
+                                                        class="form-control text-center" id="select">
+                                                        <option value="1">C.C</option>
+                                                        <option value="2">C.E</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-6 mb-2">
+                                                    <label class="form-label" for="form3Example3">Numero de
+                                                        documento</label>
+                                                    <input id="numeroDocumento" type="number" name="documento" min="4"
+                                                        max="12" class="form-control" required />
+
                                                 </div>
 
                                             </div>
-                                            <div class="row" >
-                                                <div class="col mb-2">
-                                                    <label for="email" class="m-2">email</label>
-                                                    <input type="email" class="form-control" name="email"
-                                                        placeholder="" required>
-                                                </div>
-                                                <div class="col mb-2">
-                                                    <label for="password" class="m-2">contraseña</label>
-                                                    <input type="password" class="form-control" name="titulos"
-                                                        placeholder="contraseña" required>
-                                                </div>
 
-                                            </div>
-                                   
+
                                         </div>
 
                                         <div class="mb-4 row justify-content-center">
