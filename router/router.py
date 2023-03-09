@@ -20,18 +20,21 @@ def registro():
 @login.route("/auth_register", methods=["POST"])
 def auth_register():
     usuario_nuevo = request.get_json()
-    rol = usuario_nuevo['rol']
-    usuario = usuario_nuevo['usuario']
+    email = usuario_nuevo['email']
     contrasenia = usuario_nuevo['contrasenia']
+    rol = int(usuario_nuevo['rol'])
+    nombre = usuario_nuevo['nombre']
+    tipo_documento = int(usuario_nuevo['tipo_documento'])
+    numero_documento = int(usuario_nuevo['numero_documento'])
 
-    registro_usuario = RegistroUsuario(
-        rol=rol, usuario=usuario, contrasenia=contrasenia)
+    registro_usuario = RegistroUsuario(email=email, contrasenia=contrasenia, rol=rol,
+                                       nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento)
 
-    if registro_usuario.existe(rol=rol, usuario=usuario, contrasenia=contrasenia):
+    if registro_usuario.existe(email=email, numero_documento=numero_documento):
         return {"registro": False, "home": "/registrar"}
-
-    registro_usuario.agregar()
-    return {"registro": True, "home": "/"}
+    else:
+        registro_usuario.agregar()
+        return {"registro": True, "home": "/"}
 
 
 @login.route("/", methods=["GET"])
@@ -50,7 +53,7 @@ def home():
     logueado = session.get('login')
     if logueado:
         session['login'] = True
-        return render_template("home.html", nombre=username,tipo=tipo_usuario)
+        return render_template("home.html", nombre=username, tipo=tipo_usuario)
     else:
         session['login'] = False
         return redirect(url_for('login.index'))
@@ -62,12 +65,12 @@ def auth():
     email = usuario['email']
     contrasenia = usuario['contrasenia']
 
-    verificacion = Login(usuario=email, contrasenia=contrasenia)
+    verificacion = Login(email=email, contrasenia=contrasenia)
 
     if verificacion.usuario():
         session['login'] = True
         session['username'] = verificacion.nombre_usuario()
-        session['tipo_usuario']=verificacion.tipo_usuario()
+        session['tipo_usuario'] = verificacion.tipo_usuario()
         return {"login": True, "home": "/home"}
 
     session['login'] = False
