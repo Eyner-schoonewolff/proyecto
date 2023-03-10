@@ -1,51 +1,47 @@
 from db.database import *
+from typing import Dict
+
 
 class Usuario:
     def __init__(self) -> None:
         pass
 
+
 class Login:
     def __init__(self, email, contrasenia) -> None:
         self.email = email
         self.contrasenia = contrasenia
-        self.cuenta = self.cuentas()
-        self.datos_unicos = self.datos_unico()
+        self.usuario = self.obtener_usuario()
 
-    def datos_unico(self) -> list:
-        cursor = db.connection.cursor()
+    def datos_unico(self, numero_documento, email) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+
         query = """SELECT email, numero_documento 
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
-            ON u.`id`=dp.`id_usuario`"""
-        cursor.execute(query)
-        return cursor.fetchall()
+            ON u.`id`=dp.`id_usuario`
+            WHERE dp.`numero_documento`=%s or u.email=%s"""
+        cursor.execute(query, (numero_documento, email,))
+        return cursor.fetchone()
 
-    def cuentas(self) -> list:
-        cursor = db.connection.cursor()
-        query = """SELECT u.email, u.contraseña, tu.nombre tipo,u.nombre
-            FROM usuarios u
-            INNER JOIN tipo_usuario tu on u.id_tipo_usuario = tu.id"""
-        cursor.execute(query)
-        return cursor.fetchall()
+    def obtener_usuario(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """SELECT u.email, u.contraseña, tu.nombre tipo,udp.`nombre_completo` nombre
+                FROM usuarios u
+                INNER JOIN tipo_usuario tu on u.id_tipo_usuario = tu.id
+                INNER JOIN usuario_datos_personales udp on u.id = udp.`id_usuario`
+                WHERE u.email=%s"""
+        cursor.execute(query, (self.email,))
+        return cursor.fetchone()
 
-    def usuario(self) -> bool:
-        for user in self.cuenta:
-            if (user[0] == self.email and user[1] == self.contrasenia):
-                return True
-        return False
-
-    def tipo_usuario(self) -> str:
-        for user in self.cuenta:
-            if (user[0] == self.email and user[1] == self.contrasenia):
-                return user[2]
-        return ""
-
-    def nombre_usuario(self) -> str:
-        for user in self.cuenta:
-            if (user[0] == self.email and user[1] == self.contrasenia):
-                nombre: str = user[3]
-                return nombre.upper()
-        return ""
+    def verificar(self) -> bool:
+        if self.usuario is None:
+            return False
+        # Verificar la contraseña
+        if self.usuario['contraseña'] == self.contrasenia:
+            return True
+        else:
+            return False
 
 
 class RegistroUsuario(Login):
@@ -61,20 +57,26 @@ class RegistroUsuario(Login):
         super().__init__(email, contrasenia)
 
     # devuelve true si existe un usuario, es decir no se crea otro usuario, si devuelve false si se crea el usuario
-    def existe(self, email, numero_documento) -> bool:
-        for usuario in self.datos_unicos:
-            if usuario[0] == email or usuario[1] == numero_documento:
-                return True
-        return False
+    def existe(self) -> bool:
+        dato_unico = self.datos_unico(
+            numero_documento=self.numero_documento, email=self.email)
+        if dato_unico is None:
+            return False
+
+        if dato_unico:
+            return True
+        else:
+            return True
 
     def agregar(self) -> None:
         cursor = db.connection.cursor()
-        usuario_nuevo = (self.nombre, self.email, self.contrasenia, self.rol)
-        informacion = (self.tipo_documento, self.numero_documento, self.email)
-        query = "INSERT INTO usuarios (nombre,email,contraseña,id_tipo_usuario) VALUES (%s,%s,%s,%s)"
+        usuario_nuevo = (self.email, self.contrasenia, self.rol)
+        informacion = (self.tipo_documento, self.nombre,
+                       self.numero_documento, self.email)
+        query = "INSERT INTO usuarios (email,contraseña,id_tipo_usuario) VALUES (%s,%s,%s)"
         query_informacion = """
-                    INSERT usuario_datos_personales (id_usuario,id_documento,numero_documento)
-                    SELECT id,%s,%s
+                    INSERT usuario_datos_personales (id_usuario,id_documento,nombre_completo,numero_documento)
+                    SELECT id,%s,%s,%s
                     FROM usuarios
                     WHERE email=%s
                 """

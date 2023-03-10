@@ -20,7 +20,7 @@ def registro():
 @login.route("/auth_register", methods=["POST"])
 def auth_register():
     usuario_nuevo = request.get_json()
-    email = usuario_nuevo['email']
+    email =str(usuario_nuevo['email'])
     contrasenia = usuario_nuevo['contrasenia']
     rol = int(usuario_nuevo['rol'])
     nombre = usuario_nuevo['nombre']
@@ -30,7 +30,7 @@ def auth_register():
     registro_usuario = RegistroUsuario(email=email, contrasenia=contrasenia, rol=rol,
                                        nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento)
 
-    if registro_usuario.existe(email=email, numero_documento=numero_documento):
+    if registro_usuario.existe():
         return {"registro": False, "home": "/registrar"}
     else:
         registro_usuario.agregar()
@@ -61,16 +61,16 @@ def home():
 
 @login.route("/auth", methods=["POST"])
 def auth():
-    usuario = request.get_json()
-    email = usuario['email']
-    contrasenia = usuario['contrasenia']
+    json = request.get_json()
+    email = json['email']
+    contrasenia = json['contrasenia']
 
-    verificacion = Login(email=email,contrasenia=contrasenia)
+    login = Login(email=email, contrasenia=contrasenia)
 
-    if verificacion.usuario():
+    if login.verificar():
         session['login'] = True
-        session['username'] = verificacion.nombre_usuario()
-        session['tipo_usuario'] = verificacion.tipo_usuario()
+        session['username'] = login.usuario["nombre"]
+        session['tipo_usuario'] = login.usuario["tipo"]
         return {"login": True, "home": "/home"}
 
     session['login'] = False
