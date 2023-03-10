@@ -65,7 +65,7 @@ def auth():
     email = usuario['email']
     contrasenia = usuario['contrasenia']
 
-    verificacion = Login(email=email, contrasenia=contrasenia)
+    verificacion = Login(email=email,contrasenia=contrasenia)
 
     if verificacion.usuario():
         session['login'] = True
