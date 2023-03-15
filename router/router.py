@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from seguridad.login import Login
-from seguridad.registrar import Usuario
 from flask_login import logout_user, LoginManager
 
 login = Blueprint('login', __name__, static_url_path='/static',
