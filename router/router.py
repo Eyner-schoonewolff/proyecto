@@ -14,21 +14,7 @@ def index():
     if not logueado:
         return render_template("/index.html")
     else:
-        return redirect(url_for('login.home'))
-
-
-@login.route("/home")
-def home():
-    username = session.get('username')
-    tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login')
-    if logueado:
-        session['login'] = True
-        return render_template("home.html", nombre=username, tipo=tipo_usuario)
-    else:
-        session['login'] = False
-        return redirect(url_for('login.index'))
-
+        return redirect(url_for('datos_personales.home'))
 
 @login.route("/auth", methods=["POST"])
 def auth():
@@ -40,6 +26,7 @@ def auth():
 
     if login.verificar():
         session['login'] = True
+        session['email']=login.usuario['email']
         session['username'] = login.usuario["nombre"].upper()
         session['tipo_usuario'] = login.usuario["tipo"]
         return {"login": True, "home": "/home"}

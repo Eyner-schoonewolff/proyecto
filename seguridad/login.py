@@ -2,6 +2,7 @@ from db.database import *
 from typing import Dict
 import bcrypt
 
+
 class Login:
     def __init__(self, email, contrasenia) -> None:
         self.email = email
@@ -17,7 +18,6 @@ class Login:
                 WHERE u.email=%s"""
         cursor.execute(query, (self.email,))
         return cursor.fetchone()
-    
 
     def verificar(self) -> bool:
         if self.usuario is None:
@@ -27,6 +27,3 @@ class Login:
             return True
         else:
             return False
-
-
-
