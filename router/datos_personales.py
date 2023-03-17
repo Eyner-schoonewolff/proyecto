@@ -35,6 +35,8 @@ def home():
         ocupacion=usuario['ocupaciones'],
     )
 
+@datos_personales.route('/')
+
 
 @datos_personales.route('/auth_actualizar', methods=['POST'])
 def auth():
