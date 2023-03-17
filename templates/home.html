@@ -119,32 +119,24 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="form-outline mb-5">
-
                                                             <div class="row">
-
-
                                                                 <div class="col-6 mb-2">
                                                                     <label class="form-label m-2"
                                                                         for="form3Example3">Nombre
                                                                         completo</label>
                                                                     <input id="nombre" type="text" name="nombre"
                                                                         class="form-control" value="{{nombre}}" />
-
                                                                 </div>
-
-
                                                                 <div class="col-6 mb-2">
                                                                     <label class="form-label m-2"
                                                                         for="form3Example3">Direecion</label>
                                                                     <input id="direccion" type="text" name="direccion"
                                                                         class="form-control" value="{{direccion}}" />
-
                                                                 </div>
-
 
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-6 mb-2">
+                                                                <div class="col-12 mb-2">
                                                                     <label class="form-label" for="form3Example3">Numero
                                                                         de
                                                                         Celualar</label>
@@ -153,22 +145,7 @@
                                                                         class="form-control" value={{numero}} />
 
                                                                 </div>
-                                                                <div class="col-6 mb-2">
-                                                                    <label class="form-label"
-                                                                        for="form3Example3">Agregar
-                                                                        Ocupaciones</label>
-                                                                    <select id="agregar_ocupacion" type="text"
-                                                                        name="ocupacion"
-                                                                        class="form-control text-center">
-                                                                        {% set contador = 1 %}
-                                                                        {% for ocupacion in ocupaciones_disponibles %}
-                                                                        <option value="{{ contador }}">{{ ocupacion }}
-                                                                        </option>
-                                                                        {% set contador = contador + 1 %}
-                                                                        {% endfor %}
 
-                                                                    </select>
-                                                                </div>
 
                                                             </div>
 

@@ -11,7 +11,7 @@ class Login:
 
     def obtener_usuario(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
-        query = """SELECT u.id,u.email, u.contraseña, tu.nombre tipo,udp.`nombre_completo` nombre
+        query = """SELECT udp.`id` id_udp,u.id,u.email, u.contraseña, tu.nombre tipo,udp.`nombre_completo` nombre
                 FROM usuarios u
                 INNER JOIN tipo_usuario tu on u.id_tipo_usuario = tu.id
                 INNER JOIN usuario_datos_personales udp on u.`id_usuario_datos_personales`=udp.`id`

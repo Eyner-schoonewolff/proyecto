@@ -28,6 +28,7 @@ def auth():
     if login.verificar():
         session['login'] = True
         session['id'] = login.usuario['id']
+        session['id_udp'] = login.usuario['id_udp']
         session['email'] = login.usuario['email']
         session['username'] = login.usuario["nombre"].upper()
         session['tipo_usuario'] = login.usuario["tipo"]

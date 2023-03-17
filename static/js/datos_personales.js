@@ -3,16 +3,15 @@ document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
     nombre = document.querySelector("#nombre").value;
     direccion = document.querySelector("#direccion").value;
     numeroCelular = document.querySelector("#numeroCelular").value;
-    const agregarOcupacionElement = document.querySelector("#agregar_ocupacion");
+    // const agregarOcupacionElement = document.querySelector("#agregar_ocupacion");
 
     //si el valor de agregaOcupacion no esta definido y es null la variable devolvera el valor de 0
-    const agregar_ocupacion = agregarOcupacionElement !== null ? agregarOcupacionElement.value : 0;
+    // const agregar_ocupacion = agregarOcupacionElement !== null ? agregarOcupacionElement.value : 0;
     
     var datos = {
         nombre,
         direccion,
         numeroCelular,
-        agregar_ocupacion,
     };
 
     $.ajax({
@@ -24,9 +23,7 @@ document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
         success: function (respuesta) {
             if (respuesta.actualizar) {
                 window.location.href = respuesta.home
-            } else {
-                window.location.href = respuesta.home;
-            }
+            } 
         }
     });
 });
