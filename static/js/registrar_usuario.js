@@ -5,6 +5,8 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     contrasenia = document.querySelector("#contrasenia").value
     numero_documento = document.querySelector('#numeroDocumento').value
     tipo_documento = document.querySelector("#documento").value
+    direccion = document.querySelector("#direccion").value
+    celular = document.querySelector("#numeroCelular").value
 
     datos = {
         email,
@@ -12,7 +14,9 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         nombre,
         contrasenia,
         tipo_documento,
-        numero_documento
+        numero_documento,
+        direccion,
+        celular
     }
 
     $.ajax({

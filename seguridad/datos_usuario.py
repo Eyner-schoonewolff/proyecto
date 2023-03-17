@@ -1,6 +1,5 @@
 from db.database import *
 from typing import Dict
-from flask import session
 
 
 class DatosUsuario:

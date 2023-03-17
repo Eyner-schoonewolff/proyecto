@@ -4,13 +4,15 @@ import bcrypt
 
 
 class Usuario:
-    def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int) -> None:
+    def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int,celular:int,direccion:str) -> None:
         self.email = email
         self.contrasenia = contrasenia
         self.rol = rol
         self.nombre = nombre
         self.tipo_documento = tipo_documento
         self.numero_documento = numero_documento
+        self.celular=celular
+        self.direccion=direccion
 
     def datos_unico(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
@@ -44,14 +46,14 @@ class Usuario:
         cursor = db.connection.cursor()
 
         informacion = (self.tipo_documento, self.nombre,
-                       self.numero_documento)
+                       self.numero_documento,self.celular,self.direccion)
 
         usuario_nuevo = (self.email, self.encriptar_contraseña(),
                          self.rol, self.numero_documento)
 
         query_informacion = """
-                    INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento)
-                    VALUES (%s,%s,%s)
+                    INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento,numero_celular,direccion)
+                    VALUES (%s,%s,%s,%s,%s)
                 """
 
         query = """INSERT usuarios(email,contraseña,id_tipo_usuario,id_usuario_datos_personales)
@@ -66,4 +68,4 @@ class Usuario:
         cursor.close()
         db.connection.close()
 
-        return None
+        return 'Usuario agregado'

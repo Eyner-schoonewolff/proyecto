@@ -7,24 +7,25 @@ login = Blueprint('login', __name__, static_url_path='/static',
 
 login_manager = LoginManager()
 
-
 @login.route("/", methods=["GET"])
 def index():
     logueado = session.get('login')
     if not logueado:
         return render_template("/index.html")
     else:
-        return redirect(url_for('datos_personales.home'))
+        return redirect(url_for('menus.home'))
 
 
-@login.route("/auth", methods=["POST"])
-def auth():
+@login.route("/auth_login", methods=["POST"])
+def auth_login():
     json = request.get_json()
     email = json['email']
     contrasenia = json['contrasenia']
 
     login = Login(email=email, contrasenia=contrasenia)
 
+    print(login.obtener_usuario())
+    print(login.verificar())
     if login.verificar():
         session['login'] = True
         session['id'] = login.usuario['id']

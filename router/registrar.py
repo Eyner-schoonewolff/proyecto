@@ -23,12 +23,16 @@ def auth():
     nombre = usuario_nuevo['nombre']
     tipo_documento = int(usuario_nuevo['tipo_documento'])
     numero_documento = int(usuario_nuevo['numero_documento'])
+    celular = int(usuario_nuevo['celular'])
+    direccion = str(usuario_nuevo['direccion'])
+
 
     registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
-                       nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento)
+                       nombre=nombre, tipo_documento=tipo_documento, 
+                       numero_documento=numero_documento,celular=celular,direccion=direccion)
 
     if registro.existe():
         return {"registro": False, "home": "/registrar"}
     else:
         registro.agregar()
-        return {"registro": True, "home": "/"}
+        return {"registro": True, "home": "/registrar"}
