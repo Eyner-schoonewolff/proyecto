@@ -1,0 +1,142 @@
+@charset "UTF-8";
+/* Aquí definimos las Custom properties */
+:root {
+  --tipo-principal: Helvetica, Arial, sans-serif;
+}
+
+
+li {
+  list-style-type: none;
+}
+
+.contenedor {
+  width: 90%;
+  max-width: 125em;
+  /* padding: 1em; */
+  color: var(--negro);
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  -webkit-box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+          box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+}
+
+.contenedor .ul {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+          flex-flow: row nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.contenedor .li {
+  padding: 10px;
+  margin: 0 25px 0 0;
+  color: var(--negro);
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  -webkit-box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+          box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  cursor: pointer;
+  font-size: 25px;
+}
+
+.contenedor .li.activo {
+  background-color: darkblue;
+  color: white;
+}
+
+.contenedor .subcontenedor {
+  min-height:73vh;
+  position: relative;
+}
+
+.contenedor .bloque {
+  margin: 1em;
+  padding: 1em;
+  position: absolute;
+
+  color: var(--negro);
+  -webkit-transition: all 0.4s ease;
+  transition: all 0.4s ease;
+  border-radius: 0.5em;
+  background-color: var(--blanco);
+  -webkit-box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+          box-shadow: 0.3em 0.3em 0.6em var(--sombra-ppal), -0.3em -0.3em 0.6em var(--sombra-sec), inset 0 0 0 transparent, inset 0 0 0 transparent;
+  opacity: 3;
+  -webkit-transform: translateY(50%);
+          transform: translateY(50%);
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.contenedor .bloque.activo {
+  opacity:1;
+  -webkit-transform: translateY(0%);
+          transform: translateY(0%);
+}
+
+.div_der{
+  margin-left: 25px;
+}
+
+
+.tamaño_{
+
+    width: 100% !important;
+   
+}
+
+.tamaño_f{
+    width: 100% !important;
+
+}
+
+.contenedor .panel_ {
+    display: flex;
+    justify-content: center;
+}
+
+.contenedor .panel_1 {
+  display: flex;
+  justify-content:start;
+  margin-left: 77px;
+}
+
+#login{
+  opacity: 50 !important;
+  background-color: whitesmoke;
+  border-color: black;
+  border-style: groove;
+  border-width: 1px;
+  border-radius: 15px;
+}
+
+.bdy{
+
+  background-color: cornflowerblue !important;
+}
+
+.obli{
+  color: red;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
