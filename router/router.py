@@ -16,6 +16,7 @@ def index():
     else:
         return redirect(url_for('datos_personales.home'))
 
+
 @login.route("/auth", methods=["POST"])
 def auth():
     json = request.get_json()
@@ -26,7 +27,8 @@ def auth():
 
     if login.verificar():
         session['login'] = True
-        session['email']=login.usuario['email']
+        session['id'] = login.usuario['id']
+        session['email'] = login.usuario['email']
         session['username'] = login.usuario["nombre"].upper()
         session['tipo_usuario'] = login.usuario["tipo"]
         return {"login": True, "home": "/home"}

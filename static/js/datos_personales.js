@@ -1,12 +1,20 @@
 
 document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
-    email = document.querySelector("#inputEmail").value
-    contrasenia = document.querySelector("#inputcontrasenia").value
+    nombre = document.querySelector("#nombre").value;
+    direccion = document.querySelector("#direccion").value;
+    numeroCelular = document.querySelector("#numeroCelular").value;
+    const agregarOcupacionElement = document.querySelector("#agregar_ocupacion");
 
+    //si el valor de agregaOcupacion no esta definido y es null la variable devolvera el valor de 0
+    const agregar_ocupacion = agregarOcupacionElement !== null ? agregarOcupacionElement.value : 0;
+    
     var datos = {
-        email,
-        contrasenia
-    }
+        nombre,
+        direccion,
+        numeroCelular,
+        agregar_ocupacion,
+    };
+
     $.ajax({
         url: '/auth_actualizar',
         method: 'POST',
@@ -14,7 +22,7 @@ document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (respuesta) {
-            if (respuesta.login) {
+            if (respuesta.actualizar) {
                 window.location.href = respuesta.home
             } else {
                 window.location.href = respuesta.home;
