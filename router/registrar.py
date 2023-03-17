@@ -14,8 +14,8 @@ def registro():
         return redirect(url_for('login.home'))
 
 
-@registrar.route("/auth_register", methods=["POST"])
-def auth_register():
+@registrar.route("/auth_registro", methods=["POST"])
+def auth():
     usuario_nuevo = request.get_json()
     email = str(usuario_nuevo['email'])
     contrasenia = usuario_nuevo['contrasenia']

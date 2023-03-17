@@ -16,7 +16,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     }
 
     $.ajax({
-        url: '/auth_register',
+        url: '/auth_registro',
         method: 'POST',
         data: JSON.stringify(datos),
         contentType: "application/json; charset=utf-8",
