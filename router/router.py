@@ -14,7 +14,7 @@ def index():
     if not logueado:
         return render_template("/index.html")
     else:
-        return redirect(url_for('datos_personales.home'))
+        return redirect(url_for('menus.home'))
 
 
 @login.route("/auth", methods=["POST"])

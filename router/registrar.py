@@ -11,7 +11,7 @@ def registro():
     if not logueado:
         return render_template("registrar.html")
     else:
-        return redirect(url_for('login.home'))
+        return redirect(url_for('login.actualizar'))
 
 
 @registrar.route("/auth_registro", methods=["POST"])
