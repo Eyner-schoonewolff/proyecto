@@ -63,7 +63,5 @@ class Usuario:
         cursor.execute(query_informacion, (informacion))
         cursor.execute(query, (usuario_nuevo))
         db.connection.commit()
-        cursor.close()
-        db.connection.close()
 
         return None

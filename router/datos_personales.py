@@ -5,8 +5,8 @@ datos_personales = Blueprint('datos_personales', __name__, static_url_path='/sta
                              template_folder="templates")
 
 
-@datos_personales.route("/home")
-def home():
+@datos_personales.route("/actualizar")
+def actualizar():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
@@ -25,7 +25,7 @@ def home():
     session['direccion'] = usuario['direccion']
 
     return render_template(
-        "home.html",
+        "actualizar.html",
         nombre=nombre_usuario,
         tipo=tipo_usuario,
         email=session.get('email'),
@@ -34,6 +34,7 @@ def home():
         direccion=usuario['direccion'],
         ocupacion=usuario['ocupaciones'],
     )
+
 
 
 @datos_personales.route('/auth_actualizar', methods=['POST'])
@@ -53,4 +54,4 @@ def auth():
 
     datos_usuario.actualizar(nombre, numeroCelular, direccion, id_udp)
 
-    return {'actualizar': True, 'home': '/home'}
+    return {'actualizar': True, 'home': '/actualizar'}

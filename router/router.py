@@ -14,28 +14,33 @@ def index():
     if not logueado:
         return render_template("/index.html")
     else:
-        return redirect(url_for('datos_personales.home'))
+        return redirect(url_for('menus.home'))
 
 
 @login.route("/auth", methods=["POST"])
 def auth():
-    json = request.get_json()
-    email = json['email']
-    contrasenia = json['contrasenia']
+    try:
+        json = request.get_json()
+        email = json['email']
+        contrasenia = json['contrasenia']
 
-    login = Login(email=email, contrasenia=contrasenia)
+        login = Login(email=email, contrasenia=contrasenia)
 
-    if login.verificar():
-        session['login'] = True
-        session['id'] = login.usuario['id']
-        session['id_udp'] = login.usuario['id_udp']
-        session['email'] = login.usuario['email']
-        session['username'] = login.usuario["nombre"].upper()
-        session['tipo_usuario'] = login.usuario["tipo"]
-        return {"login": True, "home": "/home"}
+        if login.verificar():
+            session['login'] = True
+            session['id'] = login.usuario['id']
+            session['id_udp'] = login.usuario['id_udp']
+            session['email'] = login.usuario['email']
+            session['username'] = login.usuario["nombre"].upper()
+            session['tipo_usuario'] = login.usuario["tipo"]
+            return {"login": True, "home": "/home"}
 
-    session['login'] = False
-    return {"login": False, "home": "/"}
+        session['login'] = False
+        return {"login": False, "home": "/"}
+    except Exception as error:
+        print(error)
+        session.clear()
+        return {"login": False, "home": "/"}
 
 
 @login.route('/logout')
