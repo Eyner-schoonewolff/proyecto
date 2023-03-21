@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session
 from seguridad.datos_usuario import DatosUsuario
-from seguridad.solicitud import ConsultarSolicitud
+from seguridad.Model_solicitar_servicio import solicitar
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -19,7 +19,7 @@ def home():
 
 
 @menus.route("/solicitar")
-def solicitar():
+def solicitar_():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
 
@@ -34,20 +34,22 @@ def solicitar():
 
 @menus.route("/consultar")
 def consultar():
-    id_usuario=session.get('id')
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
 
-
     if not logueado:
         return redirect(url_for('login.index'))
     
-    consultar=ConsultarSolicitud()
-
+    consultar=solicitar()
+    
+    if  consultar.contratista_():
+        return render_template("consultar.html", nombre=nombre_usuario,
+                            tipo=tipo_usuario,consulta_contratista=consultar.contratista_())
     
     return render_template("consultar.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario,consultas= consultar.contratista(id_usuario))
+                            tipo=tipo_usuario,consulta_cliente=consultar.cliente())
+
 
 
 @menus.route("/agregar")
