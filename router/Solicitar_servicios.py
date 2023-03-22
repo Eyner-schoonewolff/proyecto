@@ -24,7 +24,6 @@ def solicitar_():
 
     nuevo_nombre_file = str(uuid.uuid4()) + extension
 
-    print(nuevo_nombre_file)
     upload_path = os.path.join('static/img', nuevo_nombre_file)
    
     file.save(upload_path)

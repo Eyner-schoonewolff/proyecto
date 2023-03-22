@@ -82,14 +82,4 @@ class Solicitar:
         cursor.execute(query, (id_ocupacion,))
         return cursor.fetchall()
     
-    def consultar_contratista_albanil(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
-        query = """
-                SELECT uo.id_usuario id,udp.nombre_completo nombre
-                  FROM usuario_ocupaciones uo
-                  INNER JOIN usuarios u ON uo.id_usuario=u.id
-                  INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
-                  WHERE uo.id_ocupacion=1
-        """
-        cursor.execute(query)
-        return cursor.fetchone()
+

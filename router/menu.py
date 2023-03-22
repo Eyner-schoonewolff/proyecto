@@ -19,18 +19,10 @@ def home():
 
 
 @menus.route("/solicitar", methods=['GET', 'POST'])
-def solicitar_():
-    nombre_usuario = session.get('username')
-    tipo_usuario = session.get('tipo_usuario')
-    contratista_consulta = []
-
-    logueado = session.get('login', False)
-
+def solicitar_contratista():
     solicitar = Solicitar()
-
-    if not logueado:
-        return redirect(url_for('login.index'))
-
+    contratista_consulta = []
+    
     if request.method == 'POST':
         id = int(request.get_json()["id"])
         if not (id == 0):
@@ -38,12 +30,20 @@ def solicitar_():
             contratistas = solicitar.consultar_contratista(id_ocupacion=id)
             contratista_consulta.append(contratistas)
             return jsonify({'contratista_consulta': contratista_consulta})
-
         return jsonify({'contratista_consulta': 0})
 
-    return render_template("solicitar.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, email=session.get('email'),
-                           numero=session.get('numero_celular'), contratista_consulta=contratista_consulta)
+    else:
+        nombre_usuario = session.get('username')
+        tipo_usuario = session.get('tipo_usuario')
+
+        logueado = session.get('login', False)
+
+        if not logueado:
+            return redirect(url_for('login.index'))
+
+        return render_template("solicitar.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario, email=session.get('email'),
+                               numero=session.get('numero_celular'), contratista_consulta=contratista_consulta)
 
 
 @menus.route("/consultar")
