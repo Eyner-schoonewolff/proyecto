@@ -26,7 +26,7 @@
                                         <select id="agregar_ocupacion" type="text" multiple name="ocupacion"
                                             class="form-control mb-3">
                                             {% for ocu in ocupaciones_disponibles %}
-                                            <option value="{{ ocu.id }}">{{ ocu.ocupacion }}</option>
+                                                <option value="{{ ocu.id }}">{{ ocu.ocupacion }}</option>
                                             {% endfor %}
                                         </select>
                                         <a id="btn-agregar-ocupacion" class="btn btn-primary" role="button"

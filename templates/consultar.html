@@ -93,12 +93,12 @@
                       <tbody>
                         {% for consulta in consulta_cliente %}
                         <tr>
-                          <th scope="row">{{consulta.nombre}}</th>
+                          <th scope="row" >{{consulta.nombre}}</th>
                           <td>{{consulta.numero}}</td>
-                          <td>{{consulta.horario}}</td>
-                          <td>{{consulta.ocupacion}}</td>
-                          <td>{{consulta.estado}}</td>
-                          <td> <a class="btn btn-danger" href="../eliminar_solicitud"> <i class="bi bi-trash3"></i></a>
+                          <td >{{consulta.horario}}</td>
+                          <td  >{{consulta.ocupacion}}</td>
+                          <td  >{{consulta.estado}}</td>
+                          <td ><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i class="bi bi-trash3"></i></a>
                           </td>
                         </tr>
                         {% endfor %}
@@ -122,5 +122,7 @@
 
   {% endif %}
 </body>
+
+
 
 </html>
