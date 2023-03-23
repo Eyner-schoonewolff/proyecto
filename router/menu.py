@@ -22,7 +22,7 @@ def home():
 def solicitar_contratista():
     solicitar = Solicitar()
     contratista_consulta = []
-    
+
     if request.method == 'POST':
         id = int(request.get_json()["id"])
         if not (id == 0):
@@ -63,6 +63,23 @@ def consultar():
 
     return render_template("consultar.html", nombre=nombre_usuario,
                            tipo=tipo_usuario, consulta_cliente=consultar.cliente())
+
+
+@menus.route("/evidencia/<id>")
+def evidencia_solicitud(id):
+    id_evidencia=int(id)
+    logueado = session.get('login', False)
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+
+    consultar = Solicitar()
+
+    consulta=consultar.evidencia_(id=id_evidencia)
+
+    return render_template("evidencias.html",nombre=nombre_usuario,tipo=tipo_usuario,informacion=consulta)
 
 
 @menus.route("/agregar")

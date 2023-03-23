@@ -9,11 +9,16 @@ solicitar_servi = Blueprint('solicitar_servi', __name__, static_url_path='/stati
 
 @solicitar_servi.route("/solicitar_serv", methods=["POST"])
 def solicitar_():
+    logueado = session.get('login', False)
     fecha = request.form.get('fecha')
     hora = request.form.get('hora')
     tipo_contratista = request.form.get('servicio')
     contratista = request.form.get('contratista')
     problema = request.form.get('problema')
+
+
+    if not logueado:
+        return redirect(url_for('login.index'))
 
     file =request.files['evidencia']
 
@@ -41,9 +46,16 @@ def solicitar_():
 
 @solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET', 'DELETE'])
 def eliminar_(id):
+    logueado = session.get('login', False)
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+
     eliminar_solicitud = Solicitar()
 
     if eliminar_solicitud.eliminar(id=id):
         return redirect(url_for('menus.consultar'))
 
     return flash(message='No se pudo eliminar')
+
+

@@ -19,14 +19,14 @@ class Solicitar:
 
         segundo = datetime.datetime.now()
         fechatime = self.fecha + ' ' + self.hora+':'+repr(segundo.second)
-        informacion = (self.contratista, fechatime, self.evidencia,
+        informacion = (self.contratista, self.tipo_contratista, fechatime, self.evidencia,
                        self.problema, self.id_usuario)
 
         query_informacion = """
-                    INSERT INTO solicitud (id_usuario_ocupaciones,horario,evidencia,descripcion,id_usuario_cliente)
-                    VALUES (%s,%s,%s,%s,%s)
+                    INSERT INTO solicitud (id_usuario_ocupaciones,id_ocupacion,horario,evidencia,descripcion,id_usuario_cliente,id_estado)
+                    VALUES (%s,%s,%s,%s,%s,%s,1)
                 """
-        cursor.execute(query_informacion,informacion)
+        cursor.execute(query_informacion, informacion)
         db.connection.commit()
 
         return '1'
@@ -42,14 +42,14 @@ class Solicitar:
     def contratista_(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-               SELECT udp.nombre_completo nombre,udp.numero_celular numero,s.horario,s.estado,s.evidencia,s.descripcion,udp.direccion
+            SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
-               INNER JOIN usuario_ocupaciones uo ON s.id_usuario_ocupaciones=uo.id
-
+               INNER JOIN usuario_ocupaciones uo ON s.id_usuario_ocupaciones=uo.id_usuario
                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
-               WHERE uo.id_usuario=%s
-         
+               INNER JOIN estado e ON s.id_estado = e.id
+               WHERE s.id_usuario_ocupaciones=%s
+               GROUP BY s.id;
          """
         cursor.execute(query, (self.id_usuario,))
         return cursor.fetchall()
@@ -57,15 +57,18 @@ class Solicitar:
     def cliente(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-            SELECT udp.nombre_completo nombre,udp.numero_celular numero,s.horario,o.nombre ocupacion,s.estado,s.id
-                  FROM usuario_ocupaciones uo
-                  INNER JOIN usuarios u ON uo.`id_usuario`=u.`id`
-                  INNER JOIN usuario_datos_personales udp ON u.`id_usuario_datos_personales`=udp.`id` 
-                  INNER JOIN ocupacion o ON uo.`id_ocupacion`= o.`id`
-                  INNER JOIN solicitud s ON s.id_usuario_ocupaciones=uo.`id`
-                  WHERE s.id_usuario_cliente=%s
-         
+                SELECT s.id, s.horario, e.nombre estado, s.id_ocupacion, o.nombre as ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
+                FROM solicitud s
+                INNER JOIN usuario_ocupaciones uo1 ON s.id_ocupacion = uo1.id_ocupacion
+                INNER JOIN ocupacion o ON uo1.id_ocupacion = o.id
+                INNER JOIN usuario_ocupaciones uo2 ON s.id_usuario_ocupaciones = uo2.id_usuario
+                INNER JOIN usuarios u ON uo2.id_usuario = u.id
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
+                INNER JOIN estado e ON s.id_estado = e.id
+                WHERE id_usuario_cliente = %s
+                GROUP BY s.id;
          """
+
         cursor.execute(query, (self.id_usuario,))
         return cursor.fetchall()
 
@@ -81,5 +84,9 @@ class Solicitar:
         """
         cursor.execute(query, (id_ocupacion,))
         return cursor.fetchall()
-    
 
+    def evidencia_(self,id) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = "SELECT descripcion,evidencia FROM solicitud WHERE id=%s "
+        cursor.execute(query,(id,))
+        return cursor.fetchone()

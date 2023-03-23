@@ -19,7 +19,6 @@
       <section class="h-100 text-center">
         <div class="container mt-5 h-100">
           <div class="row justify-content-sm-center h-100">
-            <div class="col-xxl-7 col-xl-5 col-lg-7 col-md-9 col-sm-9">
               <div class="card shadow-lg h-100">
                 <div class="card-body p-5">
                   <div class="row d-flex justify-content-center">
@@ -34,9 +33,9 @@
                               <th scope="col">Celular</th>
                               <th scope="col">Fecha</th>
                               <th scope="col">Direccion</th>
-                              <th scope="col">Evidencias</th>
                               <th scope="col">Problema</th>
                               <th scope="col">Estado</th>
+                              <th scope="col">Evidencias</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -46,9 +45,9 @@
                               <td>{{consulta.numero}}</td>
                               <td>{{consulta.horario}}</td>
                               <td>{{consulta.direccion}}</td>
-                              <td>{{consulta.evidencia}}</td>
                               <td>{{consulta.descripcion}}</td>
                               <td>{{consulta.estado}}</td>
+                              <td> <a href="./evidencia/{{consulta.id}}" class="btn btn-info">Ver</a></a></td>
                             </tr>
                             {% endfor %}
                             <!-- Agregar más filas según sea necesario -->
@@ -58,7 +57,6 @@
                     </div>
                   </div>
                 </div>
-              </div>
             </div>
           </div>
         </div>
@@ -73,7 +71,6 @@
     <section class="h-100 text-center">
       <div class="container mt-5 h-100">
         <div class="row justify-content-sm-center h-100">
-          <div class="col-xxl-7 col-xl-5 col-lg-7 col-md-9 col-sm-9">
             <div class="card shadow-lg">
               <div class="card-body p-5">
                 <div class="row d-flex justify-content-center">
@@ -111,7 +108,6 @@
 
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
