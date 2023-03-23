@@ -65,6 +65,19 @@ def consultar():
                            tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
+@menus.route("/actualizar_estado/<id>",methods=['POST','GET'])
+def actualizar_estado(id):
+    # id_select=request.get_json()['id']
+    # print(id_select)
+    if request.method == 'POST':
+        id_select=request.get_json()['id']
+        print('select')
+        print(id_select)
+
+    print(f" id_:{id}")
+    return redirect(url_for('menus.consultar'))
+
+
 @menus.route("/evidencia/<id>")
 def evidencia_solicitud(id):
     id_evidencia=int(id)
