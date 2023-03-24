@@ -36,9 +36,8 @@
                             <th scope="col">Celular</th>
                             <th scope="col">Fecha</th>
                             <th scope="col">Direccion</th>
-                            <!-- <th scope="col">Problema</th> -->
                             <th scope="col">Estado</th>
-                            <th scope="col">Evidencias</th>
+                            <th scope="col">Funciones</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -48,11 +47,11 @@
                             <td>{{consulta.numero}}</td>
                             <td>{{consulta.horario}}</td>
                             <td>{{consulta.direccion}}</td>
-                            <!-- <td>{{consulta.descripcion}}</td> -->
-                            <!-- <td class="btn btn-warning material-symbols-outlined">change_circle</td> -->
-                            <td data-bs-toggle="modal" data-bs-target="#exampleModal-{{consulta.id}}"><a
-                                class="btn btn-warning bi bi-arrow-clockwise"></a></td>
-                            <td><a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a></a></td>
+                            <td>{{consulta.estado}}</td>
+                            <td class="mt-2">
+                                <a id="guardar-id" class="btn btn-warning bi bi-arrow-clockwise m-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{consulta.id}}"></a>
+                                <a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a>
+                            </td>
                           </tr>
 
                           <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -80,11 +79,11 @@
                                       <div class="col-12 mb-2">
                                         <label for="select" class="m-3">Cambiar estado</label>
                                         <select class="form-select text-center" aria-label="Default select example"
-                                          id="select_estado-{{consulta.id}}">
+                                          id="select_estado">
                                           <option selected value="1">Pendiente</option>
-                                          <option value="2">Aceptada</option>
-                                          <option value="3">Cancelada</option>
-                                          <option value="4">Finalizada</option>
+                                          <option value="2">Acepatar</option>
+                                          <option value="3">Cancelar</option>
+                                          <option value="4">Finalizar</option>
                                         </select>
                                       </div>
                                     </div>
@@ -92,9 +91,8 @@
                                   </div>
                                 </div>
                                 <div class="modal-footer">
-                                  <!-- <button type="button" id="btn-guardar-estado" class="btn btn-success">
-                                    Guardar</button> -->
-                                  <a id="btn-guardar-estado" href="./actualizar_estado/{{consulta.id}}" class="btn btn-success">Guardar</a>
+                                  <a id="btn-guardar-estado" href="./actualizar_estado/{{consulta.id}}"
+                                    class="btn btn-success">Guardar</a>
                                   <button type="button" class="btn btn-secondary"
                                     data-bs-dismiss="modal">Cerrar</button>
                                 </div>
@@ -102,9 +100,6 @@
                             </div>
                           </div>
                           {% endfor %}
-
-
-                          <!-- Agregar más filas según sea necesario -->
                         </tbody>
                       </table>
                     </div>
