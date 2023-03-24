@@ -17,6 +17,8 @@ def actualizar():
 
     datos_usuario = DatosUsuario()
 
+    ocupaciones = datos_usuario.ocupaciones()
+
     session['login'] = True
     usuario = datos_usuario.obtener(id)
 
@@ -33,6 +35,7 @@ def actualizar():
         numero_documento=usuario['numero_documento'],
         direccion=usuario['direccion'],
         ocupacion=usuario['ocupaciones'],
+        ocupaciones_disponibles=ocupaciones
     )
 
 

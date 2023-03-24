@@ -85,8 +85,18 @@ class Solicitar:
         cursor.execute(query, (id_ocupacion,))
         return cursor.fetchall()
 
-    def evidencia_(self,id) -> Dict:
+    def evidencia_(self, id) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = "SELECT descripcion,evidencia FROM solicitud WHERE id=%s "
-        cursor.execute(query,(id,))
+        cursor.execute(query, (id,))
         return cursor.fetchone()
+
+    def actualizar_estado(self,id_estado,id_solicitud):
+        cursor = db.connection.cursor()
+        informacion = (id_estado,id_solicitud)
+        query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
+        cursor.execute(query, informacion)
+        db.connection.commit()
+        cursor.close()
+
+        return f"registro(s) actualizado(s)"

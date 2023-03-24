@@ -65,6 +65,17 @@ def consultar():
                            tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
+@menus.route("/actualizar_estado/<id>",methods=['POST','GET'])
+def actualizar_estado(id):
+    if request.method == 'POST':
+        id_select=request.get_json()['id']
+        actualizar=Solicitar()
+        actualizar.actualizar_estado(id_estado=id_select,id_solicitud=id)
+        return jsonify({"actualizar":True,"recargar":"/consultar"})
+    
+    return redirect(url_for('menus.consultar'))
+
+
 @menus.route("/evidencia/<id>")
 def evidencia_solicitud(id):
     id_evidencia=int(id)
@@ -82,8 +93,8 @@ def evidencia_solicitud(id):
     return render_template("evidencias.html",nombre=nombre_usuario,tipo=tipo_usuario,informacion=consulta)
 
 
-@menus.route("/agregar")
-def agregar():
+@menus.route("/contacto")
+def contacto():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
@@ -91,9 +102,5 @@ def agregar():
     if not logueado:
         return redirect(url_for('login.index'))
 
-    datos_usuario = DatosUsuario()
-
-    ocupaciones = datos_usuario.ocupaciones()
-
-    return render_template("agregar.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, ocupaciones_disponibles=ocupaciones)
+    return render_template("contacto.html", nombre=nombre_usuario,
+                           tipo=tipo_usuario)

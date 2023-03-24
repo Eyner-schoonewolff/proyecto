@@ -6,6 +6,9 @@
   <!-- Incluir los archivos CSS de Bootstrap -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
@@ -19,44 +22,90 @@
       <section class="h-100 text-center">
         <div class="container mt-5 h-100">
           <div class="row justify-content-sm-center h-100">
-              <div class="card shadow-lg h-100">
-                <div class="card-body p-5">
-                  <div class="row d-flex justify-content-center">
-                    <div class="col-lg-12">
-                      <h2>Consultar trabajos</h2>
-                      <div class="table-responsive">
-                        <table class="table caption-top mt-5 w-100">
+            <div class="card shadow-lg h-100">
+              <div class="card-body p-5">
+                <div class="row d-flex justify-content-center">
+                  <div class="col-lg-12">
+                    <h2>Consultar trabajos</h2>
+                    <div class="table-responsive">
+                      <table class="table caption-top mt-5 w-100">
 
-                          <thead>
-                            <tr>
-                              <th scope="col">Nombre</th>
-                              <th scope="col">Celular</th>
-                              <th scope="col">Fecha</th>
-                              <th scope="col">Direccion</th>
-                              <th scope="col">Problema</th>
-                              <th scope="col">Estado</th>
-                              <th scope="col">Evidencias</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {% for consulta in consulta_contratista %}
-                            <tr>
-                              <th scope="row">{{consulta.nombre}}</th>
-                              <td>{{consulta.numero}}</td>
-                              <td>{{consulta.horario}}</td>
-                              <td>{{consulta.direccion}}</td>
-                              <td>{{consulta.descripcion}}</td>
-                              <td>{{consulta.estado}}</td>
-                              <td> <a href="./evidencia/{{consulta.id}}" class="btn btn-info">Ver</a></a></td>
-                            </tr>
-                            {% endfor %}
-                            <!-- Agregar más filas según sea necesario -->
-                          </tbody>
-                        </table>
-                      </div>
+                        <thead>
+                          <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Celular</th>
+                            <th scope="col">Fecha</th>
+                            <th scope="col">Direccion</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Funciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for consulta in consulta_contratista %}
+                          <tr>
+                            <th scope="row">{{consulta.nombre}}</th>
+                            <td>{{consulta.numero}}</td>
+                            <td>{{consulta.horario}}</td>
+                            <td>{{consulta.direccion}}</td>
+                            <td>{{consulta.estado}}</td>
+                            <td class="mt-2">
+                                <a id="guardar-id" class="btn btn-warning bi bi-arrow-clockwise m-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{consulta.id}}"></a>
+                                <a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a>
+                            </td>
+                          </tr>
+
+                          <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                            id="exampleModal-{{consulta.id}}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Actualizar Estado
+                                  </h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="form-outline mb-5">
+                                    <div class="row mt-3">
+                                      <div class="col-12 mb-2">
+                                        <label for="estado" class="m-2">Estado actual</label>
+                                        <input type="estado" class="form-control text-center" name="estado"
+                                          value={{consulta.estado}} readonly>
+                                        <input id="id_consulta" name="prodId" type="hidden" value={{consulta.id}}>
+
+                                      </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                      <div class="col-12 mb-2">
+                                        <label for="select" class="m-3">Cambiar estado</label>
+                                        <select class="form-select text-center" aria-label="Default select example"
+                                          id="select_estado">
+                                          <option selected value="1">Pendiente</option>
+                                          <option value="2">Acepatar</option>
+                                          <option value="3">Cancelar</option>
+                                          <option value="4">Finalizar</option>
+                                        </select>
+                                      </div>
+                                    </div>
+
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <a id="btn-guardar-estado" href="./actualizar_estado/{{consulta.id}}"
+                                    class="btn btn-success">Guardar</a>
+                                  <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Cerrar</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
+              </div>
             </div>
           </div>
         </div>
@@ -71,43 +120,44 @@
     <section class="h-100 text-center">
       <div class="container mt-5 h-100">
         <div class="row justify-content-sm-center h-100">
-            <div class="card shadow-lg">
-              <div class="card-body p-5">
-                <div class="row d-flex justify-content-center">
-                  <div class="col-lg-12">
-                    <h2>Consultar mis Solicitudes</h2>
-                    <table class="table caption-top mt-5">
-                      <thead>
-                        <tr>
-                          <th scope="col">Nombre</th>
-                          <th scope="col">Celular</th>
-                          <th scope="col">Fecha</th>
-                          <th scope="col">Tipo Solicitud</th>
-                          <th scope="col">Estado</th>
-                          <th scope="col">Eliminar</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {% for consulta in consulta_cliente %}
-                        <tr>
-                          <th scope="row" >{{consulta.nombre}}</th>
-                          <td>{{consulta.numero}}</td>
-                          <td >{{consulta.horario}}</td>
-                          <td  >{{consulta.ocupacion}}</td>
-                          <td  >{{consulta.estado}}</td>
-                          <td ><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i class="bi bi-trash3"></i></a>
-                          </td>
-                        </tr>
-                        {% endfor %}
+          <div class="card shadow-lg">
+            <div class="card-body p-5">
+              <div class="row d-flex justify-content-center">
+                <div class="col-lg-12">
+                  <h2>Consultar mis Solicitudes</h2>
+                  <table class="table caption-top mt-5">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Tipo Solicitud</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Eliminar</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for consulta in consulta_cliente %}
+                      <tr>
+                        <th scope="row">{{consulta.nombre}}</th>
+                        <td>{{consulta.numero}}</td>
+                        <td>{{consulta.horario}}</td>
+                        <td>{{consulta.ocupacion}}</td>
+                        <td>{{consulta.estado}}</td>
+                        <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
+                              class="bi bi-trash3"></i></a>
+                        </td>
+                      </tr>
+                      {% endfor %}
 
-                      </tbody>
-                    </table>
+                    </tbody>
+                  </table>
 
-
-                  </div>
 
                 </div>
+
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -119,6 +169,9 @@
   {% endif %}
 </body>
 
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/actualizar_estado.js')}}"></script>
 
 </html>

@@ -42,7 +42,7 @@
         <input class="form-check-input" type="checkbox" />
         <div class="pt-1" style="font-size: 0.9rem">Recordar</div>
       </div>
-      <div class="pt-1">
+      <div class="pt-1 mt-1">
         <a href="#" class="text-decoration-none text-info fw-semibold fst-italic" style="font-size: 0.9rem">Olvidaste tu
           contrasenia?</a>
       </div>
@@ -50,7 +50,7 @@
     <button id="BotonLogin" class="btn btn-success text-white w-100 mt-4 fw-semibold shadow-sm">
       Iniciar Sesion
     </button>
-    <div class="d-flex gap-1 justify-content-center mt-1">
+    <div class="d-flex gap-1 justify-content-center mt-4">
       <div>No tienes una cuenta?</div>
       <a href="{{url_for('registrar.registro')}}" class="text-decoration-none text-info fw-semibold">Registrarse</a>
     </div>
@@ -58,10 +58,6 @@
       <div class="border-bottom text-center" style="height: 0.9rem">
         <span class="bg-white px-3">or</span>
       </div>
-    </div>
-    <div class="btn d-flex gap-2 justify-content-center border mt-3 shadow-sm">
-      <img src="{{ url_for('static', filename='icons/google-icon.svg')}}" alt="google-icon" style="height: 1.6rem" />
-      <div class="fw-semibold text-secondary">Continuar con Google</div>
     </div>
   </div>
 </body>

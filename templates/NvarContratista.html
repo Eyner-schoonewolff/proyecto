@@ -20,7 +20,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menulateral">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand text-white" href="./home">Bienvenido Usuario  {{tipo}} </a>
+        <a class="navbar-brand text-white" href="../home">Bienvenido Usuario  {{tipo}} </a>
         <a href="{{url_for('login.logout')}}" class="btn btn-danger">Cerrar sesion</a>
         <!-- off camvas -->
         <section class="offcanvas offcanvas-start " id="menulateral" tabindex="-1">
@@ -31,11 +31,10 @@
 
             <div class="offcanvas-body d-flex flex-column justify-content-between px-0">
                 <ul class="navbar-nav fs-5 justify-content-evenly">
-                    <li class="nav-item p-3 py-md-1"><a href="./home" class="nav-link">INICIO</a></li>
-                    <li class="nav-item p-3 py-md-1"><a href="./consultar" class="nav-link">CONSULTAR</a></li>
-                    <li class="nav-item p-3 py-md-1"><a href="./actualizar" class="nav-link">MODIFICAR</a></li>
-                    <li class="nav-item p-3 py-md-1"><a href="./agregar" class="nav-link">AGREGAR OCUPACIONES</a></li>
-                    <li class="nav-item p-3 py-md-1"><a href="./contacto" class="nav-link">CONTACTO</a></li>
+                    <li class="nav-item p-3 py-md-1"><a href="../home" class="nav-link">INICIO</a></li>
+                    <li class="nav-item p-3 py-md-1"><a href="../consultar" class="nav-link">CONSULTAR</a></li>
+                    <li class="nav-item p-3 py-md-1"><a href="../actualizar" class="nav-link">MODIFICAR</a></li>
+                    <li class="nav-item p-3 py-md-1"><a href="../contacto" class="nav-link">CONTACTO</a></li>
                 </ul>
             </div>
         </section>
