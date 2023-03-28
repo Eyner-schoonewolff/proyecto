@@ -33,10 +33,11 @@ class Solicitar:
 
     def eliminar(self, id) -> bool:
         cursor = db.connection.cursor()
-        query = "DELETE FROM solicitud WHERE id = %s"
-        valores = (id,)
-        cursor.execute(query, valores)
+        valor_id = (id,)
+        query='UPDATE solicitud SET id_estado = 4 WHERE id = %s'
+        cursor.execute(query,valor_id)
         db.connection.commit()
+        cursor.close()
         return True
 
     def contratista_(self) -> Dict:

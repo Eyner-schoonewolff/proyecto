@@ -50,5 +50,4 @@ class DatosUsuario:
         cursor.execute(query,datos_actualizar)
         db.connection.commit()
         cursor.close()
-
         return f"registro(s) actualizado(s)"

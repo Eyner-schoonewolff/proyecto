@@ -49,8 +49,13 @@
                             <td>{{consulta.direccion}}</td>
                             <td>{{consulta.estado}}</td>
                             <td class="mt-2">
-                                <a id="guardar-id" class="btn btn-warning bi bi-arrow-clockwise m-1" data-bs-toggle="modal" data-bs-target="#exampleModal-{{consulta.id}}"></a>
-                                <a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a>
+                              {% if consulta.estado == "Finalizada"%}
+                                <a id="guardar-id" class="btn btn-secondary bi bi-arrow-clockwise m-1"></a>
+                              {%else%}
+                              <a id="guardar-id" class="btn btn-warning bi bi-arrow-clockwise m-1"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal-{{consulta.id}}"></a>
+                              {%endif%}
+                              <a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a>
                             </td>
                           </tr>
 
@@ -69,8 +74,7 @@
                                     <div class="row mt-3">
                                       <div class="col-12 mb-2">
                                         <label for="estado" class="m-2">Estado actual</label>
-                                        <input type="estado" class="form-control text-center" name="estado"
-                                          value={{consulta.estado}} readonly>
+                                          <h3 class="mt-2 text-center">{{consulta.estado}}</h3>
                                         <input id="id_consulta" name="prodId" type="hidden" value={{consulta.id}}>
 
                                       </div>
@@ -80,10 +84,12 @@
                                         <label for="select" class="m-3">Cambiar estado</label>
                                         <select class="form-select text-center" aria-label="Default select example"
                                           id="select_estado">
-                                          <option selected value="1">Pendiente</option>
+                                          {%if consulta.estado == "Pendiente" %}
                                           <option value="2">Acepatar</option>
                                           <option value="3">Cancelar</option>
+                                          {% elif consulta.estado == "Aceptada" %}
                                           <option value="4">Finalizar</option>
+                                          {% endif %}
                                         </select>
                                       </div>
                                     </div>
@@ -138,16 +144,22 @@
                     </thead>
                     <tbody>
                       {% for consulta in consulta_cliente %}
+                      {% if consulta.estado != "Finalizada"%}
                       <tr>
                         <th scope="row">{{consulta.nombre}}</th>
                         <td>{{consulta.numero}}</td>
                         <td>{{consulta.horario}}</td>
                         <td>{{consulta.ocupacion}}</td>
                         <td>{{consulta.estado}}</td>
+                        {% if consulta.estado != "Aceptada"%}
                         <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
                               class="bi bi-trash3"></i></a>
                         </td>
+                        {%else%}
+                        <td><a class="btn btn-secondary"> <i class="bi bi-trash3"></i></a>
+                          {%endif%}
                       </tr>
+                      {%endif%}
                       {% endfor %}
 
                     </tbody>
