@@ -14,7 +14,7 @@ class Solicitar:
         self.problema = problema
         self.id_usuario = session.get('id')
 
-    def agregar(self) -> None:
+    def agregar(self) -> bool:
         cursor = db.connection.cursor()
 
         segundo = datetime.datetime.now()
@@ -29,7 +29,7 @@ class Solicitar:
         cursor.execute(query_informacion, informacion)
         db.connection.commit()
 
-        return '1'
+        return True
 
     def eliminar(self, id) -> bool:
         cursor = db.connection.cursor()
@@ -101,3 +101,17 @@ class Solicitar:
         cursor.close()
 
         return f"registro(s) actualizado(s)"
+    
+    def ultima_solicitud(self):
+        cursor=db.connection.cursor(dictionary=True)
+        query="""
+            SELECT id_usuario_ocupaciones id,udp.nombre_completo nombre
+                FROM solicitud s
+                INNER JOIN usuarios u ON s.`id_usuario_cliente` = u.`id`
+                INNER JOIN usuario_datos_personales udp ON u.`id_usuario_datos_personales`= udp.id
+                ORDER BY s.id DESC
+                LIMIT 1;
+        """
+        cursor.execute(query)
+        return cursor.fetchone()
+        

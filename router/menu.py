@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
-from seguridad.datos_usuario import DatosUsuario
 from seguridad.Model_solicitar_servicio import Solicitar
+from plyer import notification
+import os
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -14,6 +15,8 @@ def home():
     if not logueado:
         return redirect(url_for('login.index'))
 
+    notification.notify(title='Título de la notificación',
+                        message='Este es el mensaje de la notificación')
     return render_template("home.html", nombre=nombre_usuario,
                            tipo=tipo_usuario)
 
@@ -58,6 +61,13 @@ def consultar():
     consultar = Solicitar()
 
     if consultar.contratista_():
+        id = session.get('id')
+        notificacion_ = consultar.ultima_solicitud()
+        if notificacion_['id'] == id:
+            notification.notify(title='Notificacion',
+                                message='Nueva Solicitud de {}'.format(notificacion_['nombre']), app_name='Contratista',
+                                app_icon="Image-1.png",  # Reemplazar por el path del icono deseado
+                                timeout=5)
         return render_template("consultar.html", nombre=nombre_usuario,
                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
@@ -65,20 +75,20 @@ def consultar():
                            tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
-@menus.route("/actualizar_estado/<id>",methods=['POST','GET'])
+@menus.route("/actualizar_estado/<id>", methods=['POST', 'GET'])
 def actualizar_estado(id):
     if request.method == 'POST':
-        id_select=request.get_json()['id']
-        actualizar=Solicitar()
-        actualizar.actualizar_estado(id_estado=id_select,id_solicitud=id)
-        return jsonify({"actualizar":True,"recargar":"/consultar"})
-    
+        id_select = request.get_json()['id']
+        actualizar = Solicitar()
+        actualizar.actualizar_estado(id_estado=id_select, id_solicitud=id)
+        return jsonify({"actualizar": True, "recargar": "/consultar"})
+
     return redirect(url_for('menus.consultar'))
 
 
 @menus.route("/evidencia/<id>")
 def evidencia_solicitud(id):
-    id_evidencia=int(id)
+    id_evidencia = int(id)
     logueado = session.get('login', False)
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
@@ -88,9 +98,9 @@ def evidencia_solicitud(id):
 
     consultar = Solicitar()
 
-    consulta=consultar.evidencia_(id=id_evidencia)
+    consulta = consultar.evidencia_(id=id_evidencia)
 
-    return render_template("evidencias.html",nombre=nombre_usuario,tipo=tipo_usuario,informacion=consulta)
+    return render_template("evidencias.html", nombre=nombre_usuario, tipo=tipo_usuario, informacion=consulta)
 
 
 @menus.route("/contacto")
