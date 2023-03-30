@@ -1,4 +1,5 @@
 from flask import Blueprint, request, session, redirect, url_for, flash
+from plyer import notification
 import os
 import uuid
 from werkzeug.utils import secure_filename
@@ -16,12 +17,10 @@ def solicitar_():
     contratista = request.form.get('contratista')
     problema = request.form.get('problema')
 
-
     if not logueado:
         return redirect(url_for('login.index'))
 
-    file =request.files['evidencia']
-
+    file = request.files['evidencia']
     # Nombre original del archivo
     filename = secure_filename(file.filename)
     # capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
@@ -30,15 +29,15 @@ def solicitar_():
     nuevo_nombre_file = str(uuid.uuid4()) + extension
 
     upload_path = os.path.join('static/img', nuevo_nombre_file)
-   
+
     file.save(upload_path)
 
     solicitar = Solicitar(fecha=fecha, hora=hora, tipo_contratista=tipo_contratista,
-                          contratista=contratista,evidencia=nuevo_nombre_file ,problema=problema)
+                          contratista=contratista,evidencia=nuevo_nombre_file, problema=problema)
 
     valor = solicitar.agregar()
 
-    if valor== '1':
+    if valor:
         return {"numero": 1}
     else:
         return {"numero": 0}
@@ -57,5 +56,3 @@ def eliminar_(id):
         return redirect(url_for('menus.consultar'))
 
     return flash(message='No se pudo eliminar')
-
-

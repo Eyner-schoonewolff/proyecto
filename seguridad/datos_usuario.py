@@ -1,6 +1,5 @@
 from db.database import *
 from typing import Dict
-from flask import session
 
 
 class DatosUsuario:
@@ -13,7 +12,7 @@ class DatosUsuario:
         cursor.execute(query)
         return cursor.fetchall()
 
-    def obtener(self,id) -> Dict:
+    def obtener(self, id) -> Dict:
         # Obtener el cursor y el correo electrónico actual
         cursor = db.connection.cursor(dictionary=True)
         # Consultar los datos del usuario con sus ocupaciones
@@ -43,11 +42,35 @@ class DatosUsuario:
 
         return datos
 
-    def actualizar(self, nombre, celular, direccion,id_usuario):
+    def actualizar(self, nombre, celular, direccion, id_usuario):
         cursor = db.connection.cursor()
-        datos_actualizar=(nombre,celular,direccion,id_usuario)
-        query='UPDATE usuario_datos_personales SET nombre_completo = %s, numero_celular = %s, direccion=%s WHERE id = %s'
-        cursor.execute(query,datos_actualizar)
+        datos_actualizar = (nombre, celular, direccion, id_usuario)
+        query = 'UPDATE usuario_datos_personales SET nombre_completo = %s, numero_celular = %s, direccion=%s WHERE id = %s'
+        cursor.execute(query, datos_actualizar)
         db.connection.commit()
         cursor.close()
         return f"registro(s) actualizado(s)"
+
+    def id_usuarios(self, id) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+            SELECT id_usuario_ocupaciones,id_usuario_cliente
+            FROM solicitud
+            WHERE id=%s
+        """
+        cursor.execute(query, (id,))
+        return cursor.fetchone()
+
+    def calificacion(self, cliente, contratista, observaciones, estrellas):
+        cursor = db.connection.cursor()
+
+        informacion = (cliente, contratista, observaciones, estrellas)
+
+        query_informacion = """
+                    INSERT INTO calificacion (id_cliente,id_contratista,observaciones,numero_estrellas,id_tipo_usuario)
+                    VALUES (%s,%s,%s,%s,3)
+                """
+        cursor.execute(query_informacion, informacion)
+        db.connection.commit()
+
+        return True

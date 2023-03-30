@@ -1,5 +1,6 @@
-from flask import Blueprint, request, session, render_template, redirect, url_for
+from flask import Blueprint, request, session, render_template, redirect, url_for,flash
 from seguridad.datos_usuario import DatosUsuario
+from seguridad.Model_solicitar_servicio import Solicitar
 
 datos_personales = Blueprint('datos_personales', __name__, static_url_path='/static',
                              template_folder="templates")
@@ -14,6 +15,14 @@ def actualizar():
 
     if not logueado:
         return redirect(url_for('login.index'))
+    
+    consultar = Solicitar()
+
+    id = session.get('id')
+    notificacion_ = consultar.ultima_solicitud()
+    if notificacion_['id'] == id:
+        flash(message="Nueva Solicitud de {}".format(
+            notificacion_['nombre']), category="Contratista")
 
     datos_usuario = DatosUsuario()
 
