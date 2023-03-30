@@ -114,4 +114,3 @@ class Solicitar:
         """
         cursor.execute(query)
         return cursor.fetchone()
-        

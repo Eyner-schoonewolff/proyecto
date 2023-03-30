@@ -1,7 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
+from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify, flash
 from seguridad.Model_solicitar_servicio import Solicitar
-from plyer import notification
-import os
+from seguridad.datos_usuario import DatosUsuario
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -15,8 +14,17 @@ def home():
     if not logueado:
         return redirect(url_for('login.index'))
 
-    notification.notify(title='Título de la notificación',
-                        message='Este es el mensaje de la notificación')
+    if not tipo_usuario == 'Contratista':
+        return render_template("home.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario)
+    consultar = Solicitar()
+
+    id = session.get('id')
+    notificacion_ = consultar.ultima_solicitud()
+    if notificacion_['id'] == id:
+        flash(message="Nueva Solicitud de {}".format(
+            notificacion_['nombre']), category="Contratista")
+
     return render_template("home.html", nombre=nombre_usuario,
                            tipo=tipo_usuario)
 
@@ -64,10 +72,8 @@ def consultar():
         id = session.get('id')
         notificacion_ = consultar.ultima_solicitud()
         if notificacion_['id'] == id:
-            notification.notify(title='Notificacion',
-                                message='Nueva Solicitud de {}'.format(notificacion_['nombre']), app_name='Contratista',
-                                app_icon="Image-1.png",  # Reemplazar por el path del icono deseado
-                                timeout=5)
+            flash(message="Nueva Solicitud de {}".format(
+                notificacion_['nombre']), category="Contratista")
         return render_template("consultar.html", nombre=nombre_usuario,
                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
@@ -112,5 +118,50 @@ def contacto():
     if not logueado:
         return redirect(url_for('login.index'))
 
+    consultar = Solicitar()
+
+    id = session.get('id')
+    notificacion_ = consultar.ultima_solicitud()
+    if notificacion_['id'] == id:
+        flash(message="Nueva Solicitud de {}".format(
+            notificacion_['nombre']), category="Contratista")
+
     return render_template("contacto.html", nombre=nombre_usuario,
                            tipo=tipo_usuario)
+
+
+@menus.route("/calificar")
+def calificar():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+
+    consultar = Solicitar()
+
+    return render_template("calificacion.html", nombre=nombre_usuario,
+                           tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+
+
+@menus.route("/guardar-calificacion", methods=['POST'])
+def guardar_calificacion():
+    json = request.get_json()
+    id = json['id_calificacion']
+    calificacion = json['estrellas']
+    observacion = json['observacion']
+
+    datosUsuario = DatosUsuario()
+
+    usuario = datosUsuario.id_usuarios(id=id)
+
+    cliente = usuario['id_usuario_cliente']
+    contratista = usuario['id_usuario_ocupaciones']
+
+    agregar = datosUsuario.calificacion(
+        cliente=cliente, contratista=contratista, observaciones=observacion, estrellas=calificacion)
+    if agregar:
+        return jsonify({"actualizar": True, "recargar": "/calificar"})
+    
+    return jsonify({"actualizar": False})
