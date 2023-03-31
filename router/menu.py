@@ -130,6 +130,21 @@ def contacto():
                            tipo=tipo_usuario)
 
 
+@menus.route("/calendario")
+def calendario():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+
+    consultar = Solicitar()
+
+    return render_template("calendario.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+
+
 @menus.route("/calificar")
 def calificar():
     nombre_usuario = session.get('username')
@@ -141,27 +156,28 @@ def calificar():
 
     consultar = Solicitar()
 
+    if consultar.contratista_():
+        return render_template("calificacion.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+
     return render_template("calificacion.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+                           tipo=tipo_usuario, consulta_contratista=consultar.cliente())
 
 
 @menus.route("/guardar-calificacion", methods=['POST'])
 def guardar_calificacion():
     json = request.get_json()
-    id = json['id_calificacion']
+    id_solicitud = json['id_solicitud']
+    id_tipo_usuario = json['id_tipo_usuario']
     calificacion = json['estrellas']
     observacion = json['observacion']
 
     datosUsuario = DatosUsuario()
 
-    usuario = datosUsuario.id_usuarios(id=id)
+    agregar = datosUsuario.calificacion(observaciones=observacion,
+                                        estrellas=calificacion, id_solicitud=id_solicitud, id_usuario_calificacion=id_tipo_usuario)
 
-    cliente = usuario['id_usuario_cliente']
-    contratista = usuario['id_usuario_ocupaciones']
-
-    agregar = datosUsuario.calificacion(
-        cliente=cliente, contratista=contratista, observaciones=observacion, estrellas=calificacion)
     if agregar:
         return jsonify({"actualizar": True, "recargar": "/calificar"})
-    
-    return jsonify({"actualizar": False})
+
+    return jsonify({"actualizar": False, "recargar": "/calificar"})

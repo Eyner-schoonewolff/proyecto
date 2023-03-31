@@ -54,23 +54,37 @@ class DatosUsuario:
     def id_usuarios(self, id) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-            SELECT id_usuario_ocupaciones,id_usuario_cliente
+            SELECT id_usuario_contratista,id_usuario_cliente
             FROM solicitud
             WHERE id=%s
         """
         cursor.execute(query, (id,))
         return cursor.fetchone()
 
-    def calificacion(self, cliente, contratista, observaciones, estrellas):
-        cursor = db.connection.cursor()
+    def calificacion(self, observaciones, estrellas, id_solicitud, id_usuario_calificacion):
+        cursor = db.connection.cursor(dictionary=True)
 
-        informacion = (cliente, contratista, observaciones, estrellas)
+        query_validacion = "SELECT * FROM calificacion WHERE id_solicitud=%s and id_usuario_calificacion=%s"
 
-        query_informacion = """
-                    INSERT INTO calificacion (id_cliente,id_contratista,observaciones,numero_estrellas,id_tipo_usuario)
-                    VALUES (%s,%s,%s,%s,3)
+        valores = (id_solicitud, id_usuario_calificacion)
+
+        cursor.execute(query_validacion, valores)
+
+        calificacion = cursor.fetchone()
+
+        if calificacion is None:
+
+            informacion = (observaciones,estrellas, id_solicitud, id_usuario_calificacion)
+
+            query_informacion = """
+                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario_calificacion)
+                    VALUES (%s,%s,%s,%s)
                 """
-        cursor.execute(query_informacion, informacion)
-        db.connection.commit()
-
-        return True
+            
+            cursor.execute(query_informacion, informacion)
+            db.connection.commit()
+            return True
+        
+        elif calificacion:
+            print("Hay algo")
+            return False
