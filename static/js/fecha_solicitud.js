@@ -9,14 +9,14 @@ function guardarsolicitud() {
     let formData = new FormData();
     let fecha = $("#fecha").val();
     let hora = $("#hora").val();
-    // let servicio = $("#opciones").val();
+    let servicio = $("#opciones").val();
     let contratista = $("#contratistas").val();
     let problema = $("#carta").val();
     let evidencia = $("#formFileSm")[0].files[0];
 
     formData.append('fecha', fecha);
     formData.append('hora', hora);
-    // formData.append('servicio', servicio);
+    formData.append('servicio', servicio);
     formData.append('contratista', contratista);
     formData.append('problema', problema);
     formData.append('evidencia', evidencia);
@@ -39,7 +39,7 @@ function guardarsolicitud() {
                   }).then(() => {
                       $("#fecha").val('');
                       $("#hora").val('');
-                      // $("#opciones").val();
+                      $("#opciones").val();
                       $("#contratistas").val();
                       $("#formFileSm").val();
                       $("#carta").val('');

@@ -5,10 +5,11 @@ import datetime
 
 
 class Solicitar:
-    def __init__(self, fecha="", hora="", contratista="", evidencia="", problema="") -> None:
+    def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="", problema="") -> None:
         self.fecha = fecha
         self.hora = hora
         self.contratista = contratista
+        self.tipo_contratista = tipo_contratista
         self.evidencia = evidencia
         self.problema = problema
         self.id_usuario = session.get('id')
@@ -18,12 +19,13 @@ class Solicitar:
 
         segundo = datetime.datetime.now()
         fechatime = self.fecha + ' ' + self.hora+':'+repr(segundo.second)
-        informacion = (self.contratista, self.id_usuario, fechatime, self.evidencia,
+        informacion = (self.contratista, self.id_usuario, self.tipo_contratista, fechatime, self.evidencia,
                        self.problema)
 
         query_informacion = """
-                    INSERT INTO solicitud (id_usuario_contratista,id_usuario_cliente,horario,evidencia,descripcion,id_estado)
-                    VALUES (%s,%s,%s,%s,%s,1)
+                    INSERT INTO solicitud 
+                    (id_usuario_contratista,id_usuario_cliente,id_ocupacion_solicitud,horario,evidencia,descripcion,id_estado)
+                    VALUES (%s,%s,%s,%s,%s,%s,1)
                 """
         cursor.execute(query_informacion, informacion)
         db.connection.commit()
@@ -57,11 +59,10 @@ class Solicitar:
     def cliente(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-            SELECT s.id, s.horario, e.nombre estado, uo.id_ocupacion, o.nombre ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
+           SELECT s.id, s.horario, e.nombre estado, s.id_ocupacion_solicitud, o.nombre ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
                 FROM solicitud s
                 INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
-                INNER JOIN usuario_ocupaciones uo ON uo.id_usuario=u.id
-                INNER JOIN ocupacion o ON uo.id_ocupacion=o.id
+                INNER JOIN ocupacion o ON s.`id_ocupacion_solicitud`=o.id
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 INNER JOIN estado e ON s.id_estado=e.id
                 WHERE s.id_usuario_cliente=%s
