@@ -34,8 +34,8 @@ class Solicitar:
     def eliminar(self, id) -> bool:
         cursor = db.connection.cursor()
         valor_id = (id,)
-        query='UPDATE solicitud SET id_estado = 4 WHERE id = %s'
-        cursor.execute(query,valor_id)
+        query = 'UPDATE solicitud SET id_estado = 4 WHERE id = %s'
+        cursor.execute(query, valor_id)
         db.connection.commit()
         cursor.close()
         return True
@@ -92,19 +92,19 @@ class Solicitar:
         cursor.execute(query, (id,))
         return cursor.fetchone()
 
-    def actualizar_estado(self,id_estado,id_solicitud):
+    def actualizar_estado(self, id_estado, id_solicitud):
         cursor = db.connection.cursor()
-        informacion = (id_estado,id_solicitud)
+        informacion = (id_estado, id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
         cursor.close()
 
         return f"registro(s) actualizado(s)"
-    
+
     def ultima_solicitud(self):
-        cursor=db.connection.cursor(dictionary=True)
-        query="""
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
             SELECT id_usuario_contratista id,udp.nombre_completo nombre
                 FROM solicitud s
                 INNER JOIN usuarios u ON s.`id_usuario_cliente` = u.`id`
