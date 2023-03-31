@@ -86,5 +86,4 @@ class DatosUsuario:
             return True
         
         elif calificacion:
-            print("Hay algo")
             return False

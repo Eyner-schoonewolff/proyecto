@@ -18,6 +18,8 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.min.css">
+
 </head>
 
 <body>
@@ -53,7 +55,7 @@
                                                 <label for="puesto">Elegir tipo contratista<span
                                                         style="color: red;">*</span></label>
                                                 <select class="form-control text-center" id="opciones">
-                                                    <option value="0" selected >Elegir opcion</option>
+                                                    <option value="0" selected>Elegir opcion</option>
                                                     <option value="1">Albañil</option>
                                                     <option value="2">Plomero</option>
                                                     <option value="3">Electricista</option>
@@ -64,7 +66,7 @@
                                                 <label for="puesto">Nombres de contratistas disponibles<span
                                                         style="color: red;">*</span></label>
                                                 <select class="form-control text-center" id="contratistas">
-                                                        <option value= ''> </option>
+                                                    <option value=''> </option>
                                                 </select>
                                             </div>
                                             <div class="form-group m-3">
@@ -109,6 +111,7 @@
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/fecha_solicitud.js') }}"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </html>

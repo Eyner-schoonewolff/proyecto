@@ -14,7 +14,7 @@ class Usuario:
 
     def datos_unico(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
-
+        #revisar
         query = """SELECT email, numero_documento 
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
@@ -53,7 +53,7 @@ class Usuario:
                     INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento)
                     VALUES (%s,%s,%s)
                 """
-
+        #revisar
         query = """INSERT usuarios(email,contraseña,id_tipo_usuario,id_usuario_datos_personales)
                 SELECT %s,%s,%s,id
                 FROM usuario_datos_personales

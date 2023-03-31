@@ -52,7 +52,7 @@
                           <td>{{consulta.direccion}}</td>
                           <td>{{consulta.estado}}</td>
                           <td class="mt-2">
-                            {% if consulta.estado == "Finalizada"%}
+                            {% if consulta.estado == "Finalizada" or consulta.estado == "Cancelada"%}
                             <a id="guardar-id" class="btn btn-secondary bi bi-arrow-clockwise m-1"
                               title="desactivado"></a>
                             {%else%}

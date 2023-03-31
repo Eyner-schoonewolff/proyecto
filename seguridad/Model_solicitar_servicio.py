@@ -5,10 +5,9 @@ import datetime
 
 
 class Solicitar:
-    def __init__(self, fecha="", hora="", tipo_contratista="", contratista="", evidencia="", problema="") -> None:
+    def __init__(self, fecha="", hora="", contratista="", evidencia="", problema="") -> None:
         self.fecha = fecha
         self.hora = hora
-        self.tipo_contratista = tipo_contratista
         self.contratista = contratista
         self.evidencia = evidencia
         self.problema = problema
@@ -19,12 +18,12 @@ class Solicitar:
 
         segundo = datetime.datetime.now()
         fechatime = self.fecha + ' ' + self.hora+':'+repr(segundo.second)
-        informacion = (self.contratista, self.tipo_contratista, fechatime, self.evidencia,
-                       self.problema, self.id_usuario)
+        informacion = (self.contratista, self.id_usuario, fechatime, self.evidencia,
+                       self.problema)
 
         query_informacion = """
-                    INSERT INTO solicitud (id_usuario_contratista,id_ocupacion,horario,evidencia,descripcion,id_usuario_cliente,id_estado)
-                    VALUES (%s,%s,%s,%s,%s,%s,1)
+                    INSERT INTO solicitud (id_usuario_contratista,id_usuario_cliente,horario,evidencia,descripcion,id_estado)
+                    VALUES (%s,%s,%s,%s,%s,1)
                 """
         cursor.execute(query_informacion, informacion)
         db.connection.commit()
@@ -58,21 +57,21 @@ class Solicitar:
     def cliente(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-                SELECT s.id, s.horario, e.nombre estado, s.id_ocupacion, o.nombre as ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
+            SELECT s.id, s.horario, e.nombre estado, uo.id_ocupacion, o.nombre ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
                 FROM solicitud s
-                INNER JOIN usuario_ocupaciones uo1 ON s.id_ocupacion = uo1.id_ocupacion
-                INNER JOIN ocupacion o ON uo1.id_ocupacion = o.id
-                INNER JOIN usuario_ocupaciones uo2 ON s.id_usuario_contratista = uo2.id_usuario
-                INNER JOIN usuarios u ON uo2.id_usuario = u.id
-                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
-                INNER JOIN estado e ON s.id_estado = e.id
-                WHERE id_usuario_cliente = %s
+                INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
+                INNER JOIN usuario_ocupaciones uo ON uo.id_usuario=u.id
+                INNER JOIN ocupacion o ON uo.id_ocupacion=o.id
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
+                INNER JOIN estado e ON s.id_estado=e.id
+                WHERE s.id_usuario_cliente=%s
                 GROUP BY s.id;
          """
 
         cursor.execute(query, (self.id_usuario,))
         return cursor.fetchall()
 
+        # cambiar query 5
     def consultar_contratista(self, id_ocupacion) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
@@ -102,6 +101,7 @@ class Solicitar:
 
         return f"registro(s) actualizado(s)"
 
+        # cambiar query 6
     def ultima_solicitud(self):
         cursor = db.connection.cursor(dictionary=True)
         query = """
