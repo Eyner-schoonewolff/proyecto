@@ -168,14 +168,14 @@ def calificar():
 def guardar_calificacion():
     json = request.get_json()
     id_solicitud = json['id_solicitud']
-    id_tipo_usuario = json['id_tipo_usuario']
+    tipo_usuario = json['id_tipo_usuario']
     calificacion = json['estrellas']
     observacion = json['observacion']
 
-    datosUsuario = DatosUsuario()
+    solicitud = DatosUsuario()
 
-    agregar = datosUsuario.calificacion(observaciones=observacion,
-                                        estrellas=calificacion, id_solicitud=id_solicitud, id_usuario_calificacion=id_tipo_usuario)
+    agregar = solicitud.calificar(observaciones=observacion,
+                                        estrellas=calificacion, id_solicitud=id_solicitud,tipo_usuario=tipo_usuario)
 
     if agregar:
         return jsonify({"actualizar": True, "recargar": "/calificar"})

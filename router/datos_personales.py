@@ -11,7 +11,6 @@ def actualizar():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
-    id = session.get('id')
 
     if not logueado:
         return redirect(url_for('login.index'))

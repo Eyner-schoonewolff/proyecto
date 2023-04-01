@@ -31,13 +31,19 @@ function guardarsolicitud() {
         success: function (respuesta) {
             console.log(respuesta.numero);
             if (respuesta.numero == 1) {
-                alert('Solicitud Creada')
-                $("#fecha").val('');
-                $("#hora").val('');
-                $("#opciones").val();
-                $("#contratistas").val();
-                $("#formFileSm").val();
-                $("#carta").val('');
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Se ha realizado correctamente la solicitud",
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                  }).then(() => {
+                      $("#fecha").val('');
+                      $("#hora").val('');
+                      $("#opciones").val();
+                      $("#contratistas").val();
+                      $("#formFileSm").val();
+                      $("#carta").val('');
+                  });
             } else {
                 alert('Error')
             }

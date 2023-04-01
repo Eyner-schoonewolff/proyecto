@@ -32,11 +32,16 @@ def solicitar_():
 
     file.save(upload_path)
 
-    solicitar = Solicitar(fecha=fecha, hora=hora, tipo_contratista=tipo_contratista,
-                          contratista=contratista,evidencia=nuevo_nombre_file, problema=problema)
+    solicitar = Solicitar(fecha=fecha,
+                          hora=hora,
+                          contratista=contratista,
+                          tipo_contratista=tipo_contratista,
+                          evidencia=nuevo_nombre_file,
+                          problema=problema
+                          )
 
     valor = solicitar.agregar()
-
+    print(valor)
     if valor:
         return {"numero": 1}
     else:
