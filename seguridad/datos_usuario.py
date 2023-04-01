@@ -1,10 +1,11 @@
 from db.database import *
+from flask import session
 from typing import Dict
 
 
 class DatosUsuario:
     def __init__(self) -> None:
-        pass
+        self.id_usuario = session.get('id')
 
     def ocupaciones(self):
         cursor = db.connection.cursor(dictionary=True)
@@ -61,23 +62,28 @@ class DatosUsuario:
         cursor.execute(query, (id,))
         return cursor.fetchone()
 
-    def calificacion(self, observaciones, estrellas, id_solicitud, id_usuario_calificacion):
+    def calificar(self, observaciones, estrellas, id_solicitud,tipo_usuario)->bool:
         cursor = db.connection.cursor(dictionary=True)
 
-        query_validacion = "SELECT * FROM calificacion WHERE id_solicitud=%s and id_usuario_calificacion=%s"
-
-        valores = (id_solicitud, id_usuario_calificacion)
+        query_validacion = """
+        SELECT count(u.id) cantidad
+            FROM calificacion c
+            INNER JOIN usuarios u ON c.`id_usuario`=u.`id`
+            INNER JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id
+            WHERE c.`id_solicitud`=%s and tu.id=%s
+        
+        """
+        valores = (id_solicitud, tipo_usuario)
 
         cursor.execute(query_validacion, valores)
 
-        calificacion = cursor.fetchone()
-
-        if calificacion is None:
-
-            informacion = (observaciones,estrellas, id_solicitud, id_usuario_calificacion)
+        calificacion = cursor.fetchone()['cantidad']
+ 
+        if calificacion==0:
+            informacion = (observaciones,estrellas, id_solicitud, self.id_usuario)
 
             query_informacion = """
-                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario_calificacion)
+                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario)
                     VALUES (%s,%s,%s,%s)
                 """
             
@@ -85,5 +91,5 @@ class DatosUsuario:
             db.connection.commit()
             return True
         
-        elif calificacion:
+        elif calificacion==1:
             return False
