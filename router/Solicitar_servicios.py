@@ -1,5 +1,4 @@
 from flask import Blueprint, request, session, redirect, url_for, flash
-from plyer import notification
 import os
 import uuid
 from werkzeug.utils import secure_filename

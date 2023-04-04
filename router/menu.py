@@ -29,6 +29,20 @@ def home():
                            tipo=tipo_usuario)
 
 
+@menus.route('/perfiles')
+def perfiles():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+    if not logueado:
+        return redirect(url_for('login.index'))
+
+    return render_template("perfiles.html", 
+                           nombre=nombre_usuario,
+                           tipo=tipo_usuario
+                           )
+
+
 @menus.route("/solicitar", methods=['GET', 'POST'])
 def solicitar_contratista():
     solicitar = Solicitar()
@@ -142,7 +156,7 @@ def calendario():
     consultar = Solicitar()
 
     return render_template("calendario.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+                           tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
 
 @menus.route("/calificar")
@@ -175,7 +189,7 @@ def guardar_calificacion():
     solicitud = DatosUsuario()
 
     agregar = solicitud.calificar(observaciones=observacion,
-                                        estrellas=calificacion, id_solicitud=id_solicitud,tipo_usuario=tipo_usuario)
+                                  estrellas=calificacion, id_solicitud=id_solicitud, tipo_usuario=tipo_usuario)
 
     if agregar:
         return jsonify({"actualizar": True, "recargar": "/calificar"})

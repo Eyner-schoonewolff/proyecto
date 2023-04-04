@@ -146,19 +146,19 @@
                     </thead>
                     <tbody>
                       {% for consulta in consulta_cliente %}
-                      {% if consulta.estado != "Finalizada"%}
+                      {% if consulta.estado != "Finalizada" %}
                       <tr>
                         <th scope="row">{{consulta.nombre}}</th>
                         <td>{{consulta.numero}}</td>
                         <td>{{consulta.horario}}</td>
                         <td>{{consulta.ocupacion}}</td>
                         <td>{{consulta.estado}}</td>
-                        {% if consulta.estado != "Aceptada"%}
-                        <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
-                              class="bi bi-trash3"></i></a>
+                        {% if consulta.estado == "Aceptada" or consulta.estado == "Cancelada" %}
+                        <td><a class="btn btn-secondary"> <i class="bi bi-trash3"></i></a>
                         </td>
                         {%else%}
-                        <td><a class="btn btn-secondary"> <i class="bi bi-trash3"></i></a>
+                        <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
+                              class="bi bi-trash3"></i></a>
                           {%endif%}
                       </tr>
                       {%endif%}
