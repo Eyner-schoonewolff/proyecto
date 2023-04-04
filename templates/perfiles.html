@@ -19,46 +19,56 @@
     <div class="container">
         <section class="h-100 text-center">
             <h2 class="m-3">Perfiles Cliente</h2>
+            {% if perfiles_cliente %}
             <div class="shadow-sm p-3 mb-5 bg-white rounded">
                 <div class="row">
+                    {% for perfil in perfiles_cliente %}
                     <div class="col-lg-4">
-                        <div class="card">
+                        <div class="card mb-5">
                             <div class="card-body">
-                                <h5 class="card-title">Nombre</h5>
-                                <p class="card-text">Observaciones</p>
-                                <a href="#" class="btn btn-success btn-sm bi bi-eye-fill" title="Ver mas"></a>
+                                <h5 class="card-title">{{perfil.nombre}}</h5>
+                                <p class="card-text">{{perfil.comentario}}</p>
+                                <a href="./perfil/{{perfil.id}}" class="btn btn-success btn-sm bi bi-eye-fill" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal-{{perfil.id}}" title="Ver mas"></a>
                             </div>
                             <div class="card-footer text-muted">
                                 2 days ago
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Nombre</h5>
-                                <p class="card-text">Observaciones</p>
-                                <a href="#" class="btn btn-success btn-sm bi bi-eye-fill" title="Ver mas"></a>
-                            </div>
-                            <div class="card-footer text-muted">
-                                2 days ago
+                    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                        id="exampleModal-{{perfil.id}}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ver Calificacion de Usuario id
+                                        {{perfil.id}}
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-outline mb-5">
+                                        <div class="row mt-3">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cerrar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="card-title">Nombre</h5>
-                                <p class="card-text">Observaciones</p>
-                                <a href="#" class="btn btn-success btn-sm bi bi-eye-fill" title="Ver mas"></a>
-                            </div>
-                            <div class="card-footer text-muted">
-                                2 days ago
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            {%else%}
+            <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+                <h4 class="text-center">No hay perfiles para mostrar</h4>
+            </div>
+            {% endif%}
         </section>
     </div>
 

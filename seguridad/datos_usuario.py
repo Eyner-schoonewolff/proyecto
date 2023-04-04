@@ -1,6 +1,7 @@
 from db.database import *
 from flask import session
 from typing import Dict
+import datetime
 
 
 class DatosUsuario:
@@ -62,7 +63,7 @@ class DatosUsuario:
         cursor.execute(query, (id,))
         return cursor.fetchone()
 
-    def calificar(self, observaciones, estrellas, id_solicitud,tipo_usuario)->bool:
+    def calificar(self, observaciones, estrellas, id_solicitud, tipo_usuario) -> bool:
         cursor = db.connection.cursor(dictionary=True)
 
         query_validacion = """
@@ -78,18 +79,23 @@ class DatosUsuario:
         cursor.execute(query_validacion, valores)
 
         calificacion = cursor.fetchone()['cantidad']
- 
-        if calificacion==0:
-            informacion = (observaciones,estrellas, id_solicitud, self.id_usuario)
+
+        if calificacion == 0:
+            fecha_actual = datetime.datetime.now()
+
+            cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
+
+            informacion = (observaciones, estrellas,
+                           id_solicitud, self.id_usuario, cadena_fecha)
 
             query_informacion = """
-                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario)
-                    VALUES (%s,%s,%s,%s)
+                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario,registro)
+                    VALUES (%s,%s,%s,%s,%s)
                 """
-            
+
             cursor.execute(query_informacion, informacion)
             db.connection.commit()
             return True
-        
-        elif calificacion==1:
+
+        elif calificacion == 1:
             return False

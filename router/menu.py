@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify, flash
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
+from seguridad.perfiles import Perfiles
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -36,10 +37,33 @@ def perfiles():
     logueado = session.get('login', False)
     if not logueado:
         return redirect(url_for('login.index'))
+    
+    perfiles=Perfiles()
 
-    return render_template("perfiles.html", 
+    mostrar=perfiles.consulta_cliente()
+
+    return render_template("perfiles.html",
                            nombre=nombre_usuario,
-                           tipo=tipo_usuario
+                           tipo=tipo_usuario,
+                           perfiles_cliente=mostrar
+                           )
+
+@menus.route('/perfil/<id>')
+def perfiles(id):
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    perfiles=Perfiles()
+
+    mostrar=perfiles.consulta_cliente()
+
+    return render_template("perfiles.html",
+                           nombre=nombre_usuario,
+                           tipo=tipo_usuario,
+                           perfiles_cliente=mostrar
                            )
 
 
@@ -181,15 +205,18 @@ def calificar():
 @menus.route("/guardar-calificacion", methods=['POST'])
 def guardar_calificacion():
     json = request.get_json()
+    observacion = json['observacion']
+    calificacion = json['estrellas']
     id_solicitud = json['id_solicitud']
     tipo_usuario = json['id_tipo_usuario']
-    calificacion = json['estrellas']
-    observacion = json['observacion']
 
     solicitud = DatosUsuario()
 
     agregar = solicitud.calificar(observaciones=observacion,
-                                  estrellas=calificacion, id_solicitud=id_solicitud, tipo_usuario=tipo_usuario)
+                                  estrellas=calificacion,
+                                  id_solicitud=id_solicitud,
+                                  tipo_usuario=tipo_usuario,
+                                  )
 
     if agregar:
         return jsonify({"actualizar": True, "recargar": "/calificar"})
