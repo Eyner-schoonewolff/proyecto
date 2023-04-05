@@ -11,27 +11,36 @@ document.querySelectorAll(".btn-perfil").forEach(function (button) {
             contentType: 'application/json',
             success: function (respuesta) {
                 if (respuesta.actualizar) {
-                    
-                    respuesta.datos.forEach(function (dato) {
-                        var h6Nombre = document.createElement('h6');
-                        h6Nombre.id = 'nombre-' + id_perfil;
-                        h6Nombre.textContent = dato.nombre;
+                    var div = document.querySelector(".contenedor_calificacion");
+                    var modal_contenido = document.getElementById('modal_contenido');
+                    var promedio= document.getElementById("promedio-calificacion");
+                    modal_contenido.innerHTML = "";
+                    promedio.innerHTML="";
 
-                        var h5Calificacion = document.createElement('h5');
-                        h5Calificacion.id = 'calificacion-' + id_perfil;
-                        h5Calificacion.textContent = dato.calificacion;
-                        
-                        var pComentario = document.createElement('p');
-                        pComentario.id = 'comentario-' + id_perfil;
-                        pComentario.textContent = dato.comentario;
-                        
-                        var modalBody = document.querySelector('#exampleModal-' + id_perfil + ' .modal-body');
-                        modalBody.appendChild(h6Nombre);
-                        modalBody.appendChild(h5Calificacion);
-                        modalBody.appendChild(pComentario);
-                    });
-                    
-                    $('#exampleModal-' + id_perfil).modal('show');
+                    for (const calificacion of respuesta.datos) {
+                        a = div.cloneNode(true);
+                        a.classList.remove("d-none")
+
+                        promedio.innerHTML="Calificacion "+respuesta.calificacion.promedio + '★';
+    
+                        const estrellas = a.querySelectorAll('.clasificacion input[type="radio"]');
+                        const valor = calificacion.valor; // Este valor podría venir de una base de datos o de un formulario
+    
+                        for (let i = 0; i < estrellas.length; i++) {
+                            if (estrellas[i].value <= valor) {
+                                estrellas[i].nextElementSibling.classList.add('checked');
+                            } else {
+                                estrellas[i].nextElementSibling.classList.remove('checked');
+                            }
+                        }
+    
+                        a.querySelector(".card-title").textContent = calificacion.nombre
+                        a.querySelector(".card-text").textContent = calificacion.comentario
+                        a.querySelector(".text-muted").textContent = calificacion.registro
+
+                        modal_contenido.appendChild(a)
+                    }
+                    $('#exampleModal').modal('show');
                 }
             }
         });

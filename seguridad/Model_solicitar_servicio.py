@@ -98,9 +98,8 @@ class Solicitar:
         query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
-        cursor.close()
 
-        return f"registro(s) actualizado(s)"
+        return True
 
         # cambiar query 6
     def ultima_solicitud(self):

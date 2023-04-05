@@ -14,9 +14,7 @@ document.querySelectorAll("#btn-guardar-estado").forEach(function (button) {
             contentType: 'application/json',
             success: function (respuesta) {
                 if (respuesta.actualizar) {
-                    // console.log(respuesta.data)
-                    window.location.href = respuesta.recargar
-
+                    window.location.reload()
                 }
             }
         });

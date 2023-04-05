@@ -48,17 +48,18 @@ def perfiles():
                            )
 
 
-@menus.route('/perfiles/<id>', methods=['GET', 'POST'])
+@menus.route('/perfiles/<id>', methods=['POST'])
 def perfiles_cliente(id):
-    if request.method == 'POST':
-        id_usuario = int(id)
-        perfiles = Perfiles()
-        id_usuario_cliente = request.get_json()['id_usuario_cliente']
-        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,
-                                                              id_usuario=id_usuario
-                                                              )
-        return jsonify({'actualizar': True, 'datos': informacion_usuario})
-    return redirect(url_for('menus.perfil'))
+    id_usuario = int(id)
+    perfiles = Perfiles()
+    id_usuario_cliente = request.get_json()['id_usuario_cliente']
+    informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,
+                                                          id_usuario=id_usuario
+                                                          )
+    promedio = perfiles.promedio_calificacion(id_usuario_cliente=id_usuario_cliente,
+                                              id_usuario=id_usuario
+                                              )
+    return jsonify({'actualizar': True, 'datos': informacion_usuario, 'calificacion': promedio})
 
 
 @menus.route("/solicitar", methods=['GET', 'POST'])
@@ -113,15 +114,14 @@ def consultar():
                            tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
-@menus.route("/actualizar_estado/<id>", methods=['POST', 'GET'])
+@menus.route("/actualizar_estado/<id>", methods=['POST'])
 def actualizar_estado(id):
-    if request.method == 'POST':
-        id_select = request.get_json()['id']
-        actualizar = Solicitar()
-        actualizar.actualizar_estado(id_estado=id_select, id_solicitud=id)
-        return jsonify({"actualizar": True, "recargar": "/consultar"})
-
-    return redirect(url_for('menus.consultar'))
+    # import pdb
+    # pdb.set_trace()
+    id_estado = request.get_json()['id']
+    actualizar = Solicitar()
+    actualizar.actualizar_estado(id_estado=id_estado, id_solicitud=id)
+    return jsonify({"actualizar": True})
 
 
 @menus.route("/evidencia/<id>")
