@@ -30,41 +30,35 @@ def home():
                            tipo=tipo_usuario)
 
 
-@menus.route('/perfiles')
+@menus.route('/perfiles', methods=['GET', 'POST'])
 def perfiles():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
     if not logueado:
         return redirect(url_for('login.index'))
-    
-    perfiles=Perfiles()
 
-    mostrar=perfiles.consulta_cliente()
-
-    return render_template("perfiles.html",
-                           nombre=nombre_usuario,
-                           tipo=tipo_usuario,
-                           perfiles_cliente=mostrar
-                           )
-
-@menus.route('/perfil/<id>')
-def perfiles(id):
-    nombre_usuario = session.get('username')
-    tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-    if not logueado:
-        return redirect(url_for('login.index'))
-    
-    perfiles=Perfiles()
-
-    mostrar=perfiles.consulta_cliente()
+    perfiles = Perfiles()
+    mostrar = perfiles.consulta_cliente()
 
     return render_template("perfiles.html",
                            nombre=nombre_usuario,
                            tipo=tipo_usuario,
                            perfiles_cliente=mostrar
                            )
+
+
+@menus.route('/perfiles/<id>', methods=['GET', 'POST'])
+def perfiles_cliente(id):
+    if request.method == 'POST':
+        id_usuario = int(id)
+        perfiles = Perfiles()
+        id_usuario_cliente = request.get_json()['id_usuario_cliente']
+        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,
+                                                              id_usuario=id_usuario
+                                                              )
+        return jsonify({'actualizar': True, 'datos': informacion_usuario})
+    return redirect(url_for('menus.perfil'))
 
 
 @menus.route("/solicitar", methods=['GET', 'POST'])

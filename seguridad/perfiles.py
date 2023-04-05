@@ -20,7 +20,7 @@ class Perfiles:
         cursor.execute(query)
         return cursor.fetchall()
     
-    def calificaciones(self)->Dict:
+    def calificaciones_cliente(self,id_usuario_cliente,id_usuario)->Dict:
         cursor=db.connection.cursor(dictionary=True)
         valores=(id_usuario_cliente,id_usuario)
         query="""
