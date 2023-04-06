@@ -30,7 +30,7 @@ def home():
                            tipo=tipo_usuario)
 
 
-@menus.route('/perfiles', methods=['GET', 'POST'])
+@menus.route('/perfiles', methods=['GET'])
 def perfiles():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
@@ -39,26 +39,33 @@ def perfiles():
         return redirect(url_for('login.index'))
 
     perfiles = Perfiles()
-    mostrar = perfiles.consulta_cliente()
+    if tipo_usuario=='Contratista':
+        mostrar = perfiles.consulta_cliente()
+    else:
+        mostrar = perfiles.consulta_contratista()
+
 
     return render_template("perfiles.html",
                            nombre=nombre_usuario,
                            tipo=tipo_usuario,
-                           perfiles_cliente=mostrar
+                           perfiles_usuario=mostrar
                            )
 
 
 @menus.route('/perfiles/<id>', methods=['POST'])
 def perfiles_cliente(id):
+    tipo_usuario = session.get('tipo_usuario')
     id_usuario = int(id)
     perfiles = Perfiles()
     id_usuario_cliente = request.get_json()['id_usuario_cliente']
-    informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,
-                                                          id_usuario=id_usuario
-                                                          )
-    promedio = perfiles.promedio_calificacion(id_usuario_cliente=id_usuario_cliente,
-                                              id_usuario=id_usuario
-                                              )
+
+    if tipo_usuario=='Contratista':
+        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+        promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+    else:
+        informacion_usuario = perfiles.calificaciones_contratisra(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+        promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+
     return jsonify({'actualizar': True, 'datos': informacion_usuario, 'calificacion': promedio})
 
 

@@ -19,16 +19,15 @@
     <div class="container">
         <section class="h-100 text-center">
             <h2 class="m-3">Perfiles Cliente</h2>
-            {% if perfiles_cliente %}
+            {% if perfiles_usuario %}
             <div class="shadow-sm p-3 mb-5 bg-white rounded">
                 <div class="row">
-                    {% for perfil in perfiles_cliente %}
+                    {% for perfil in perfiles_usuario %}
                     <div class="col-lg-4">
                         <div class="card mb-5">
                             <div class="card-body">
                                 <h5 class="card-title">{{perfil.nombre}}</h5>
-                                <p class="card-text">{{perfil.comentario}}</p>
-                                <a class="btn btn-success btn-sm bi bi-eye-fill btn-perfil" title="Ver mas"></a>
+                                <a class="btn btn-success btn-sm bi bi-eye-fill btn-perfil" title="Ver calificacion">  Calificacion</a>
                                 <input class="id_perfil" name="idPerfil" type="hidden" value={{perfil.id}}>
                             </div>
                             <div class="card-footer text-muted">
@@ -37,34 +36,8 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                        id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">
-                                    </h5>
-                                        <input id="radio1" type="radio" name="estrellas" value="5">
-                                        <div class="text-center ms-4 m-2" >
-                                                <h4 id="promedio-calificacion" style="color: rgb(23, 91, 207); display: inline-block;"> </h4 >
-                                        </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body" id="modal_contenido">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cerrar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
             </div>
-      
-
             {%else%}
             <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
                 <h4 class="text-center">No hay perfiles para mostrar</h4>
@@ -72,15 +45,41 @@
             {% endif%}
         </section>
     </div>
-
-
     {% elif tipo == "Cliente" %}
     {%include 'NvarCliente.html'%}
-    <div class="container">
-        <section class="h-100 text-center">
-            <p>Cliente</p>
-        </section>
-    </div>
+        <div class="container">
+            <section class="h-100 text-center">
+                <h2 class="m-3">Perfiles Contratistas</h2>
+                {% if perfiles_usuario %}
+                <div class="shadow-sm p-3 mb-5 bg-white rounded">
+                    <div class="row">
+                        {% for perfil in perfiles_usuario %}
+                        <div class="col-lg-4">
+                            <div class="card mb-5">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{perfil.nombre}}</h5>
+                                    <a class="btn btn-success btn-sm bi bi-eye-fill btn-perfil" title="Ver Calificacion"> Calificacion</a>
+                                    <input class="id_perfil" name="idPerfil" type="hidden" value={{perfil.id}}>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    {{perfil.dia_calificacion}}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                      
+                    </div>
+    
+                </div>
+          
+    
+                {%else%}
+                <div class="d-flex justify-content-center align-items-center" style="height: 70vh;">
+                    <h4 class="text-center mb-5">No hay perfiles para mostrar</h4>
+                </div>
+                {% endif%}
+            </section>
+        </div>
     <!-- Pagina Administrador -->
     {% else %}
 
@@ -95,6 +94,30 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/calificaciones_perfiles.js')}}"></script>
 
 </html>
+
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+            </h5>
+                <input id="radio1" type="radio" name="estrellas" value="5">
+                <div class="text-center ms-4 m-2" >
+                        <h4 id="promedio-calificacion" style="color: rgb(23, 91, 207); display: inline-block;"> </h4 >
+                </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal_contenido">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary"
+                data-bs-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+</div>
 
 <div class="row mb-4 contenedor_calificacion d-none">
     <div class="col-sm-8 mx-auto text-center">
