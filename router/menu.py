@@ -41,8 +41,10 @@ def perfiles():
     perfiles = Perfiles()
     if tipo_usuario=='Contratista':
         mostrar = perfiles.consulta_cliente()
-    else:
+    elif tipo_usuario=='Cliente':
         mostrar = perfiles.consulta_contratista()
+    else:
+        mostrar= perfiles.consulta_cliente(),perfiles.consulta_contratista()
 
 
     return render_template("perfiles.html",
@@ -57,16 +59,26 @@ def perfiles_cliente(id):
     tipo_usuario = session.get('tipo_usuario')
     id_usuario = int(id)
     perfiles = Perfiles()
-    id_usuario_cliente = request.get_json()['id_usuario_cliente']
+    datos_json = request.get_json()
+    id_usuario_cliente = datos_json['id_usuario_cliente']
+    tipo_usuario_cliente = datos_json['tipo_usuario']
 
-    if tipo_usuario=='Contratista':
-        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
-        promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+    if tipo_usuario == 'Contratista':
+        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+    elif tipo_usuario == 'Cliente':
+        informacion_usuario = perfiles.calificaciones_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
     else:
-        informacion_usuario = perfiles.calificaciones_contratisra(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
-        promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+        if tipo_usuario_cliente == 'Cliente':
+            informacion_usuario = perfiles.calificaciones_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+            promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        else:
+            informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+            promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
 
     return jsonify({'actualizar': True, 'datos': informacion_usuario, 'calificacion': promedio})
+
 
 
 @menus.route("/solicitar", methods=['GET', 'POST'])
@@ -107,6 +119,10 @@ def consultar():
         return redirect(url_for('login.index'))
 
     consultar = Solicitar()
+        
+    if consultar.admin_cliente() and consultar.admin_contratista():
+        return render_template("consultar.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario,consulta_admin_cliente=consultar.admin_cliente(),consulta_admin_contratista=consultar.admin_contratista())
 
     if consultar.contratista_():
         id = session.get('id')

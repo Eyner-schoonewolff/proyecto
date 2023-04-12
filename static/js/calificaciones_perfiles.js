@@ -1,11 +1,18 @@
 document.querySelectorAll(".btn-perfil").forEach(function (button) {
     button.addEventListener('click', function (event) {
         var id_perfil = event.target.parentElement.querySelector(".id_perfil").value;
+        var tipo_usuario = event.target.parentElement.querySelector(".tipo_usuario_perfil") ?? null;
+
+        if (tipo_usuario!=null){
+            tipo_usuario=tipo_usuario.value
+        }
+        
         $.ajax({
             url: '/perfiles/' + id_perfil,
             method: 'POST',
             data: JSON.stringify({
-                id_usuario_cliente: id_perfil
+                id_usuario_cliente: id_perfil,
+                tipo_usuario:tipo_usuario
             }),
             dataType: 'json',
             contentType: 'application/json',

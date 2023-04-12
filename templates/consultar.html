@@ -32,7 +32,6 @@
                   <h2>Consultar trabajos</h2>
                   <div class="table-responsive">
                     <table id="paginacion" class="table caption-top mt-5 w-100">
-
                       <thead>
                         <tr>
                           <th scope="col">Nombre</th>
@@ -101,8 +100,7 @@
                                 </div>
                               </div>
                               <div class="modal-footer">
-                                <a id="btn-guardar-estado"
-                                  class="btn btn-success">Guardar</a>
+                                <a id="btn-guardar-estado" class="btn btn-success">Guardar</a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                               </div>
                             </div>
@@ -178,6 +176,80 @@
   </div>
   <!-- Pagina Administrador -->
   {% else %}
+  {%include 'NvarAdmin.html'%}
+  <section class="h-100 text-center">
+
+    <div class="container mt-5 h-125">
+      <div class="row ">
+        <div class="col-lg-12 d-flex justify-content-center">
+          <div class="col-lg-6 card shadow-lg" style="margin: 0 9px 0 0;">
+            <div class="card-body p-5">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h2 class="fw-bold mb-5">Consultar Clientes</h2>
+                  <table id="paginacion" class="table caption-top mt-5">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Celular</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Tipo Solicitud</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {% if consulta_admin_cliente%}
+                      {% for consulta in consulta_admin_cliente %}
+                      <tr>
+                        <th scope="row">{{consulta.nombre}}</th>
+                        <td>{{consulta.horario}}</td>
+                        <td>{{consulta.ocupacion}}</td>
+                        <td>{{consulta.estado}}</td>
+                      </tr>
+                      {% endfor %}
+                      {%endif%}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6 card shadow-lg">
+            <div class="card-body p-5">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h2 class="fw-bold mb-5">Consultar Contratista</h2>
+                  <table id="paginacion_contratista" class="table caption-top mt-5">
+                    <thead>
+                      <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Direccion</th>
+                        <th scope="col">Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if consulta_admin_contratista%}
+                      {% for consulta in consulta_admin_contratista %}
+                      <tr>
+                        <th scope="row">{{consulta.nombre}}</th>
+                        <td>{{consulta.horario}}</td>
+                        <td>{{consulta.direccion}}</td>
+                        <td>{{consulta.estado}}</td>
+                      </tr>
+                      {% endfor %}
+                      {%endif%}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 
   {% endif %}
@@ -195,5 +267,6 @@
   integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/actualizar_estado.js')}}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/tabla_paginada.js')}}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/tabla_paginacion_contratistas.js')}}"></script>
 
 </html>

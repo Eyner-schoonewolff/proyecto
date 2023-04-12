@@ -41,6 +41,34 @@ class Solicitar:
         cursor.close()
         return True
 
+    def admin_contratista(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion
+               FROM solicitud s
+               INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
+               INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
+               INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
+               INNER JOIN estado e ON s.id_estado = e.id
+               GROUP BY s.id;
+         """
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    def admin_cliente(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+              SELECT s.id, s.horario, e.nombre estado, o.nombre ocupacion, udp.nombre_completo nombre
+                FROM solicitud s
+                INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
+                INNER JOIN ocupacion o ON s.`id_ocupacion_solicitud`=o.id
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
+                INNER JOIN estado e ON s.id_estado=e.id
+                GROUP BY s.id;
+         """
+        cursor.execute(query)
+        return cursor.fetchall()
+
     def contratista_(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
