@@ -33,7 +33,7 @@ def auth():
             session['email'] = login.usuario['email']
             session['username'] = login.usuario["nombre"].upper()
             session['tipo_usuario'] = login.usuario["tipo"]
-            return {"login": True, "home": "/home"}
+            return {"login": True, "home": "/actualizar"}
 
         session['login'] = False
         return {"login": False, "home": "/"}

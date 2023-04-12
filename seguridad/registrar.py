@@ -12,16 +12,28 @@ class Usuario:
         self.tipo_documento = tipo_documento
         self.numero_documento = numero_documento
 
-    def datos_unico(self) -> Dict:
+    def datos_unico_documento(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         #revisar
-        query = """SELECT email, numero_documento 
+        query = """SELECT u.id
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
             ON u.`id_usuario_datos_personales`=dp.`id`
-            WHERE dp.`numero_documento`=%s or u.email=%s"""
+            WHERE dp.`numero_documento`=%s"""
         
-        cursor.execute(query, (self.numero_documento, self.email,))
+        cursor.execute(query, (self.numero_documento,))
+        return cursor.fetchone()
+    
+    def datos_unico_correo(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        #revisar
+        query = """SELECT u.id
+            FROM usuarios u
+            INNER JOIN usuario_datos_personales dp 
+            ON u.`id_usuario_datos_personales`=dp.`id`
+            WHERE u.email=%s"""
+        
+        cursor.execute(query, (self.email,))
         return cursor.fetchone()
     
     def encriptar_contraseña(self)->str:
@@ -29,12 +41,30 @@ class Usuario:
         return bcrypt.hashpw(self.contrasenia.encode('utf-8'), salt)
 
     # devuelve true si existe un usuario, es decir no se crea otro usuario, si devuelve false si se crea el usuario
-    def existe(self) -> bool:
-        dato_unico = self.datos_unico()
+    def existe_correo (self) -> bool:
+        dato_unico = self.datos_unico_correo()
         if dato_unico is None:
             return False
-
         if dato_unico:
+             return True
+        else:
+            return True
+        
+    def existe_documento(self) -> bool:
+        dato_unico = self.datos_unico_documento()
+        if dato_unico is None:
+            return False
+        if dato_unico:
+            return True
+        else:
+            return True
+        
+    def existe_(self) -> bool:
+        dato_unico_documento = self.datos_unico_documento()
+        dato_unico_correo = self.datos_unico_correo()
+        if dato_unico_documento is None and dato_unico_correo is None:
+            return False
+        if dato_unico_documento and dato_unico_correo:
             return True
         else:
             return True
@@ -65,3 +95,25 @@ class Usuario:
         db.connection.commit()
 
         return None
+
+
+
+class CorreoExistenteException(Exception):
+    """
+    Excepción personalizada para indicar que el correo electrónico ya existe.
+    """
+    pass
+
+
+class DocumentoExistenteException(Exception):
+    """
+    Excepción personalizada para indicar que el número de documento ya existe.
+    """
+    pass
+
+
+class ExistenteException(Exception):
+    """
+    Excepción personalizada para indicar que el número de documento y el correo electrónico ya existe.
+    """
+    pass
