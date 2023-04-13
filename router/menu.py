@@ -119,10 +119,6 @@ def consultar():
         return redirect(url_for('login.index'))
 
     consultar = Solicitar()
-        
-    if consultar.admin_cliente() and consultar.admin_contratista():
-        return render_template("consultar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario,consulta_admin_cliente=consultar.admin_cliente(),consulta_admin_contratista=consultar.admin_contratista())
 
     if consultar.contratista_():
         id = session.get('id')
@@ -131,10 +127,25 @@ def consultar():
             flash(message="Nueva Solicitud de {}".format(
                 notificacion_['nombre']), category="Contratista")
         return render_template("consultar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+                               tipo=tipo_usuario, consultar_cliente=consultar.contratista_())
+    
 
     return render_template("consultar.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_cliente=consultar.cliente())
+                            tipo=tipo_usuario, consulta_contratista=consultar.cliente())
+
+@menus.route("/consultar_admin")
+def consultar_admin():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+
+    consultar = Solicitar()
+
+    return render_template("consultar.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario,consulta_admin_cliente=consultar.admin_cliente(),consulta_admin_contratista=consultar.admin_contratista())
 
 
 @menus.route("/actualizar_estado/<id>", methods=['POST'])

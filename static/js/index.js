@@ -15,9 +15,23 @@ document.querySelector("#BotonLogin").addEventListener('click', () => {
         dataType: "json",
         success: function (respuesta) {
             if (respuesta.login) {
-                window.location.href = respuesta.home
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "El usuario se ha logueado correctamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                  }).then(() => {
+                     window.location.href = respuesta.home;
+                  });
             } else {
-                window.location.href = respuesta.home;
+                Swal.fire({
+                    title: "Hubo un error",
+                    text: respuesta.excepcion,
+                    icon: "error",
+                    confirmButtonText: "Aceptar",
+                  }).then(() => {
+                    window.location.href = respuesta.home;
+                  });
             }
         }
     });

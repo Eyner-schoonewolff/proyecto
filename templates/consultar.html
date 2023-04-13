@@ -43,7 +43,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {% for consulta in consulta_contratista %}
+                        {% for consulta in consultar_cliente %}
                         <tr>
                           <th scope="row">{{consulta.nombre}}</th>
                           <td>{{consulta.numero}}</td>
@@ -143,7 +143,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      {% for consulta in consulta_cliente %}
+                      {% for consulta in consulta_contratista %}
                       {% if consulta.estado != "Finalizada" %}
                       <tr>
                         <th scope="row">{{consulta.nombre}}</th>
