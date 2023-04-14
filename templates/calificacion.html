@@ -53,8 +53,8 @@
                                                             data-bs-target="#exampleModal-{{consulta.id}}"></a>
                                                     </td>
                                                 </tr>
+                                             
                                                 {%endif%}
-
                                                 <div class="modal fade" data-bs-backdrop="static"
                                                     data-bs-keyboard="false" tabindex="-1"
                                                     id="exampleModal-{{consulta.id}}"
@@ -184,7 +184,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for consulta in consulta_contratista %}
+                                                {% for consulta in consulta_cliente %}
                                                 {% if consulta.estado == "Finalizada"%}
                                                 <tr id="fila-{{consulta.id}}">
                                                     <th scope="row">{{consulta.nombre}} <a style="font-size: 1.3em;"
@@ -202,7 +202,6 @@
                                                     </td>
                                                 </tr>
                                                 {%endif%}
-
                                                 <div class="modal fade" data-bs-backdrop="static"
                                                     data-bs-keyboard="false" tabindex="-1"
                                                     id="exampleModal-{{consulta.id}}"

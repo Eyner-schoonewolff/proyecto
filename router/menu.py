@@ -227,7 +227,7 @@ def calificar():
                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
     return render_template("calificacion.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_contratista=consultar.cliente())
+                           tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
 @menus.route("/guardar-calificacion", methods=['POST'])
