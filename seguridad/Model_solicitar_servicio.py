@@ -72,13 +72,14 @@ class Solicitar:
     def contratista_(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-            SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
+             SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
                INNER JOIN estado e ON s.id_estado = e.id
-               WHERE s.id_usuario_contratista=%s
+               LEFT JOIN calificacion c ON c.`id_solicitud`=s.id
+               WHERE s.id_usuario_contratista=%s and numero_estrellas is null 
                GROUP BY s.id;
          """
         cursor.execute(query, (self.id_usuario,))
@@ -93,7 +94,8 @@ class Solicitar:
                 INNER JOIN ocupacion o ON s.`id_ocupacion_solicitud`=o.id
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 INNER JOIN estado e ON s.id_estado=e.id
-                WHERE s.id_usuario_cliente=%s
+                LEFT JOIN calificacion c ON c.`id_solicitud`=s.id
+                WHERE s.id_usuario_cliente=%s and c.numero_estrellas is null 
                 GROUP BY s.id;
          """
 

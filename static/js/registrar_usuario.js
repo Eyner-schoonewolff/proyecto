@@ -6,6 +6,19 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     numero_documento = document.querySelector('#numeroDocumento').value
     tipo_documento = document.querySelector("#documento").value
 
+
+    if (!rol || !email || !nombre || !contrasenia || !numero_documento || !tipo_documento) {
+        Swal.fire({
+            title: "Error",
+            text: "Por favor, completa todos los campos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+        }).then(() => {
+            window.location.reload();
+        });
+        return; // Detiene la ejecución del código si hay campos vacíos
+    }
+
     datos = {
         email,
         rol,

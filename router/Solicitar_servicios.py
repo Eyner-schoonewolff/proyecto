@@ -58,7 +58,9 @@ def eliminar_(id):
     eliminar_solicitud = Solicitar()
 
     if eliminar_solicitud.eliminar(id=id) and tipo_usuario!='Admin':
+        flash("Se ha cancelado la solicitud correctamente",category="Cliente")
         return redirect(url_for('menus.consultar'))
     else:
+        flash("Se ha cancelado la solicitud correctamente",category="Admin")
         return redirect(url_for('menus.consultar_admin'))
 
