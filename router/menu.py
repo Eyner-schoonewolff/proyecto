@@ -115,7 +115,7 @@ def consultar():
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
 
-    if not logueado:
+    if not logueado or tipo_usuario=='Admin':
         return redirect(url_for('login.index'))
 
     consultar = Solicitar()

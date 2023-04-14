@@ -1,5 +1,5 @@
-from flask import Blueprint, request, session, render_template, redirect, url_for,flash
-from seguridad.datos_usuario import DatosUsuario
+from flask import Blueprint, request, session, render_template, redirect, url_for,flash,jsonify
+from seguridad.datos_usuario import DatosUsuario,DatoUnicoEmail,CorreoInvalido
 from seguridad.Model_solicitar_servicio import Solicitar
 import json
 
@@ -47,7 +47,59 @@ def actualizar():
         ocupaciones_disponibles=ocupaciones
     )
 
+@datos_personales.route("/actualizar_admin", methods=['GET','POST'])
+def actualizar_admin():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
 
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    if request.method == 'POST':
+        email = request.get_json()["email"]
+        consultar = DatosUsuario()
+        informacion=consultar.informacion_usuario(email=email)
+        return jsonify({'datos': informacion})
+    else:
+        return render_template("actualizar.html",
+        nombre=nombre_usuario,
+        tipo=tipo_usuario)
+    
+@datos_personales.route("/actualizar_email_usuario", methods=['POST'])
+def actualizar_email_usuario():
+    logueado = session.get('login', False)
+    json = request.get_json()
+    email_actual=json['email_actual']
+    email_nuevo=json['email_nuevo']
+
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    datosUsuario=DatosUsuario(email_actual=email_actual,email_nuevo=email_nuevo)
+    try:
+        if datosUsuario.existe_correo():
+            raise DatoUnicoEmail(f"No se puede actualizar,{email_nuevo} ya que este correo se encuentra registrado, intente con otro diferente ")
+        
+        elif not(datosUsuario.validar_correo_electronico()):
+            raise CorreoInvalido(f"No se puede actualizar,{email_nuevo} No es un correo valido")
+        
+        elif datosUsuario.actualizar_email():
+            return jsonify({"actualizacion":True,"mensaje":f"Se ha actualizado el correo {email_nuevo} correctamente","home":"/actualizar_admin"})
+    
+    except DatoUnicoEmail as mensaje:
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar_admin"})
+    
+    except CorreoInvalido as mensaje:
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar_admin"})
+    
+    except Exception as error:
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(error),"home":"/actualizar_admin"})
+    
+
+    
+    
+   
 
 @datos_personales.route('/auth_actualizar', methods=['POST'])
 def auth():

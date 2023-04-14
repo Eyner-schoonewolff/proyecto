@@ -2,10 +2,60 @@ from db.database import *
 from flask import session
 from typing import Dict
 import datetime
+import re
+
 
 class DatosUsuario:
-    def __init__(self) -> None:
+    def __init__(self,email_actual="",email_nuevo="") -> None:
+        self.email_actual=email_actual
+        self.email_nuevo=email_nuevo
         self.id_usuario = session.get('id')
+
+    def validar_correo_electronico(self):
+        # Expresión regular para validar correos electrónicos
+        patron = r'^(?=.{1,256})(?=.{1,64}@.{1,255}$)(?=.{1,255}$)((?!@)[\w&\'*+._%-]+(?:(?!@)[\w&\'*+._%-]|){0,63}(?<!@)@)+(?:(?!@)[\w&\'*+._%-]+(?:(?!@)[\w&\'*+._%-]|){0,63}(?<!@)\.)+(?:(?!@)[a-zA-Z]{2,63}(?:(?!@)[a-zA-Z]{2,63}|))$'
+        if re.match(patron, self.email_nuevo):
+            return True
+        else:
+            return False
+
+
+    def informacion_usuario(self, email) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+            SELECT udp.nombre_completo nombre, udp.numero_documento documento, udp.direccion, udp.numero_celular celular
+                FROM usuarios u 
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
+                WHERE u.email=%s
+        """
+        cursor.execute(query, (email,))
+        return cursor.fetchone()
+
+    def actualizar_email(self)->bool:
+        cursor = db.connection.cursor()
+        actualizacion_email = (self.email_nuevo,self.email_actual)
+        query = 'UPDATE usuarios SET email = %s WHERE email = %s'
+        cursor.execute(query, actualizacion_email)
+        db.connection.commit()
+        cursor.close()
+        return True
+
+    def datos_unico_correo(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = "SELECT id FROM usuarios WHERE email=%s"
+        cursor.execute(query, (self.email_nuevo,))
+        return cursor.fetchone()
+
+    def existe_correo(self) -> bool:
+        dato_unico = self.datos_unico_correo()
+        if dato_unico is None:
+            return False
+
+        if dato_unico:
+            return True
+
+        else:
+            return True
 
     def ocupaciones(self):
         cursor = db.connection.cursor(dictionary=True)
@@ -145,3 +195,10 @@ class DatosUsuario:
         cursor.execute(query_informacion)
         db.connection.commit()
         return True
+
+
+class DatoUnicoEmail(Exception):
+    ...
+
+class CorreoInvalido(Exception):
+    ...

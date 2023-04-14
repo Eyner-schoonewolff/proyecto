@@ -50,13 +50,15 @@ def solicitar_():
 @solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET', 'DELETE'])
 def eliminar_(id):
     logueado = session.get('login', False)
+    tipo_usuario = session.get('tipo_usuario')
 
     if not logueado:
         return redirect(url_for('login.index'))
 
     eliminar_solicitud = Solicitar()
 
-    if eliminar_solicitud.eliminar(id=id):
+    if eliminar_solicitud.eliminar(id=id) and tipo_usuario!='Admin':
         return redirect(url_for('menus.consultar'))
+    else:
+        return redirect(url_for('menus.consultar_admin'))
 
-    return flash(message='No se pudo eliminar')

@@ -20,6 +20,9 @@ document.querySelector("#BotonLogin").addEventListener('click', () => {
                     text: "El usuario se ha logueado correctamente",
                     icon: "success",
                     confirmButtonText: "Aceptar",
+                    customClass: {
+                        container: 'my-swal-container'
+                      }
                   }).then(() => {
                      window.location.href = respuesta.home;
                   });
@@ -29,6 +32,9 @@ document.querySelector("#BotonLogin").addEventListener('click', () => {
                     text: respuesta.excepcion,
                     icon: "error",
                     confirmButtonText: "Aceptar",
+                    customClass: {
+                        container: 'my-swal-container'
+                      }
                   }).then(() => {
                     window.location.href = respuesta.home;
                   });
