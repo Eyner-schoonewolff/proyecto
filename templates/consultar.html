@@ -43,7 +43,7 @@
                         </tr>
                       </thead>
                       <tbody>
-                        {% for consulta in consulta_contratista %}
+                        {% for consulta in consultar_cliente %}
                         <tr>
                           <th scope="row">{{consulta.nombre}}</th>
                           <td>{{consulta.numero}}</td>
@@ -139,11 +139,11 @@
                         <th scope="col">Fecha</th>
                         <th scope="col">Tipo Solicitud</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Eliminar</th>
+                        <th scope="col">Cancelar solicitud</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {% for consulta in consulta_cliente %}
+                      {% for consulta in consulta_contratista %}
                       {% if consulta.estado != "Finalizada" %}
                       <tr>
                         <th scope="row">{{consulta.nombre}}</th>
@@ -194,6 +194,8 @@
                         <th scope="col">Celular</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Tipo Solicitud</th>
+                        <th scope="col">Cancelar solicitud</th>
+
                       </tr>
                     </thead>
 
@@ -205,6 +207,13 @@
                         <td>{{consulta.horario}}</td>
                         <td>{{consulta.ocupacion}}</td>
                         <td>{{consulta.estado}}</td>
+                        {% if consulta.estado == "Aceptada" or consulta.estado == "Cancelada" or consulta.estado == "Finalizada"%}
+                        <td><a class="btn btn-secondary"> <i class="bi bi-trash3"></i></a>
+                        </td>
+                        {%else%}
+                        <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
+                              class="bi bi-trash3"></i></a>
+                          {%endif%}
                       </tr>
                       {% endfor %}
                       {%endif%}
@@ -226,7 +235,7 @@
                         <th scope="col">Nombre</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Direccion</th>
-                        <th scope="col">Estado</th>
+                        <th scope="col">Funciones</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -236,8 +245,62 @@
                         <th scope="row">{{consulta.nombre}}</th>
                         <td>{{consulta.horario}}</td>
                         <td>{{consulta.direccion}}</td>
-                        <td>{{consulta.estado}}</td>
+                        <td class="mt-2">
+                          {% if consulta.estado == "Finalizada" or consulta.estado == "Cancelada"%}
+                          <a id="guardar-id" class="btn btn-secondary bi bi-arrow-clockwise m-1"
+                            title="desactivado"></a>
+                          {%else%}
+                          <a id="guardar-id" class="btn btn-warning bi bi-arrow-clockwise m-1" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal-{{consulta.id}}" title="actualizar estado"></a>
+                          {%endif%}
+                          <a href="./evidencia/{{consulta.id}}" class="btn btn-info bi bi-eye-fill"></a>
+                        </td>
+
                       </tr>
+                      <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                        id="exampleModal-{{consulta.id}}" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Actualizar Estado
+                              </h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="form-outline mb-5">
+                                <div class="row mt-3">
+                                  <div class="col-12 mb-2">
+                                    <label for="estado" class="m-2">Estado actual</label>
+                                    <h3 class="mt-2 text-center">{{consulta.estado}}</h3>
+                                    <input id="id_consulta" name="prodId" type="hidden" value={{consulta.id}}>
+
+                                  </div>
+                                </div>
+                                <div class="row mt-3">
+                                  <div class="col-12 mb-2">
+                                    <label for="select" class="m-3">Cambiar estado</label>
+                                    <select class="form-select text-center" aria-label="Default select example"
+                                      id="select_estado">
+                                      {%if consulta.estado == "Pendiente" %}
+                                      <option value="2">Acepatar</option>
+                                      <option value="3">Cancelar</option>
+                                      {% elif consulta.estado == "Aceptada" %}
+                                      <option value="4">Finalizar</option>
+                                      {% endif %}
+                                    </select>
+                                  </div>
+                                </div>
+
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <a id="btn-guardar-estado" class="btn btn-success">Guardar</a>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       {% endfor %}
                       {%endif%}
                     </tbody>

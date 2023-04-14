@@ -19,11 +19,28 @@ class Login:
         cursor.execute(query, (self.email,))
         return cursor.fetchone()
 
-    def verificar(self) -> bool:
+    def verificar_email(self) -> bool:
         if self.usuario is None:
             return False
-        # Verificar la contraseña
+        else:
+            return True
+        
+    def verificar_contrasena(self) -> bool:
+        if self.usuario is None:
+            return True
+            
         if bcrypt.checkpw(self.contrasenia.encode('utf-8'), self.usuario['contraseña'].encode('utf-8')):
             return True
         else:
             return False
+
+
+
+class ContrasenaUsuarioIncorrecto(Exception):
+    ...
+
+class EmailUsuarioIncorrecto(Exception):
+    ...
+
+class EmailContraseniaIncorrecta(Exception):
+    ...

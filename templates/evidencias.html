@@ -37,7 +37,11 @@
                     </div>
                 </div>
                 <div class="mb-4 m-3 ">
+                    {%if tipo == "Admin"%}
+                    <a href="../consultar_admin" class="btn btn-primary"><i class="bi bi-arrow-90deg-left"></i></a>
+                    {%else%}
                     <a href="../consultar" class="btn btn-primary"><i class="bi bi-arrow-90deg-left"></i></a>
+                    {%endif%}
                 </div>
 
             </div>
