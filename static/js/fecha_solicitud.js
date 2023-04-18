@@ -14,12 +14,20 @@ function guardarsolicitud() {
     let problema = $("#carta").val();
     let evidencia = $("#formFileSm")[0].files[0];
 
+    if (evidencia) {
+        formData.append('evidencia', evidencia);
+    }
+
+    else if(!evidencia && !$("#formFileSm").val()) {
+        formData.append('evidencia', '');
+    }
+
     formData.append('fecha', fecha);
     formData.append('hora', hora);
     formData.append('servicio', servicio);
     formData.append('contratista', contratista);
     formData.append('problema', problema);
-    formData.append('evidencia', evidencia);
+
 
     $.ajax({
         url: '/solicitar_serv',
@@ -29,21 +37,20 @@ function guardarsolicitud() {
         contentType: false,
 
         success: function (respuesta) {
-            console.log(respuesta.numero);
             if (respuesta.numero == 1) {
                 Swal.fire({
                     title: "¡Éxito!",
                     text: "Se ha realizado correctamente la solicitud",
                     icon: "success",
                     confirmButtonText: "Aceptar",
-                  }).then(() => {
-                      $("#fecha").val('');
-                      $("#hora").val('');
-                      $("#opciones").val();
-                      $("#contratistas").val();
-                      $("#formFileSm").val();
-                      $("#carta").val('');
-                  });
+                }).then(() => {
+                    $("#fecha").val('');
+                    $("#hora").val('');
+                    $("#opciones").val();
+                    $("#contratistas").val();
+                    $("#formFileSm").val();
+                    $("#carta").val('');
+                });
             } else {
                 alert('Error')
             }

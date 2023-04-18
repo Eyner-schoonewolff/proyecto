@@ -31,12 +31,14 @@
                 <div class="col-lg-12">
                   <h2>Consultar trabajos</h2>
                   <div class="table-responsive">
-                    <table id="paginacion" class="table caption-top mt-5 w-100">
+
+                    <table id="paginacion_contratista" class="table caption-top mt-5 w-100">
+
                       <thead>
                         <tr>
                           <th scope="col">Nombre</th>
                           <th scope="col">Celular</th>
-                          <th scope="col">Fecha</th>
+                          <th scope="col" class="fecha"> Fecha</th>
                           <th scope="col">Direccion</th>
                           <th scope="col">Estado</th>
                           <th scope="col">Funciones</th>
@@ -51,7 +53,7 @@
                           <td>{{consulta.direccion}}</td>
                           <td>{{consulta.estado}}</td>
                           <td class="mt-2">
-                            {% if consulta.estado == "Finalizada" or consulta.estado == "Cancelada"%}
+                            {% if consulta.estado == "Finalizada" or consulta.estado == "Cancelada" %}
                             <a id="guardar-id" class="btn btn-secondary bi bi-arrow-clockwise m-1"
                               title="desactivado"></a>
                             {%else%}
@@ -81,7 +83,35 @@
                                       <input id="id_consulta" name="prodId" type="hidden" value={{consulta.id}}>
 
                                     </div>
+
                                   </div>
+                                  {% if consulta.estado == "Pendiente" %}
+                                  <div class="row">
+                                    <div class="col mb-2">
+                                      <label for="fecha_actual" class="m-2">Fecha de Solicitud</label>
+                                      <input id="fecha_actual" type="text" class="form-control text-center"
+                                        name="fecha_actual" value="{{consulta.horario}}" readonly>
+                                    </div>
+                                    <div class="col mb-2">
+                                      <label for="tiempo" class="m-2">fecha a actualizar</label>
+                                      <input type="date" class="form-control text-center" id="fecha_actualizar" name="fecha"
+                                        >
+                                    </div>
+                                  </div>
+                                  <div class="row">
+                                    <div class="col mb-2">
+                                      <label for="hora_actual" class="m-2">Hora de Solicitud</label>
+                                      <input id="hora_actual" type="text" class="form-control text-center"
+                                        name="hora_actual" value="{{consulta.hora}}" readonly>
+                                    </div>
+                                    <div class="col mb-2">
+                                      <label for="tiempo" class="m-2">Hora a actualizar</label>
+                                      <input type="time" class="form-control text-center" id="hora_actualizar" name="hora"
+                                        step="1">
+                                    </div>
+                                  </div>
+                                  {%endif%}
+
                                   <div class="row mt-3">
                                     <div class="col-12 mb-2">
                                       <label for="select" class="m-3">Cambiar estado</label>
@@ -316,40 +346,8 @@
       </div>
     </div>
   </section>
-
-
-  {% endif %}
-
-  {% with messages = get_flashed_messages(with_categories=True) %}
-  {% if messages %}
-  {% for category, message in messages %}
-  {% if category == 'Admin' %}
-  <script>
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      text: "{{message}}",
-      showConfirmButton: true,
-      timer: 5000
-    });
-  </script>
-  {% else %}
-  <script>
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      text: "{{message}}",
-      showConfirmButton: true,
-      timer: 5000
-    });
-  </script>
-  {% endif %}
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-
+  {%endif%}
 </body>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
