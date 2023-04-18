@@ -152,9 +152,12 @@ def consultar_admin():
 def actualizar_estado(id):
     # import pdb
     # pdb.set_trace()
-    id_estado = request.get_json()['id']
-    actualizar = Solicitar()
-    actualizar.actualizar_estado(id_estado=id_estado, id_solicitud=id)
+    json=request.get_json()
+    id_estado = json['id']
+    fecha = json['fecha']
+    hora = json['hora']
+    actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
+    actualizar.actualizar_estado()
     return jsonify({"actualizar": True})
 
 
