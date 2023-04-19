@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
+from seguridad.enviar_correos import Correos
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -253,3 +254,21 @@ def guardar_calificacion():
         return jsonify({"actualizar": True, "recargar": "/calificar"})
 
     return jsonify({"actualizar": False, "recargar": "/calificar"})
+
+
+@menus.route("/enviar_correos", methods=['POST'])
+def enviar_correos():
+    json = request.get_json()
+    correo = json['correo']
+    nombre = json['nombre']
+    numero = json['numero']
+    asunto = json['asunto']
+    mensaje = json['mensaje']
+    correo= Correos(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
+
+    enviado=correo.enviar()
+
+    if enviado:
+        return jsonify({"actualizar": True,"endpoint":"/contacto"})
+
+    return jsonify({"actualizar": False})
