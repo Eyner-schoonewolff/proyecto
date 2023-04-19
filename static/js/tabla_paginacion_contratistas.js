@@ -17,17 +17,39 @@ $(document).ready(function () {
                 next: "Siguiente",
                 last: "Ultimo"
             },
+            responsive: "true",
             aria: {
                 sortAscending: ": active para ordenar la columna en orden ascendente",
                 sortDescending: ": active para ordenar la columna en orden descendente"
             }
         },
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },
+        ],
         scrollY: 400,
         lengthMenu: [[5, 10, -1], [5, 10, "All"]],
     });
 
     $.fn.dataTable.ext.search.push(
-        function(settings, data, dataIndex) {
+        function (settings, data, dataIndex) {
             var min = $('#min').val();
             var max = $('#max').val();
             var date = new Date(data[2]); // asumiendo que la columna de fecha es la primera (índice 0)
@@ -47,7 +69,7 @@ $(document).ready(function () {
     $('<input type="date" id="max" />').appendTo('#paginacion_contratista_filter');
 
     // Agregar el evento de cambio en los campos de entrada de fecha
-    $('#min, #max').on('change', function() {
+    $('#min, #max').on('change', function () {
         table.draw();
     });
 
