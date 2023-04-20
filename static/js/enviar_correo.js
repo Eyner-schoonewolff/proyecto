@@ -37,7 +37,7 @@ document.querySelector("#btn-enviar-correo").
                 if(respuesta.actualizar){
                     Swal.fire({
                         title: "Se ha enviado el correo exitosamente",
-                        text: "Por favor espere la respuesta de serviciossbarranquilla@gmail.com",
+                        text: respuesta.mensaje,
                         icon: "success",
                         confirmButtonText: "Aceptar",
                     }).then(() => {
@@ -45,8 +45,8 @@ document.querySelector("#btn-enviar-correo").
                     });
                 }else{
                     Swal.fire({
-                        title: "Error",
-                        text: "El correo no es un correo electronico valido",
+                        title: respuesta.titulo,
+                        text: respuesta.mensaje,
                         icon: "error",
                         confirmButtonText: "Aceptar",
                     }).then(() => {

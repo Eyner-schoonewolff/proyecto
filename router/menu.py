@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
-from seguridad.enviar_correos import Correos
+from seguridad.contacto import Contacto,ValidacionDatosContacto
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -121,18 +121,12 @@ def consultar():
 
     consultar = Solicitar()
 
-    if consultar.contratista_():
-        id = session.get('id')
-        notificacion_ = consultar.ultima_solicitud()
-        if notificacion_['id'] == id:
-            flash(message="Nueva Solicitud de {}".format(
-                notificacion_['nombre']), category="Contratista")
+    if tipo_usuario=='Cliente':
         return render_template("consultar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, consultar_cliente=consultar.contratista_())
-    
-
-    return render_template("consultar.html", nombre=nombre_usuario,
-                            tipo=tipo_usuario, consulta_contratista=consultar.cliente())
+                               tipo=tipo_usuario, consultar_cliente=consultar.cliente())
+    else:
+        return render_template("consultar.html", nombre=nombre_usuario,
+                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
 @menus.route("/consultar_admin")
 def consultar_admin():
@@ -188,16 +182,12 @@ def contacto():
     if not logueado:
         return redirect(url_for('login.index'))
 
-    consultar = Solicitar()
+    contacto=Contacto()
 
-    id = session.get('id')
-    notificacion_ = consultar.ultima_solicitud()
-    if notificacion_['id'] == id:
-        flash(message="Nueva Solicitud de {}".format(
-            notificacion_['nombre']), category="Contratista")
+    consulta=contacto.informacion_usuario_contacto()
 
     return render_template("contacto.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario)
+                           tipo=tipo_usuario,usuario=consulta)
 
 
 @menus.route("/calendario")
@@ -264,11 +254,16 @@ def enviar_correos():
     numero = json['numero']
     asunto = json['asunto']
     mensaje = json['mensaje']
-    correo= Correos(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
+    correo= Contacto(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
+    try:
+        if correo.validacion_contacto():
+            raise ValidacionDatosContacto('No se pudo enviar el correo, hubo acceso a los datos')
 
-    enviado=correo.enviar()
-
-    if enviado:
-        return jsonify({"actualizar": True,"endpoint":"/contacto"})
-
-    return jsonify({"actualizar": False})
+        if correo.enviar_correos():
+            return jsonify({"actualizar": True,"endpoint":"/contacto",'mensaje':'Por favor espere la respuesta de serviciossbarranquilla@gmail.com'})
+    
+    except ValidacionDatosContacto as exepcion:
+        return jsonify({'actualizar':False,"endpoint":"/contacto",'mensaje':str(exepcion),'titulo':'Ups... Hubo un problema con los datos'})
+    
+    except Exception as exepcion:
+        return jsonify({'actualizar':False,"endpoint":"/contacto",'mensaje':str(exepcion),'titulo':'Lo lamentamos, hubo un problema con el sevridor...'})

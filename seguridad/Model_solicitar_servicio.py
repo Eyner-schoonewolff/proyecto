@@ -115,7 +115,7 @@ class Solicitar:
                   INNER JOIN usuarios u ON uo.id_usuario=u.id
                   INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                   INNER JOIN ocupacion o ON uo.id_ocupacion= o.id
-                  WHERE uo.id_ocupacion=%s
+                  WHERE uo.id_ocupacion=%s and uo.eliminado=0
                   GROUP BY udp.nombre_completo
         """
         cursor.execute(query, (id_ocupacion,))

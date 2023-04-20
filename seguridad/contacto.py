@@ -1,21 +1,22 @@
-from flask import session
+from flask import session,request
+from db.database import *
+from typing import Dict
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
-import re
 
 
-class Correos:
-    def __init__(self, correo, nombre, numero, asunto, mensaje) -> None:
+class Contacto:
+    def __init__(self, correo="", nombre="", numero="", asunto="", mensaje="") -> None:
         self.correo = correo
         self.nombre = nombre
         self.numero = numero
         self.asunto = asunto
         self.mensaje = mensaje
         self.tipo_usuario = session.get('tipo_usuario')
+        self.id_usuario = session.get('id')
 
-    def enviar(self) -> bool:
+    def enviar_correos(self) -> bool:
         # Ejemplo para Gmail, cambiar si se usa otro proveedor
         smtp_server = "smtp.gmail.com"
         smtp_port = 587  # Puerto para TLS
@@ -131,3 +132,30 @@ class Correos:
         server.quit()
 
         return True
+
+    def informacion_usuario_contacto(self) -> Dict:
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+            SELECT udp.nombre_completo nombre,u.email correo,udp.numero_celular celular
+                FROM usuarios u 
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
+                WHERE u.id=%s
+        """
+        cursor.execute(query, (self.id_usuario,))
+        return cursor.fetchone()
+    
+    def validacion_contacto(self)->bool:
+        json=request.get_json()
+        usuario=self.informacion_usuario_contacto()
+
+        if 'nombre' not in json or 'correo' not in json or 'numero' not in json:
+            return False
+    
+        if usuario['nombre'] != json['nombre'] or usuario['correo'] != json['correo'] or int(usuario['celular']) != int(json['numero']):
+            return True
+        
+        return False
+
+class ValidacionDatosContacto(Exception):
+    ...
+    
