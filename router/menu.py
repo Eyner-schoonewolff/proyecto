@@ -121,18 +121,12 @@ def consultar():
 
     consultar = Solicitar()
 
-    if consultar.contratista_():
-        id = session.get('id')
-        notificacion_ = consultar.ultima_solicitud()
-        if notificacion_['id'] == id:
-            flash(message="Nueva Solicitud de {}".format(
-                notificacion_['nombre']), category="Contratista")
+    if tipo_usuario=='Cliente':
         return render_template("consultar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, consultar_cliente=consultar.contratista_())
-    
-
-    return render_template("consultar.html", nombre=nombre_usuario,
-                            tipo=tipo_usuario, consulta_contratista=consultar.cliente())
+                               tipo=tipo_usuario, consultar_cliente=consultar.cliente())
+    else:
+        return render_template("consultar.html", nombre=nombre_usuario,
+                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
 @menus.route("/consultar_admin")
 def consultar_admin():

@@ -1,17 +1,5 @@
 $(document).ready(function () {
-    var table = $('#paginacion').DataTable({
-        columnDefs: [
-            {
-                // The `data` parameter refers to the data for the cell (defined by the
-                // `data` option, which defaults to the column being worked with, in
-                // this case `data: 0`.
-                render: function (data, type, row) {
-                    return data + ' (' + row[3] + ')';
-                },
-                targets: 0,
-            },
-            { visible: false, targets: [3] },
-        ],
+    $('#paginacion').DataTable({
         language: {
             processing: "Tratamiento en curso...",
             search: "Buscar&nbsp;:",
@@ -29,7 +17,6 @@ $(document).ready(function () {
                 next: "Siguiente",
                 last: "Ultimo"
             },
-            responsive: "true",
             aria: {
                 sortAscending: ": active para ordenar la columna en orden ascendente",
                 sortDescending: ": active para ordenar la columna en orden descendente"
@@ -59,6 +46,4 @@ $(document).ready(function () {
         scrollY: 400,
         lengthMenu: [[5, 10, -1], [5, 10, "All"]],
     });
-
-
 });
