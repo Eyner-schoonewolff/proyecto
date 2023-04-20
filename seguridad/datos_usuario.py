@@ -30,7 +30,7 @@ class DatosUsuario:
         """
         cursor.execute(query, (email,))
         return cursor.fetchone()
-
+    
     def actualizar_email(self)->bool:
         cursor = db.connection.cursor()
         actualizacion_email = (self.email_nuevo,self.email_actual)

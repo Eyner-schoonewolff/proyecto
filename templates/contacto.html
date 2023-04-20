@@ -30,24 +30,23 @@
                                                 serviciossbarranquilla@gmail.com</p>
                                         </div>
                                     </div>
-
                                     <div class="row mt-3">
                                         <div class="col-lg-4 mb-3">
                                             <label for="nombreContacto" class="form-label">Nombre *</label>
                                             <input type="text" class="form-control" id="nombreContacto"
-                                                placeholder="nombre completo">
+                                                placeholder="nombre completo" value="{{usuario.nombre}}" readonly>
                                         </div>
 
                                         <div class="col-lg-4 mb-3">
                                             <label for="emailContacto" class="form-label">Correo electrónico *</label>
                                             <input type="email" class="form-control" id="emailContacto"
-                                                placeholder="correo@ejemplo.com">
+                                                placeholder="correo@ejemplo.com" value={{usuario.correo}} readonly>
                                         </div>
 
                                         <div class="col-lg-4 mb-3">
                                             <label for="telefonoContacto" class="form-label">Número de teléfono</label>
-                                            <input type="tel" class="form-control" id="telefonoContacto" maxlength="10"
-                                                placeholder="3001111111">
+                                            <input type="tel" class="form-control" id="telefonoContacto" 
+                                                value={{usuario.celular}} readonly>
                                         </div>
                                     </div>
 
@@ -104,24 +103,23 @@
                                                 serviciossbarranquilla@gmail.com</p>
                                         </div>
                                     </div>
-
                                     <div class="row mt-3">
                                         <div class="col-lg-4 mb-3">
                                             <label for="nombreContacto" class="form-label">Nombre *</label>
                                             <input type="text" class="form-control" id="nombreContacto"
-                                                placeholder="nombre completo">
+                                                placeholder="nombre completo" value={{usuario.nombre}} readonly>
                                         </div>
 
                                         <div class="col-lg-4 mb-3">
                                             <label for="emailContacto" class="form-label">Correo electrónico *</label>
                                             <input type="email" class="form-control" id="emailContacto"
-                                                placeholder="correo@ejemplo.com">
+                                                placeholder="correo@ejemplo.com" value={{usuario.correo}} readonly>
                                         </div>
 
                                         <div class="col-lg-4 mb-3">
                                             <label for="telefonoContacto" class="form-label">Número de teléfono</label>
-                                            <input type="tel" class="form-control" id="telefonoContacto" maxlength="10"
-                                                placeholder="3001111111">
+                                            <input type="tel" class="form-control" id="telefonoContacto" 
+                                                value={{usuario.celular}} readonly>
                                         </div>
                                     </div>
 
