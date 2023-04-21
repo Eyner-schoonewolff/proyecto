@@ -1,5 +1,5 @@
 from flask import Blueprint, request, session, render_template, redirect, url_for
-from seguridad.registrar import Usuario
+from seguridad.registrar import *
 
 registrar = Blueprint('registrar', __name__, static_url_path='/static',
                       template_folder="templates")
@@ -27,8 +27,24 @@ def auth():
     registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
                        nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento)
 
-    if registro.existe():
-        return {"registro": False, "home": "/registrar"}
-    else:
-        registro.agregar()
-        return {"registro": True, "home": "/"}
+    try:
+        if registro.existe_():
+            raise CorreoExistenteException(
+                "El correo y el número de documento ya se encuentran registrados")
+        elif registro.existe_documento():
+            raise DocumentoExistenteException(
+                "El número de documento ya existe, por favor verificar")
+        elif registro.existe_correo():
+            raise ExistenteException(
+                "El correo que deseas ingresar ya existe ")
+        else:
+            registro.agregar()
+            return {"registro": True, "home": "/"}
+
+    except CorreoExistenteException as e:
+        return {"registro": False, "mensaje": str(e)}
+    except DocumentoExistenteException as e:
+        return {"registro": False, "mensaje": str(e)}
+    except ExistenteException as e:
+        return {"registro": False, "mensaje": str(e)}
+

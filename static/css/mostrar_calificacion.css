@@ -43,3 +43,15 @@ label {
   .clasificacion label.checked {
     color: orange;
   }
+
+  body{
+    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    overflow-x: hidden;
+  }
+
+  h2{
+    color: white !important;
+  }

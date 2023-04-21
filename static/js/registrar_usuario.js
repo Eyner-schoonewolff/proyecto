@@ -6,6 +6,19 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     numero_documento = document.querySelector('#numeroDocumento').value
     tipo_documento = document.querySelector("#documento").value
 
+
+    if (!rol || !email || !nombre || !contrasenia || !numero_documento || !tipo_documento) {
+        Swal.fire({
+            title: "Error",
+            text: "Por favor, completa todos los campos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+        }).then(() => {
+            window.location.reload();
+        });
+        return; // Detiene la ejecución del código si hay campos vacíos
+    }
+
     datos = {
         email,
         rol,
@@ -23,9 +36,27 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         dataType: "json",
         success: function (respuesta) {
             if (respuesta.registro) {
-                window.location.href = respuesta.home
+                Swal.fire({
+                    title: "¡Éxito!",
+                    text: "Se ha creado el usuario correctamente",
+                    icon: "success",
+                    confirmButtonText: "Aceptar",
+                }).then(() => {
+                    window.location.href = respuesta.home
+                });
             } else {
-                window.location.href = respuesta.home
+                console.log(respuesta.mensaje)
+                Swal.fire({
+                    title: "Problema",
+                    text: respuesta.mensaje,
+                    icon: "error",
+                    confirmButtonText: "Aceptar",
+                }).then(() => {
+                    $("#email").val('');
+                    $("#nombre").val('');
+                    $("#numeroDocumento").val('');
+                    location.reload();
+                });
             }
         }
     });

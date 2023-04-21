@@ -15,8 +15,20 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/actualizar_info.css') }}">
-    <title>Home</title>
+    <title>Modificar</title>
+
+    <style>
+        body {
+            /* min-height: 100vh; */
+        background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-attachment: fixed;
+        overflow: hidden;
+        
+    
+        }
+    </style>
 </head>
 
 <body>
@@ -176,10 +188,10 @@
                                             {% endfor %}
                                         </select>
 
-                                       
+
                                     </div><br>
                                     <a id="btn-agregar-ocupacion" class="btn btn-primary" role="button"
-                                    data-mdb-toggle="button" onclick="actualizar_ocu()">Actualizar ocupacion</a>
+                                        data-mdb-toggle="button" onclick="actualizar_ocu()">Actualizar ocupacion</a>
                                 </div>
                             </div>
                         </div>
@@ -336,16 +348,100 @@
 
     <!-- Pagina Administrador -->
     {% else %}
+    {%include 'NvarAdmin.html'%}
+    <section class="h-100 text-center">
+        <div class="container mt-5 h-100">
+            <div class="row justify-content-sm-center h-100">
+                <div class="col-xxl-7 col-xl-5 col-lg-7 col-md-9 col-sm-9">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <div class="row d-flex justify-content-center">
+                                <div class="col-lg-12">
+                                    <div id="formulario" class="mb-4 m-2">
+                                        <h2 class="fw-bold mb-5">Modificar correo Usuarios </h2>
 
+                                        <div class="form-outline mb-5">
+                                            <div class="row">
+                                                <div class="col-6 mb-2">
+                                                    <label for="email" class="m-2">Email</label>
+                                                    <input id="email_cambio" type="email"
+                                                        class="form-control text-center" name="email" placeholder=""
+                                                        value="">
+                                                </div>
+                                                <div class="col-6 mb-2">
+                                                    <label for="email" class="m-2">Email actualizar</label>
+                                                    <input id="email_actualizacion" type="email"
+                                                        class="form-control text-center" name="email_actualizar"
+                                                        placeholder="" value="Nah" readonly>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col mb-2">
+                                                    <label class="form-label m-2" for="form3Example3">Nombre
+                                                        completo</label>
+                                                    <input id="nombre_completo" type="text" name="nombre"
+                                                        class="form-control text-center" value="Nah" readonly />
+                                                </div>
+
+
+
+                                                <div class="col mb-2">
+                                                    <label class="form-label" for="form3Example3">Dirección</label>
+                                                    <input id="direccion" type="text" name="direccion"
+                                                        class="form-control" value="Nah" readonly />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col mb-2">
+                                                    <label class="form-label" for="form3Example3">Numero de
+                                                        documento</label>
+                                                    <input id="documento_numero" type="number" name="documento" min="4"
+                                                        max="12" class="form-control text-center" value="0" readonly />
+                                                </div>
+                                                <div class="col mb-2">
+                                                    <label class="form-label" for="form3Example3">Numero de
+                                                        Celular</label>
+                                                    <input id="cel" type="number" name="celular" min="4" max="12"
+                                                        class="form-control text-center" value='0' readonly />
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4 row justify-content-center">
+                                            <button id="btn-actuzalizar_2" type="button" class="btn btn-warning" disabled>
+                                                <i class="bi bi-pencil-square"></i>
+                                                Actualizar
+                                            </button>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
     {% endif %}
 
 
 </body>
 
 
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% if tipo == "Contratista" or tipo == "Cliente" %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/datos_personales.js') }}"></script>
+{%else%}
+<script type="text/javascript" src="{{ url_for('static', filename='js/actualizar_email.js') }}"></script>
+{% endif %}
 
 </html>

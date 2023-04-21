@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#paginacion').DataTable({
+    var table = $('#paginacion_contratista').DataTable({
         language: {
             processing: "Tratamiento en curso...",
             search: "Buscar&nbsp;:",
@@ -47,4 +47,8 @@ $(document).ready(function () {
         scrollY: 400,
         lengthMenu: [[5, 10, -1], [5, 10, "All"]],
     });
+
+
+
+    // Redibujar la tabla al cambiar los campos de entrada de fecha
 });

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
+from seguridad.enviar_correos import Correos
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -41,8 +42,10 @@ def perfiles():
     perfiles = Perfiles()
     if tipo_usuario=='Contratista':
         mostrar = perfiles.consulta_cliente()
-    else:
+    elif tipo_usuario=='Cliente':
         mostrar = perfiles.consulta_contratista()
+    else:
+        mostrar= perfiles.consulta_cliente(),perfiles.consulta_contratista()
 
 
     return render_template("perfiles.html",
@@ -57,16 +60,26 @@ def perfiles_cliente(id):
     tipo_usuario = session.get('tipo_usuario')
     id_usuario = int(id)
     perfiles = Perfiles()
-    id_usuario_cliente = request.get_json()['id_usuario_cliente']
+    datos_json = request.get_json()
+    id_usuario_cliente = datos_json['id_usuario_cliente']
+    tipo_usuario_cliente = datos_json['tipo_usuario']
 
-    if tipo_usuario=='Contratista':
-        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
-        promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+    if tipo_usuario == 'Contratista':
+        informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+    elif tipo_usuario == 'Cliente':
+        informacion_usuario = perfiles.calificaciones_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
     else:
-        informacion_usuario = perfiles.calificaciones_contratisra(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
-        promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente,id_usuario=id_usuario)
+        if tipo_usuario_cliente == 'Cliente':
+            informacion_usuario = perfiles.calificaciones_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+            promedio = perfiles.promedio_contratista(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+        else:
+            informacion_usuario = perfiles.calificaciones_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
+            promedio = perfiles.promedio_cliente(id_usuario_cliente=id_usuario_cliente, id_usuario=id_usuario)
 
     return jsonify({'actualizar': True, 'datos': informacion_usuario, 'calificacion': promedio})
+
 
 
 @menus.route("/solicitar", methods=['GET', 'POST'])
@@ -103,31 +116,43 @@ def consultar():
     tipo_usuario = session.get('tipo_usuario')
     logueado = session.get('login', False)
 
+    if not logueado or tipo_usuario=='Admin':
+        return redirect(url_for('login.index'))
+
+    consultar = Solicitar()
+
+    if tipo_usuario=='Cliente':
+        return render_template("consultar.html", nombre=nombre_usuario,
+                               tipo=tipo_usuario, consultar_cliente=consultar.cliente())
+    else:
+        return render_template("consultar.html", nombre=nombre_usuario,
+                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+
+@menus.route("/consultar_admin")
+def consultar_admin():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+
     if not logueado:
         return redirect(url_for('login.index'))
 
     consultar = Solicitar()
 
-    if consultar.contratista_():
-        id = session.get('id')
-        notificacion_ = consultar.ultima_solicitud()
-        if notificacion_['id'] == id:
-            flash(message="Nueva Solicitud de {}".format(
-                notificacion_['nombre']), category="Contratista")
-        return render_template("consultar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
-
     return render_template("consultar.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_cliente=consultar.cliente())
+                               tipo=tipo_usuario,consulta_admin_cliente=consultar.admin_cliente(),consulta_admin_contratista=consultar.admin_contratista())
 
 
 @menus.route("/actualizar_estado/<id>", methods=['POST'])
 def actualizar_estado(id):
     # import pdb
     # pdb.set_trace()
-    id_estado = request.get_json()['id']
-    actualizar = Solicitar()
-    actualizar.actualizar_estado(id_estado=id_estado, id_solicitud=id)
+    json=request.get_json()
+    id_estado = json['id']
+    fecha = json['fecha']
+    hora = json['hora']
+    actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
+    actualizar.actualizar_estado()
     return jsonify({"actualizar": True})
 
 
@@ -200,7 +225,7 @@ def calificar():
                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
     return render_template("calificacion.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_contratista=consultar.cliente())
+                           tipo=tipo_usuario, consulta_cliente=consultar.cliente())
 
 
 @menus.route("/guardar-calificacion", methods=['POST'])
@@ -223,3 +248,33 @@ def guardar_calificacion():
         return jsonify({"actualizar": True, "recargar": "/calificar"})
 
     return jsonify({"actualizar": False, "recargar": "/calificar"})
+
+
+@menus.route("/enviar_correos", methods=['POST'])
+def enviar_correos():
+    json = request.get_json()
+    correo = json['correo']
+    nombre = json['nombre']
+    numero = json['numero']
+    asunto = json['asunto']
+    mensaje = json['mensaje']
+    correo= Correos(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
+
+    enviado=correo.enviar()
+
+    if enviado:
+        return jsonify({"actualizar": True,"endpoint":"/contacto"})
+
+    return jsonify({"actualizar": False})
+
+
+@menus.route('/perfiles_contra')
+def perfiles_contra():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    return render_template("perfiles_contratistas.html")
+

@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
-from seguridad.login import Login
+from seguridad.login import *
 from flask_login import logout_user, LoginManager
 
 login = Blueprint('login', __name__, static_url_path='/static',
@@ -19,28 +19,41 @@ def index():
 
 @login.route("/auth", methods=["POST"])
 def auth():
+    json = request.get_json()
+    email = json['email']
+    contrasenia = json['contrasenia']
+
+    login = Login(email=email, contrasenia=contrasenia)
+
     try:
-        json = request.get_json()
-        email = json['email']
-        contrasenia = json['contrasenia']
+        if not (login.verificar_contrasena() or login.verificar_email()):
+            raise EmailContraseniaIncorrecta(
+                "Email y contraseña incorrecta por favor validar")
+        elif not login.verificar_email():
+            raise EmailUsuarioIncorrecto(
+                "El email ingresada es incorrecto")
 
-        login = Login(email=email, contrasenia=contrasenia)
-
-        if login.verificar():
+        elif not login.verificar_contrasena():
+            raise ContrasenaUsuarioIncorrecto(
+                "La contraseña ingresada es incorrecta")
+        else:
             session['login'] = True
             session['id'] = login.usuario['id']
             session['id_udp'] = login.usuario['id_udp']
             session['email'] = login.usuario['email']
             session['username'] = login.usuario["nombre"].upper()
             session['tipo_usuario'] = login.usuario["tipo"]
-            return {"login": True, "home": "/home"}
+            return {"login": True, "home": "/actualizar"}
 
+    except EmailContraseniaIncorrecta as mensaje:
         session['login'] = False
-        return {"login": False, "home": "/"}
-    except Exception as error:
-        print(error)
-        session.clear()
-        return {"login": False, "home": "/"}
+        return {"login": False, "home": "/", "excepcion": str(mensaje)}
+    except EmailUsuarioIncorrecto as mensaje:
+        session['login'] = False
+        return {"login": False, "home": "/", "excepcion": str(mensaje)}
+    except ContrasenaUsuarioIncorrecto as mensaje:
+        session['login'] = False
+        return {"login": False, "home": "/", "excepcion": str(mensaje)}
 
 
 @login.route('/logout')
