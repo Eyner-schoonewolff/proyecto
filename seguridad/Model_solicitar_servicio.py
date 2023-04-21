@@ -48,7 +48,7 @@ class Solicitar:
     def admin_contratista(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
-            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion
+            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion,s.hora
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
@@ -129,23 +129,21 @@ class Solicitar:
 
     def actualizar_estado(self):
         cursor = db.connection.cursor()
+        informacion = (self.id_estado,self.id_solicitud)
+        query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
+        cursor.execute(query, informacion)
+        db.connection.commit()
+
+        return None
+    
+    def actualizar_fecha_estado(self):
+        cursor = db.connection.cursor()
         informacion = (self.id_estado,self.fecha,self.hora,self.id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s,horario=%s,hora=%s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
 
-        return True
+        return None
+    
 
-        # cambiar query 6
-    def ultima_solicitud(self):
-        cursor = db.connection.cursor(dictionary=True)
-        query = """
-            SELECT id_usuario_contratista id,udp.nombre_completo nombre
-                FROM solicitud s
-                INNER JOIN usuarios u ON s.`id_usuario_cliente` = u.`id`
-                INNER JOIN usuario_datos_personales udp ON u.`id_usuario_datos_personales`= udp.id
-                ORDER BY s.id DESC
-                LIMIT 1;
-        """
-        cursor.execute(query)
-        return cursor.fetchone()
+

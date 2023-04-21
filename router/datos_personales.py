@@ -16,36 +16,43 @@ def actualizar():
     if not logueado or tipo_usuario=='Admin':
         return redirect(url_for('login.index'))
     
-    consultar = Solicitar()
-
-    id = session.get('id')
-    notificacion_ = consultar.ultima_solicitud()
-    if notificacion_['id'] == id:
-        flash(message="Nueva Solicitud de {}".format(
-            notificacion_['nombre']), category="Contratista")
-
     datos_usuario = DatosUsuario()
 
     ocupaciones = datos_usuario.ocupaciones()
 
     session['login'] = True
-    usuario = datos_usuario.obtener(id)
+
+    usuario = datos_usuario.obtener()
 
     session['username'] = usuario['nombre_completo']
     session['numero_celular'] = usuario['numero_celular']
     session['direccion'] = usuario['direccion']
 
-    return render_template(
-        "actualizar.html",
-        nombre=nombre_usuario,
-        tipo=tipo_usuario,
-        email=session.get('email'),
-        numero=usuario['numero_celular'],
-        numero_documento=usuario['numero_documento'],
-        direccion=usuario['direccion'],
-        ocupacion=usuario['ocupaciones'],
-        ocupaciones_disponibles=ocupaciones
-    )
+    if tipo_usuario=='Contratista':
+        session['descripcion'] = usuario['descripcion']
+        return render_template(
+            "actualizar.html",
+            nombre=nombre_usuario,
+            tipo=tipo_usuario,
+            email=session.get('email'),
+            numero=usuario['numero_celular'],
+            numero_documento=usuario['numero_documento'],
+            descripcion=usuario['descripcion'],
+            direccion=usuario['direccion'],
+            ocupacion=usuario['ocupaciones'],
+            ocupaciones_disponibles=ocupaciones
+        )
+    else:
+        return render_template(
+            "actualizar.html",
+            nombre=nombre_usuario,
+            tipo=tipo_usuario,
+            email=session.get('email'),
+            numero=usuario['numero_celular'],
+            numero_documento=usuario['numero_documento'],
+            direccion=usuario['direccion'],
+        )
+
 
 @datos_personales.route("/actualizar_admin", methods=['GET','POST'])
 def actualizar_admin():
@@ -95,11 +102,8 @@ def actualizar_email_usuario():
     
     except Exception as error:
         return jsonify({"actualizacion":False,"mensaje_excepcion":str(error),"home":"/actualizar_admin"})
-    
 
-    
-    
-   
+
 
 @datos_personales.route('/auth_actualizar', methods=['POST'])
 def auth():
@@ -110,13 +114,14 @@ def auth():
     numeroCelular = json['numeroCelular']
     direccion = json['direccion']
     id_udp = session.get('id_udp')
+    descripcion = json['descripcion']
 
     if not logueado:
         return redirect(url_for('login.index'))
 
     datos_usuario = DatosUsuario()
 
-    datos_usuario.actualizar(nombre, numeroCelular, direccion, id_udp)
+    datos_usuario.actualizar(nombre, numeroCelular, direccion,descripcion, id_udp)
 
     return {'actualizar': True, 'home': '/actualizar'}
 
