@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from seguridad.login import *
 from flask_login import logout_user, LoginManager
+<<<<<<< HEAD
 from seguridad.datos_usuario import DatosUsuario
+=======
+>>>>>>> ajustes_finales
 
 login = Blueprint('login', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -14,11 +17,14 @@ def index():
     logueado = session.get('login')
     if not logueado:
         return render_template("/index.html")
+<<<<<<< HEAD
     
     datos_usuario=DatosUsuario()
 
     if datos_usuario.validar_campos_vacios():
         return redirect(url_for('datos_personales.actualizar'))
+=======
+>>>>>>> ajustes_finales
     else:
         return redirect(url_for('menus.home'))
 
@@ -49,7 +55,11 @@ def auth():
             session['email'] = login.usuario['email']
             session['username'] = login.usuario["nombre"].upper()
             session['tipo_usuario'] = login.usuario["tipo"]
+<<<<<<< HEAD
             return {"login": True, "home": "/"}
+=======
+            return {"login": True, "home": "/actualizar"}
+>>>>>>> ajustes_finales
 
     except EmailContraseniaIncorrecta as mensaje:
         session['login'] = False

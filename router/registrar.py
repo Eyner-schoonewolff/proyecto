@@ -23,9 +23,16 @@ def auth():
     nombre = usuario_nuevo['nombre']
     tipo_documento = int(usuario_nuevo['tipo_documento'])
     numero_documento = int(usuario_nuevo['numero_documento'])
+<<<<<<< HEAD
     descripcion = str(usuario_nuevo['descripcion'])
     registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
                        nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento,descripcion=descripcion)
+=======
+
+    registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
+                       nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento)
+
+>>>>>>> ajustes_finales
     try:
         if registro.existe_():
             raise CorreoExistenteException(
@@ -36,10 +43,13 @@ def auth():
         elif registro.existe_correo():
             raise ExistenteException(
                 "El correo que deseas ingresar ya existe ")
+<<<<<<< HEAD
         elif registro.valor_invalido():
             raise DatosInvalidoException(
                 "No se debio enviar este dato aqui, por favor verificar bien"
             )
+=======
+>>>>>>> ajustes_finales
         else:
             registro.agregar()
             return {"registro": True, "home": "/"}
@@ -50,6 +60,9 @@ def auth():
         return {"registro": False, "mensaje": str(e)}
     except ExistenteException as e:
         return {"registro": False, "mensaje": str(e)}
+<<<<<<< HEAD
     except DatosInvalidoException as e:
         return {"registro": False, "mensaje": str(e)}
+=======
+>>>>>>> ajustes_finales
 

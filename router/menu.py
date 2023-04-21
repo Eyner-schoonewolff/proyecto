@@ -2,7 +2,11 @@ from flask import Blueprint, render_template, redirect, url_for, session, reques
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
+<<<<<<< HEAD
 from seguridad.contacto import Contacto,ValidacionDatosContacto
+=======
+from seguridad.enviar_correos import Correos
+>>>>>>> ajustes_finales
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -19,6 +23,16 @@ def home():
     if not tipo_usuario == 'Contratista':
         return render_template("home.html", nombre=nombre_usuario,
                                tipo=tipo_usuario)
+<<<<<<< HEAD
+=======
+    consultar = Solicitar()
+
+    id = session.get('id')
+    notificacion_ = consultar.ultima_solicitud()
+    if notificacion_['id'] == id:
+        flash(message="Nueva Solicitud de {}".format(
+            notificacion_['nombre']), category="Contratista")
+>>>>>>> ajustes_finales
 
     return render_template("home.html", nombre=nombre_usuario,
                            tipo=tipo_usuario)
@@ -141,6 +155,7 @@ def actualizar_estado(id):
     # import pdb
     # pdb.set_trace()
     json=request.get_json()
+<<<<<<< HEAD
     estado_actual = json['estado_actual']
     id_estado = json['id']
 
@@ -154,6 +169,14 @@ def actualizar_estado(id):
         actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
         actualizar.actualizar_fecha_estado()
         return jsonify({"actualizar": True})
+=======
+    id_estado = json['id']
+    fecha = json['fecha']
+    hora = json['hora']
+    actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
+    actualizar.actualizar_estado()
+    return jsonify({"actualizar": True})
+>>>>>>> ajustes_finales
 
 
 @menus.route("/evidencia/<id>")
@@ -182,12 +205,25 @@ def contacto():
     if not logueado:
         return redirect(url_for('login.index'))
 
+<<<<<<< HEAD
     contacto=Contacto()
 
     consulta=contacto.informacion_usuario_contacto()
 
     return render_template("contacto.html", nombre=nombre_usuario,
                            tipo=tipo_usuario,usuario=consulta)
+=======
+    consultar = Solicitar()
+
+    id = session.get('id')
+    notificacion_ = consultar.ultima_solicitud()
+    if notificacion_['id'] == id:
+        flash(message="Nueva Solicitud de {}".format(
+            notificacion_['nombre']), category="Contratista")
+
+    return render_template("contacto.html", nombre=nombre_usuario,
+                           tipo=tipo_usuario)
+>>>>>>> ajustes_finales
 
 
 @menus.route("/calendario")
@@ -254,6 +290,7 @@ def enviar_correos():
     numero = json['numero']
     asunto = json['asunto']
     mensaje = json['mensaje']
+<<<<<<< HEAD
     correo= Contacto(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
     try:
         if correo.validacion_contacto():
@@ -267,3 +304,25 @@ def enviar_correos():
     
     except Exception as exepcion:
         return jsonify({'actualizar':False,"endpoint":"/contacto",'mensaje':str(exepcion),'titulo':'Lo lamentamos, hubo un problema con el sevridor...'})
+=======
+    correo= Correos(correo=correo,nombre=nombre,numero=numero,asunto=asunto,mensaje=mensaje)
+
+    enviado=correo.enviar()
+
+    if enviado:
+        return jsonify({"actualizar": True,"endpoint":"/contacto"})
+
+    return jsonify({"actualizar": False})
+
+
+@menus.route('/perfiles_contra')
+def perfiles_contra():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    return render_template("perfiles_contratistas.html")
+
+>>>>>>> ajustes_finales

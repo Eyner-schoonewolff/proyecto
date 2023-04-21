@@ -48,7 +48,11 @@ class Solicitar:
     def admin_contratista(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
+<<<<<<< HEAD
             SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion,s.hora
+=======
+            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion
+>>>>>>> ajustes_finales
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
@@ -115,7 +119,11 @@ class Solicitar:
                   INNER JOIN usuarios u ON uo.id_usuario=u.id
                   INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                   INNER JOIN ocupacion o ON uo.id_ocupacion= o.id
+<<<<<<< HEAD
                   WHERE uo.id_ocupacion=%s and uo.eliminado=0
+=======
+                  WHERE uo.id_ocupacion=%s and uo.eliminado = 0
+>>>>>>> ajustes_finales
                   GROUP BY udp.nombre_completo
         """
         cursor.execute(query, (id_ocupacion,))
@@ -129,6 +137,7 @@ class Solicitar:
 
     def actualizar_estado(self):
         cursor = db.connection.cursor()
+<<<<<<< HEAD
         informacion = (self.id_estado,self.id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
         cursor.execute(query, informacion)
@@ -138,12 +147,32 @@ class Solicitar:
     
     def actualizar_fecha_estado(self):
         cursor = db.connection.cursor()
+=======
+>>>>>>> ajustes_finales
         informacion = (self.id_estado,self.fecha,self.hora,self.id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s,horario=%s,hora=%s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
 
+<<<<<<< HEAD
         return None
     
 
 
+=======
+        return True
+
+        # cambiar query 6
+    def ultima_solicitud(self):
+        cursor = db.connection.cursor(dictionary=True)
+        query = """
+            SELECT id_usuario_contratista id,udp.nombre_completo nombre
+                FROM solicitud s
+                INNER JOIN usuarios u ON s.`id_usuario_cliente` = u.`id`
+                INNER JOIN usuario_datos_personales udp ON u.`id_usuario_datos_personales`= udp.id
+                ORDER BY s.id DESC
+                LIMIT 1;
+        """
+        cursor.execute(query)
+        return cursor.fetchone()
+>>>>>>> ajustes_finales

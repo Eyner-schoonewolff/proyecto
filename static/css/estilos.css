@@ -12,6 +12,26 @@
     }
 }
 
+<<<<<<< HEAD
 .bg-info {
     align-items: center !important;
 }
+=======
+
+
+.body {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    overflow: hidden;
+    
+}
+
+#login{
+    border-radius: 25px;
+     box-shadow: 4px 4px 15px black !important;
+
+}
+>>>>>>> ajustes_finales

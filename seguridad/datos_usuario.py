@@ -4,12 +4,19 @@ from typing import Dict
 import datetime
 import re
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> ajustes_finales
 class DatosUsuario:
     def __init__(self, email_actual="", email_nuevo="") -> None:
         self.email_actual = email_actual
         self.email_nuevo = email_nuevo
         self.id_usuario = session.get('id')
+<<<<<<< HEAD
         self.tipo_usuario = session.get('tipo_usuario')
+=======
+>>>>>>> ajustes_finales
 
     def validar_correo_electronico(self):
         # Expresión regular para validar correos electrónicos
@@ -62,6 +69,7 @@ class DatosUsuario:
         cursor.execute(query)
         return cursor.fetchall()
 
+<<<<<<< HEAD
     def obtener(self) -> Dict:
         # Obtener el cursor y el correo electrónico actual
         cursor = db.connection.cursor(dictionary=True)
@@ -69,6 +77,14 @@ class DatosUsuario:
         #Este query es para obtener los contratistas
         query = """
             SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion, GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones,udp.descripcion,o.id id_ocupacion
+=======
+    def obtener(self, id) -> Dict:
+        # Obtener el cursor y el correo electrónico actual
+        cursor = db.connection.cursor(dictionary=True)
+        # Consultar los datos del usuario con sus ocupaciones
+        query = """
+             SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion, GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones,o.id id_ocupacion
+>>>>>>> ajustes_finales
         FROM usuario_datos_personales udp
         INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
         INNER JOIN usuario_ocupaciones uo ON uo.id_usuario =u.`id`
@@ -76,6 +92,7 @@ class DatosUsuario:
         WHERE u.id=%s and uo.eliminado=0
         GROUP BY udp.nombre_completo, udp.numero_celular, udp.numero_documento, udp.direccion
         """
+<<<<<<< HEAD
         cursor.execute(query, (self.id_usuario,))
         datos = cursor.fetchone()
 
@@ -83,16 +100,30 @@ class DatosUsuario:
         if datos is None:
             query_ = """
             SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion,udp.descripcion
+=======
+        cursor.execute(query, (id,))
+        datos = cursor.fetchone()
+
+        # Si los datos no se encuentran, consultar solo los datos básicos del usuario
+        if datos is None:
+            query_ = """
+            SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion
+>>>>>>> ajustes_finales
             FROM usuario_datos_personales udp
             INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
             WHERE u.id = %s
             """
+<<<<<<< HEAD
             cursor.execute(query_, (self.id_usuario,))
+=======
+            cursor.execute(query_, (id,))
+>>>>>>> ajustes_finales
             datos = cursor.fetchone()
             datos['ocupaciones'] = None
 
         return datos
 
+<<<<<<< HEAD
     def validar_campos_vacios(self)->bool:
         dato=self.obtener()
         if any(valor == '' or valor == 0 or valor is None for valor in [dato['direccion'], dato['ocupaciones'], dato['descripcion'], dato['numero_celular']]) and self.tipo_usuario == 'Contratista':
@@ -112,6 +143,16 @@ class DatosUsuario:
         db.connection.commit()
         cursor.close()
         return None
+=======
+    def actualizar(self, nombre, celular, direccion, id_usuario):
+        cursor = db.connection.cursor()
+        datos_actualizar = (nombre, celular, direccion, id_usuario)
+        query = 'UPDATE usuario_datos_personales SET nombre_completo = %s, numero_celular = %s, direccion=%s WHERE id = %s'
+        cursor.execute(query, datos_actualizar)
+        db.connection.commit()
+        cursor.close()
+        return f"registro(s) actualizado(s)"
+>>>>>>> ajustes_finales
 
     def id_usuarios(self, id) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
@@ -207,6 +248,30 @@ class DatosUsuario:
         db.connection.commit()
         return True
 
+<<<<<<< HEAD
+=======
+    def informacion_contratistas(self):
+        cursor = db.connection.cursor(dictionary=True)
+        query = """select u.id,u.email as email,us.nombre_completo,us.numero_celular as celular,GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones
+                    from usuarios u
+                    join usuario_datos_personales us on u.id_usuario_datos_personales = us.id
+                    join usuario_ocupaciones uc on uc.id_usuario = u.id
+                    join ocupacion o on uc.id_ocupacion = o.id
+                    where u.id_tipo_usuario = 2 and uc.eliminado = 0
+                    group by u.id
+                    order by us.nombre_completo,o.nombre;"""
+        cursor.execute(query)
+        return cursor.fetchall()
+
+    def Eventos_contratistas(self, id):
+        cursor = db.connection.cursor(dictionary=True)
+        query = """select s.id,s.descripcion,concat(s.horario,'T',s.hora) as fecha ,if(s.id_estado = 1,'#3346FF',if(s.id_estado= 2,'#0cde00',if(s.id_estado = 3,'#FFF033','#E20202'))) as color
+                    from solicitud s
+                    where s.id_usuario_contratista = %s ;"""
+        cursor.execute(query,(id,))
+        return cursor.fetchall()
+
+>>>>>>> ajustes_finales
 
 class DatoUnicoEmail(Exception):
     ...

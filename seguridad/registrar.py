@@ -1,18 +1,28 @@
 from db.database import *
 from typing import Dict
 import bcrypt
+<<<<<<< HEAD
 from flask import request
 
 
 class Usuario:
     def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int,descripcion:str) -> None:
+=======
+
+
+class Usuario:
+    def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int) -> None:
+>>>>>>> ajustes_finales
         self.email = email
         self.contrasenia = contrasenia
         self.rol = rol
         self.nombre = nombre
         self.tipo_documento = tipo_documento
         self.numero_documento = numero_documento
+<<<<<<< HEAD
         self.descripcion=descripcion
+=======
+>>>>>>> ajustes_finales
 
     def datos_unico_documento(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
@@ -76,14 +86,23 @@ class Usuario:
         cursor = db.connection.cursor()
 
         informacion = (self.tipo_documento, self.nombre,
+<<<<<<< HEAD
                        self.numero_documento,self.descripcion)
+=======
+                       self.numero_documento)
+>>>>>>> ajustes_finales
 
         usuario_nuevo = (self.email, self.encriptar_contraseña(),
                          self.rol, self.numero_documento)
 
         query_informacion = """
+<<<<<<< HEAD
                     INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento,descripcion)
                     VALUES (%s,%s,%s,%s)
+=======
+                    INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento)
+                    VALUES (%s,%s,%s)
+>>>>>>> ajustes_finales
                 """
         #revisar
         query = """INSERT usuarios(email,contraseña,id_tipo_usuario,id_usuario_datos_personales)
@@ -97,6 +116,7 @@ class Usuario:
         db.connection.commit()
 
         return None
+<<<<<<< HEAD
     
     def valor_invalido(self)->bool:
         input_descripcion=request.get_json()['descripcion']
@@ -104,6 +124,8 @@ class Usuario:
             return True
         else:
             return False
+=======
+>>>>>>> ajustes_finales
 
 
 
@@ -126,6 +148,7 @@ class ExistenteException(Exception):
     Excepción personalizada para indicar que el número de documento y el correo electrónico ya existe.
     """
     pass
+<<<<<<< HEAD
 
 class DatosInvalidoException(Exception):
     """
@@ -134,3 +157,5 @@ class DatosInvalidoException(Exception):
     pass
 
 
+=======
+>>>>>>> ajustes_finales

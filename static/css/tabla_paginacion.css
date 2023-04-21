@@ -27,6 +27,17 @@ table>tbody>tr>td {
     color: rgb(0, 0, 0);
 }
 
+<<<<<<< HEAD
 #paginacion_filter{
     margin-bottom: 2%;
+=======
+body{
+    /* min-height: 100vh; */
+    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    overflow: hidden !important;
+    
+>>>>>>> ajustes_finales
 }

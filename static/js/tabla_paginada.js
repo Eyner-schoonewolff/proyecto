@@ -17,6 +17,10 @@ $(document).ready(function () {
                 next: "Siguiente",
                 last: "Ultimo"
             },
+<<<<<<< HEAD
+=======
+            responsive: "true",
+>>>>>>> ajustes_finales
             aria: {
                 sortAscending: ": active para ordenar la columna en orden ascendente",
                 sortDescending: ": active para ordenar la columna en orden descendente"

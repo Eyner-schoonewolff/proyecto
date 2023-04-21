@@ -21,6 +21,10 @@ class DataBaseConnector:
 
 
 db = DataBaseConnector(user='root', password='',
+<<<<<<< HEAD
                          host='localhost', database='copia_proyecto_py')
+=======
+                         host='localhost', database='proyecto_py')
+>>>>>>> ajustes_finales
 
 db.connect()

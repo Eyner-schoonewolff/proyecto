@@ -1,5 +1,9 @@
 $(document).ready(function () {
+<<<<<<< HEAD
     var table = $('#paginacion_usuarios').DataTable({
+=======
+    var table = $('#paginacion_contratista').DataTable({
+>>>>>>> ajustes_finales
         language: {
             processing: "Tratamiento en curso...",
             search: "Buscar&nbsp;:",
@@ -47,6 +51,7 @@ $(document).ready(function () {
         scrollY: 400,
         lengthMenu: [[5, 10, -1], [5, 10, "All"]],
     });
+<<<<<<< HEAD
     $.fn.dataTable.ext.search.push(
         function (settings, data, dataIndex) {
             var min = $('#min').val();
@@ -105,6 +110,10 @@ $(document).ready(function () {
         });
 
     });
+=======
+
+
+>>>>>>> ajustes_finales
 
     // Redibujar la tabla al cambiar los campos de entrada de fecha
 });

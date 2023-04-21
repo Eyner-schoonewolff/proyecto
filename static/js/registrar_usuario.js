@@ -1,10 +1,15 @@
 document.querySelector("#btn-registro").addEventListener('click', () => {
+<<<<<<< HEAD
     rol = document.querySelector("#seleccion_rol").value
+=======
+    rol = document.querySelector("#rol").value
+>>>>>>> ajustes_finales
     email = document.querySelector("#email").value
     nombre = document.querySelector("#nombre").value
     contrasenia = document.querySelector("#contrasenia").value
     numero_documento = document.querySelector('#numeroDocumento').value
     tipo_documento = document.querySelector("#documento").value
+<<<<<<< HEAD
     descripcion = document.querySelector('#descricpion_input')
     descripcion = descripcion.value ?? "" ;
 
@@ -46,6 +51,21 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         });
         return;
     }
+=======
+
+
+    if (!rol || !email || !nombre || !contrasenia || !numero_documento || !tipo_documento) {
+        Swal.fire({
+            title: "Error",
+            text: "Por favor, completa todos los campos",
+            icon: "error",
+            confirmButtonText: "Aceptar",
+        }).then(() => {
+            window.location.reload();
+        });
+        return; // Detiene la ejecución del código si hay campos vacíos
+    }
+>>>>>>> ajustes_finales
 
     datos = {
         email,
@@ -53,8 +73,12 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         nombre,
         contrasenia,
         tipo_documento,
+<<<<<<< HEAD
         numero_documento,
         descripcion
+=======
+        numero_documento
+>>>>>>> ajustes_finales
     }
 
     $.ajax({
@@ -90,6 +114,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         }
     });
 
+<<<<<<< HEAD
 });
 
 
@@ -106,3 +131,6 @@ document.querySelector("#seleccion_rol")
             }
         }
     );
+=======
+});
+>>>>>>> ajustes_finales
