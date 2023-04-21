@@ -75,14 +75,33 @@ $(document).ready(function () {
             },
             onSelect: function () {
                 table.draw();
-            }
+            },
+            onClose: function () {
+                if ($('#min').val() == null || $('#min').val() == '') {
+                  $('#min').val('');
+                  table.draw();
+                }
+              },
         });
         var pickerMax = new Pikaday({
             field: document.getElementById('max'),
             format: 'YYYY-MM-DD',
+            i18n: {
+                previousMonth: 'Mes anterior',
+                nextMonth: 'Mes siguiente',
+                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+            },
             onSelect: function () {
                 table.draw();
-            }
+            },
+            onClose: function () {
+                if ($('#max').val() == null || $('#max').val() == '') {
+                  $('#max').val('');
+                  table.draw();
+                }
+              },
         });
 
     });

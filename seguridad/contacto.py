@@ -1,4 +1,4 @@
-from flask import session,request
+from flask import session, request
 from db.database import *
 from typing import Dict
 import smtplib
@@ -105,17 +105,19 @@ class Contacto:
         </div>     
             <h1>Asunto: {asunto}</h1>
             <p> <strong>Mensaje:</strong>{mensaje}</p>
+            <h3>Datos personales</h3>
             <p><strong>Enviado por :</strong>{nombre}</p>
-            <p><strong>Correo por :</strong> {correo} numero: {numero} </p>
+            <p><strong>Correo enviado por:</strong> {correo}</p>
+            <p><strong>celular:</strong> {numero}</p>
         </div>
         <footer class="container">
             <p class="float-right">{tipo}</p>
-            <p>&copy; 2017-2018 Company, Inc. &middot; <a href="https://www.minambiente.gov.co/politica-de-proteccion-de-datos-personales/">Privacy</a></p>
+            <p>&copy; 2023 GESTIÓN DE SERVICIOS (ALBAÑIL, PLOMERO, CARPINTERO) ; <a href="https://www.minambiente.gov.co/politica-de-proteccion-de-datos-personales/">Privacy</a></p>
         </footer>
         </body>
         </html>
 
-        """.format(asunto=self.asunto, mensaje=self.mensaje, nombre=self.nombre, 
+        """.format(asunto=self.asunto, mensaje=self.mensaje, nombre=self.nombre,
                    correo=self.correo, numero=self.numero, tipo=self.tipo_usuario)
 
         # Adjuntar el cuerpo del correo como parte HTML al mensaje MIME
@@ -143,19 +145,19 @@ class Contacto:
         """
         cursor.execute(query, (self.id_usuario,))
         return cursor.fetchone()
-    
-    def validacion_contacto(self)->bool:
-        json=request.get_json()
-        usuario=self.informacion_usuario_contacto()
+
+    def validacion_contacto(self) -> bool:
+        json = request.get_json()
+        usuario = self.informacion_usuario_contacto()
 
         if 'nombre' not in json or 'correo' not in json or 'numero' not in json:
             return False
-    
+
         if usuario['nombre'] != json['nombre'] or usuario['correo'] != json['correo'] or int(usuario['celular']) != int(json['numero']):
             return True
-        
+
         return False
+
 
 class ValidacionDatosContacto(Exception):
     ...
-    
