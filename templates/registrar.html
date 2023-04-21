@@ -65,8 +65,9 @@
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label" for="form3Example3">Tipo de
                                                         Usuario</label>
-                                                    <select id="rol" type="text" name="rol"
-                                                        class="form-control text-center" id="select">
+                                                    <select type="text" name="seleccion_rol"
+                                                        class="form-control text-center" id="seleccion_rol">
+                                                        <option value="0" selected>Elegir tipo Usuario</option>
                                                         <option value="2">contratista</option>
                                                         <option value="3">cliente</option>
                                                     </select>
@@ -82,7 +83,6 @@
 
                                             </div>
                                             <div class="row">
-
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label" for="form3Example3">Tipo de
                                                         documetno</label>
@@ -103,7 +103,15 @@
 
                                             </div>
 
+                                            <div class="row">
+                                                <div class="col-12 mb-2" id="descricpion" hidden>
+                                                    <label class="form-label" for="form3Example3">Descripcion 
+                                                        Contratista</label>
+                                                    <input id="descricpion_input" type="text" name="descricpion"
+                                                       class="form-control" required />
 
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="mb-4 row justify-content-center">

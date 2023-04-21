@@ -4,12 +4,12 @@ from typing import Dict
 import datetime
 import re
 
-
 class DatosUsuario:
-    def __init__(self,email_actual="",email_nuevo="") -> None:
-        self.email_actual=email_actual
-        self.email_nuevo=email_nuevo
+    def __init__(self, email_actual="", email_nuevo="") -> None:
+        self.email_actual = email_actual
+        self.email_nuevo = email_nuevo
         self.id_usuario = session.get('id')
+        self.tipo_usuario = session.get('tipo_usuario')
 
     def validar_correo_electronico(self):
         # Expresión regular para validar correos electrónicos
@@ -18,7 +18,6 @@ class DatosUsuario:
             return True
         else:
             return False
-
 
     def informacion_usuario(self, email) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
@@ -30,10 +29,10 @@ class DatosUsuario:
         """
         cursor.execute(query, (email,))
         return cursor.fetchone()
-    
-    def actualizar_email(self)->bool:
+
+    def actualizar_email(self) -> bool:
         cursor = db.connection.cursor()
-        actualizacion_email = (self.email_nuevo,self.email_actual)
+        actualizacion_email = (self.email_nuevo, self.email_actual)
         query = 'UPDATE usuarios SET email = %s WHERE email = %s'
         cursor.execute(query, actualizacion_email)
         db.connection.commit()
@@ -63,12 +62,13 @@ class DatosUsuario:
         cursor.execute(query)
         return cursor.fetchall()
 
-    def obtener(self, id) -> Dict:
+    def obtener(self) -> Dict:
         # Obtener el cursor y el correo electrónico actual
         cursor = db.connection.cursor(dictionary=True)
         # Consultar los datos del usuario con sus ocupaciones
+        #Este query es para obtener los contratistas
         query = """
-             SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion, GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones,o.id id_ocupacion
+            SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion, GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones,udp.descripcion,o.id id_ocupacion
         FROM usuario_datos_personales udp
         INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
         INNER JOIN usuario_ocupaciones uo ON uo.id_usuario =u.`id`
@@ -76,31 +76,42 @@ class DatosUsuario:
         WHERE u.id=%s and uo.eliminado=0
         GROUP BY udp.nombre_completo, udp.numero_celular, udp.numero_documento, udp.direccion
         """
-        cursor.execute(query, (id,))
+        cursor.execute(query, (self.id_usuario,))
         datos = cursor.fetchone()
 
-        # Si los datos no se encuentran, consultar solo los datos básicos del usuario
+        # Si los datos no se encuentran, consultar solo los datos básicos del usuario, es decir para obtener los datos del usuario cliente
         if datos is None:
             query_ = """
-            SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion
+            SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion,udp.descripcion
             FROM usuario_datos_personales udp
             INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
             WHERE u.id = %s
             """
-            cursor.execute(query_, (id,))
+            cursor.execute(query_, (self.id_usuario,))
             datos = cursor.fetchone()
             datos['ocupaciones'] = None
 
         return datos
 
-    def actualizar(self, nombre, celular, direccion, id_usuario):
+    def validar_campos_vacios(self)->bool:
+        dato=self.obtener()
+        if any(valor == '' or valor == 0 or valor is None for valor in [dato['direccion'], dato['ocupaciones'], dato['descripcion'], dato['numero_celular']]) and self.tipo_usuario == 'Contratista':
+            return True
+        
+        if any(valor =='' or valor==0 for valor in [dato['direccion'] ,dato['numero_celular']]) and self.tipo_usuario=='Cliente':
+            return True
+
+        else:
+            return False
+        
+    def actualizar(self, nombre, celular, direccion,descripcion,id_usuario):
         cursor = db.connection.cursor()
-        datos_actualizar = (nombre, celular, direccion, id_usuario)
-        query = 'UPDATE usuario_datos_personales SET nombre_completo = %s, numero_celular = %s, direccion=%s WHERE id = %s'
+        datos_actualizar = (nombre, celular, direccion,descripcion, id_usuario)
+        query = 'UPDATE usuario_datos_personales SET nombre_completo = %s, numero_celular = %s, direccion=%s,descripcion=%s WHERE id = %s'
         cursor.execute(query, datos_actualizar)
         db.connection.commit()
         cursor.close()
-        return f"registro(s) actualizado(s)"
+        return None
 
     def id_usuarios(self, id) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
@@ -199,6 +210,7 @@ class DatosUsuario:
 
 class DatoUnicoEmail(Exception):
     ...
+
 
 class CorreoInvalido(Exception):
     ...

@@ -3,15 +3,15 @@
         nombre = document.querySelector("#nombre").value;
         direccion = document.querySelector("#direccion").value;
         numeroCelular = document.querySelector("#numeroCelular").value;
-        // const agregarOcupacionElement = document.querySelector("#agregar_ocupacion");
+        const descripcionElement = document.querySelector("#descripcion");
     
-        //si el valor de agregaOcupacion no esta definido y es null la variable devolvera el valor de 0
-        // const agregar_ocupacion = agregarOcupacionElement !== null ? agregarOcupacionElement.value : 0;
-        
+        const descripcion = descripcionElement !== null ? descripcionElement.value : "";
+
         var datos = {
             nombre,
             direccion,
             numeroCelular,
+            descripcion
         };
     
         $.ajax({
@@ -38,7 +38,6 @@ function ocupaciones() {
         success: function (datos) {
 
             if (datos.numero == 1) {
-                console.log(datos.datos);
                 $.each(datos.datos, function (i, e) {
                     $("#agregar_ocupacion option[value='" + e.id + "']").prop("selected", true);
                     $("#agregar_ocupacion").select2()

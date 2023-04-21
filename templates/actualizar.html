@@ -90,6 +90,15 @@
                                                 </div>
 
                                             </div>
+                                            <div class="row">
+                                                <div class="col-12 mb-2">
+                                                    <label class="form-label" for="form3Example3">Descripcion 
+                                                        Contratista</label>
+                                                    <input id="descricpion_input" type="text" name="descricpion_input"
+                                                       class="form-control" value="{{descripcion}}" readonly />
+
+                                                </div>
+                                            </div>
 
                                         </div>
                                         <div class="mb-4 row justify-content-center">
@@ -130,13 +139,19 @@
 
                                                             </div>
                                                             <div class="row">
-                                                                <div class="col-12 mb-2">
-                                                                    <label class="form-label"
+                                                                <div class="col-6 mb-2">
+                                                                    <label class="form-label m-2"
                                                                         for="form3Example3">Celular</label>
                                                                     <input id="numeroCelular" type="number"
                                                                         name="numeroCelular" min="4" max="12"
                                                                         class="form-control" value={{numero}} />
 
+                                                                </div>
+                                                                <div class="col-6 mb-2">
+                                                                    <label class="form-label m-2"
+                                                                        for="form3Example3">Descripcion</label>
+                                                                    <input id="descripcion" type="text" name="descripcion"
+                                                                        class="form-control" value="{{descripcion}}" />
                                                                 </div>
 
 

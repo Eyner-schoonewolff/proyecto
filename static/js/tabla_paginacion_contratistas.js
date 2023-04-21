@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    var table = $('#paginacion_contratista').DataTable({
+    var table = $('#paginacion_usuarios').DataTable({
         language: {
             processing: "Tratamiento en curso...",
             search: "Buscar&nbsp;:",
@@ -47,29 +47,44 @@ $(document).ready(function () {
         scrollY: 400,
         lengthMenu: [[5, 10, -1], [5, 10, "All"]],
     });
-    // $.fn.dataTable.ext.search.push(
-    //     function (settings, data, dataIndex) {
-    //         var min = $('#min').val();
-    //         var max = $('#max').val();
-    //         var date = new Date(data[2]); // asumiendo que la columna de fecha es la primera (índice 0)
-    //         if ((min === '' && max === '') ||
-    //             (min === '' && date <= new Date(max)) ||
-    //             (max === '' && date >= new Date(min)) ||
-    //             (date >= new Date(min) && date <= new Date(max))) {
-    //             return true;
-    //         }
+    $.fn.dataTable.ext.search.push(
+        function (settings, data, dataIndex) {
+            var min = $('#min').val();
+            var max = $('#max').val();
+            var date = new Date(data[2]); // asumiendo que la columna de fecha es la primera (índice 0)
+            if ((min === '' && max === '') ||
+                (min === '' && date <= new Date(max)) ||
+                (max === '' && date >= new Date(min)) ||
+                (date >= new Date(min) && date <= new Date(max))) {
+                return true;
+            }
 
-    //         return false;
-    //     }
-    // );
+            return false;
+        }
+    );
+    $(document).ready(function () {
+        var pickerMin = new Pikaday({
+            field: document.getElementById('min'),
+            format: 'D MMM YYYY',
+            i18n: {
+                previousMonth: 'Mes anterior',
+                nextMonth: 'Mes siguiente',
+                months: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                weekdays: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                weekdaysShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+            },
+            onSelect: function () {
+                table.draw();
+            }
+        });
+        var pickerMax = new Pikaday({
+            field: document.getElementById('max'),
+            format: 'YYYY-MM-DD',
+            onSelect: function () {
+                table.draw();
+            }
+        });
 
-    // Configurar los campos de entrada de fecha
-    $('<input type="date" id="min" />').appendTo('#paginacion_contratista_filter');
-    $('<input type="date" id="max" />').appendTo('#paginacion_contratista_filter');
-
-    // Agregar el evento de cambio en los campos de entrada de fecha
-    $('#min, #max').on('change', function () {
-        table.draw();
     });
 
     // Redibujar la tabla al cambiar los campos de entrada de fecha

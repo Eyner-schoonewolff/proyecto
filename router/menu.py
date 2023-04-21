@@ -19,13 +19,6 @@ def home():
     if not tipo_usuario == 'Contratista':
         return render_template("home.html", nombre=nombre_usuario,
                                tipo=tipo_usuario)
-    consultar = Solicitar()
-
-    id = session.get('id')
-    notificacion_ = consultar.ultima_solicitud()
-    if notificacion_['id'] == id:
-        flash(message="Nueva Solicitud de {}".format(
-            notificacion_['nombre']), category="Contratista")
 
     return render_template("home.html", nombre=nombre_usuario,
                            tipo=tipo_usuario)
@@ -148,12 +141,19 @@ def actualizar_estado(id):
     # import pdb
     # pdb.set_trace()
     json=request.get_json()
+    estado_actual = json['estado_actual']
     id_estado = json['id']
-    fecha = json['fecha']
-    hora = json['hora']
-    actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
-    actualizar.actualizar_estado()
-    return jsonify({"actualizar": True})
+
+    if estado_actual=='Aceptada':
+        actualizar = Solicitar(id_estado=id_estado,id_solicitud=id)
+        actualizar.actualizar_estado()
+        return jsonify({"actualizar": True})
+    else:
+        fecha = json['fecha']
+        hora = json['hora']
+        actualizar = Solicitar(fecha=fecha,hora=hora,id_estado=id_estado,id_solicitud=id)
+        actualizar.actualizar_fecha_estado()
+        return jsonify({"actualizar": True})
 
 
 @menus.route("/evidencia/<id>")
