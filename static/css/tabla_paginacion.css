@@ -26,3 +26,7 @@ table>tbody>tr>td {
     background-color: #0dcaf0;
     color: rgb(0, 0, 0);
 }
+
+#paginacion_filter{
+    margin-bottom: 2%;
+}
