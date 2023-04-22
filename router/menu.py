@@ -267,3 +267,15 @@ def enviar_correos():
     
     except Exception as exepcion:
         return jsonify({'actualizar':False,"endpoint":"/contacto",'mensaje':str(exepcion),'titulo':'Lo lamentamos, hubo un problema con el sevridor...'})
+    
+
+@menus.route('/perfiles_contra')
+def perfiles_contra():
+    nombre_usuario = session.get('username')
+    tipo_usuario = session.get('tipo_usuario')
+    logueado = session.get('login', False)
+    if not logueado:
+        return redirect(url_for('login.index'))
+    
+    return render_template("perfiles_contratistas.html",nombre=nombre_usuario,
+                           tipo=tipo_usuario,)

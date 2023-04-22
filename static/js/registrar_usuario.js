@@ -101,6 +101,9 @@ document.querySelector("#seleccion_rol")
 
             if (rol == 2) {
                 divSelect.removeAttribute('hidden', false);
+            } else if (rol == 0) {
+                divSelect.setAttribute('hidden', false);
+            
             } else if (rol == 3) {
                 divSelect.setAttribute('hidden', true);
             }

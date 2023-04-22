@@ -1,6 +1,6 @@
 from flask import Blueprint, request, session, render_template, redirect, url_for,flash,jsonify
 from seguridad.datos_usuario import DatosUsuario,DatoUnicoEmail,CorreoInvalido
-from seguridad.Model_solicitar_servicio import Solicitar
+from seguridad.Model_solicitar_servicio import *
 import json
 
 datos_personales = Blueprint('datos_personales', __name__, static_url_path='/static',
@@ -203,3 +203,15 @@ def agregar():
              
         return {"numero": 2,'home': '/actualizar'}
     
+@datos_personales.route('/contratistas', methods=['GET'])
+def contra():
+    datos_usuario = DatosUsuario()
+    datos =datos_usuario.informacion_contratistas()
+    return datos
+
+@datos_personales.route('/eventos', methods=['GET'])
+def event():
+    id = session.get('id')
+    datos_usuario = DatosUsuario()
+    datos =datos_usuario.Eventos_contratistas(id)
+    return datos
