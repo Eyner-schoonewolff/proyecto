@@ -6,9 +6,15 @@ import re
 
 
 class DatosUsuario:
-    def __init__(self, email_actual="", email_nuevo="") -> None:
+    def __init__(self, email_actual="", email_nuevo="", verificacion_email="",
+                 observaciones="", estrellas="", id_solicitud="", tipo_usuario_calificar="") -> None:
         self.email_actual = email_actual
         self.email_nuevo = email_nuevo
+        self.verificacion_email = verificacion_email
+        self.observaciones=observaciones
+        self.estrellas=estrellas
+        self.id_solicitud=id_solicitud
+        self.tipo_usuario_calificar=tipo_usuario_calificar
         self.id_usuario = session.get('id')
         self.tipo_usuario = session.get('tipo_usuario')
 
@@ -20,7 +26,7 @@ class DatosUsuario:
         else:
             return False
 
-    def informacion_usuario(self, email) -> Dict:
+    def informacion_usuario(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
             SELECT udp.nombre_completo nombre, udp.numero_documento documento, udp.direccion, udp.numero_celular celular
@@ -28,7 +34,7 @@ class DatosUsuario:
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 WHERE u.email=%s
         """
-        cursor.execute(query, (email,))
+        cursor.execute(query, (self.verificacion_email,))
         return cursor.fetchone()
 
     def actualizar_email(self) -> bool:
@@ -125,7 +131,7 @@ class DatosUsuario:
         cursor.execute(query, (id,))
         return cursor.fetchone()
 
-    def calificar(self, observaciones, estrellas, id_solicitud, tipo_usuario) -> bool:
+    def calificar(self) -> bool:
         cursor = db.connection.cursor(dictionary=True)
 
         query_validacion = """
@@ -136,7 +142,7 @@ class DatosUsuario:
             WHERE c.`id_solicitud`=%s and tu.id=%s
         
         """
-        valores = (id_solicitud, tipo_usuario)
+        valores = (self.id_solicitud, self.tipo_usuario_calificar)
 
         cursor.execute(query_validacion, valores)
 
@@ -147,8 +153,8 @@ class DatosUsuario:
 
             cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
 
-            informacion = (observaciones, estrellas,
-                           id_solicitud, self.id_usuario, cadena_fecha)
+            informacion = (self.observaciones, self.estrellas,
+                           self.id_solicitud, self.id_usuario, cadena_fecha)
 
             query_informacion = """
                     INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario,registro)
@@ -222,7 +228,7 @@ class DatosUsuario:
         cursor.execute(query)
         return cursor.fetchall()
 
-    def Eventos_contratistas(self, id):
+    def eventos_contratistas(self, id):
         cursor = db.connection.cursor(dictionary=True)
         query = """select s.id,s.descripcion,concat(s.horario,'T',s.hora) as fecha ,if(s.id_estado = 1,'#3346FF',if(s.id_estado= 2,'#0cde00',if(s.id_estado = 3,'#FFF033','#E20202'))) as color
                     from solicitud s

@@ -3,8 +3,10 @@ from flask import session
 from typing import Dict
 
 class Perfiles:
-    def __init__(self) -> None:
+    def __init__(self,id_usuario_cliente="",id_usuario="") -> None:
         self.tipo_usuario = session.get('tipo_usuario')
+        self.id_usuario_cliente=id_usuario_cliente
+        self.id_usuario=id_usuario
 
     def consulta_cliente(self)->Dict:
         cursor=db.connection.cursor(dictionary=True)
@@ -34,9 +36,9 @@ class Perfiles:
         cursor.execute(query)
         return cursor.fetchall()
     
-    def calificaciones_cliente(self,id_usuario_cliente,id_usuario)->Dict:
+    def calificaciones_cliente(self)->Dict:
         cursor=db.connection.cursor(dictionary=True)
-        valores=(id_usuario_cliente,id_usuario)
+        valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, c.`numero_estrellas` valor, c.`observaciones` comentario,c.`registro` 
                 FROM calificacion c
@@ -48,9 +50,9 @@ class Perfiles:
         cursor.execute(query,valores)
         return cursor.fetchall()
     
-    def calificaciones_contratista(self,id_usuario_cliente,id_usuario)->Dict:
+    def calificaciones_contratista(self)->Dict:
         cursor=db.connection.cursor(dictionary=True)
-        valores=(id_usuario_cliente,id_usuario)
+        valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, c.`numero_estrellas` valor, c.`observaciones` comentario,c.`registro` 
                 FROM calificacion c
@@ -62,9 +64,9 @@ class Perfiles:
         cursor.execute(query,valores)
         return cursor.fetchall()
     
-    def promedio_cliente(self,id_usuario_cliente,id_usuario)->Dict:
+    def promedio_cliente(self)->Dict:
         cursor=db.connection.cursor(dictionary=True)
-        valores=(id_usuario_cliente,id_usuario)
+        valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, ROUND(SUM(c.`numero_estrellas`) / COUNT(c.`numero_estrellas`), 1) as promedio
                 FROM calificacion c
@@ -76,9 +78,9 @@ class Perfiles:
         cursor.execute(query,valores)
         return cursor.fetchone()
     
-    def promedio_contratista(self,id_usuario_cliente,id_usuario)->Dict:
+    def promedio_contratista(self)->Dict:
         cursor=db.connection.cursor(dictionary=True)
-        valores=(id_usuario_cliente,id_usuario)
+        valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, ROUND(SUM(c.`numero_estrellas`) / COUNT(c.`numero_estrellas`), 1) as promedio
                 FROM calificacion c

@@ -65,8 +65,8 @@ def actualizar_admin():
     
     if request.method == 'POST':
         email = request.get_json()["email"]
-        consultar = DatosUsuario()
-        informacion=consultar.informacion_usuario(email=email)
+        consultar = DatosUsuario(verificacion_email=email)
+        informacion=consultar.informacion_usuario()
         return jsonify({'datos': informacion})
     else:
         return render_template("actualizar.html",
@@ -86,10 +86,13 @@ def actualizar_email_usuario():
     datosUsuario=DatosUsuario(email_actual=email_actual,email_nuevo=email_nuevo)
     try:
         if datosUsuario.existe_correo():
-            raise DatoUnicoEmail(f"No se puede actualizar,{email_nuevo} ya que este correo se encuentra registrado, intente con otro diferente ")
+            raise DatoUnicoEmail(
+            f"No se puede actualizar,{email_nuevo} ya que este correo se encuentra registrado, intente con otro diferente ")
         
         elif not(datosUsuario.validar_correo_electronico()):
-            raise CorreoInvalido(f"No se puede actualizar,{email_nuevo} No es un correo valido")
+            raise CorreoInvalido(
+                f"No se puede actualizar,{email_nuevo} No es un correo valido"
+                )
         
         elif datosUsuario.actualizar_email():
             return jsonify({"actualizacion":True,"mensaje":f"Se ha actualizado el correo {email_nuevo} correctamente","home":"/actualizar_admin"})
@@ -213,5 +216,5 @@ def contra():
 def event():
     id = session.get('id')
     datos_usuario = DatosUsuario()
-    datos =datos_usuario.Eventos_contratistas(id)
+    datos =datos_usuario.eventos_contratistas(id)
     return datos

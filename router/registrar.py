@@ -17,6 +17,7 @@ def registro():
 @registrar.route("/auth_registro", methods=["POST"])
 def auth():
     usuario_nuevo = request.get_json()
+
     email = str(usuario_nuevo['email'])
     contrasenia = usuario_nuevo['contrasenia']
     rol = int(usuario_nuevo['rol'])
@@ -24,6 +25,7 @@ def auth():
     tipo_documento = int(usuario_nuevo['tipo_documento'])
     numero_documento = int(usuario_nuevo['numero_documento'])
     descripcion = str(usuario_nuevo['descripcion'])
+    
     registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
                        nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento,descripcion=descripcion)
     try:
