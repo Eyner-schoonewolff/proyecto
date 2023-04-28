@@ -213,7 +213,6 @@
                     </thead>
                     <tbody>
                       {% for consulta in consultar_cliente %}
-                      {% if consulta.estado != "Finalizada" %}
                       <tr>
                         <td scope="row">{{consulta.nombre}}</td>
                         <td>{{consulta.numero}}</td>
@@ -226,9 +225,8 @@
                         {%else%}
                         <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
                               class="bi bi-trash3"></i></a>
-                          {%endif%}
+                        {%endif%}
                       </tr>
-                      {%endif%}
                       {% endfor %}
                     </tbody>
                   </table>
@@ -288,7 +286,6 @@
                     <tbody>
                       {% if consulta_admin_cliente%}
                       {% for consulta in consulta_admin_cliente %}
-                      {% if consulta.estado != "Finalizada"%}
                       <tr>
                         <td scope="row">{{consulta.nombre}}</td>
                         <td>{{consulta.horario}}</td>
@@ -301,9 +298,8 @@
                         {%else%}
                         <td><a class="btn btn-danger" href="./eliminar_solicitud/{{consulta.id}}"> <i
                               class="bi bi-trash3"></i></a>
-                          {%endif%}
+                        {%endif%}
                       </tr>
-                      {%endif%}
                       {% endfor %}
                       {%endif%}
                     </tbody>
