@@ -46,7 +46,7 @@ def solicitar_():
         return {"numero": 0}
 
 
-@solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET', 'DELETE'])
+@solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET'])
 def eliminar_(id):
     logueado = session.get('login', False)
     tipo_usuario = session.get('tipo_usuario')
@@ -57,9 +57,8 @@ def eliminar_(id):
     eliminar_solicitud = Solicitar()
 
     if eliminar_solicitud.eliminar(id=id) and tipo_usuario!='Admin':
-        flash("Se ha cancelado la solicitud correctamente",category="Cliente")
         return redirect(url_for('menus.consultar'))
     else:
-        flash("Se ha cancelado la solicitud correctamente",category="Admin")
+        eliminar_solicitud.eliminar(id=id)
         return redirect(url_for('menus.consultar_admin'))
 

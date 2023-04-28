@@ -62,6 +62,36 @@ $(document).ready(function () {
             return false;
         }
     );
+
+    $(document).ready(function() {
+        var table = $('#myTable').DataTable();
+      
+        $('.dt-button buttons-print btn btn-info').on('click', function() {
+          var printColumns = [0, 1, 2]; // índices de las columnas a imprimir
+          var columnCount = table.columns()[0].length;
+      
+          for (var i = 0; i < columnCount; i++) {
+            var column = table.column(i);
+      
+            if (printColumns.indexOf(i) !== -1) {
+              // mostrar columnas a imprimir
+              column.visible(true);
+            } else {
+              // ocultar columnas que no se van a imprimir
+              column.visible(false);
+            }
+          }
+      
+          // abrir ventana de impresión
+          window.print();
+      
+          // restaurar visibilidad de todas las columnas
+          table.columns().visible(true);
+        });
+      });
+      
+      
+
     $(document).ready(function () {
         var pickerMin = new Pikaday({
             field: document.getElementById('min'),
