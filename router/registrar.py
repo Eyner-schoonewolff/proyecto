@@ -1,23 +1,21 @@
-from flask import Blueprint, request, session, render_template, redirect, url_for
+from flask import Blueprint, request,render_template
 from seguridad.registrar import *
+from decorador.decoradores import *
 
 registrar = Blueprint('registrar', __name__, static_url_path='/static',
                       template_folder="templates")
 
 
 @registrar.route("/registrar")
+@login_required_login
 def registro():
-    logueado = session.get('login')
-    if not logueado:
-        return render_template("registrar.html")
-    else:
-        return redirect(url_for('login.index'))
+    return render_template('registrar.html')
 
 
-@registrar.route("/auth_registro", methods=["POST"])
+@registrar.route("/auth_registro", methods=["POST", "GET"])
+@proteccion_ruta
 def auth():
     usuario_nuevo = request.get_json()
-
     email = str(usuario_nuevo['email'])
     contrasenia = usuario_nuevo['contrasenia']
     rol = int(usuario_nuevo['rol'])
@@ -25,9 +23,9 @@ def auth():
     tipo_documento = int(usuario_nuevo['tipo_documento'])
     numero_documento = int(usuario_nuevo['numero_documento'])
     descripcion = str(usuario_nuevo['descripcion'])
-    
+
     registro = Usuario(email=email, contrasenia=contrasenia, rol=rol,
-                       nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento,descripcion=descripcion)
+                       nombre=nombre, tipo_documento=tipo_documento, numero_documento=numero_documento, descripcion=descripcion)
     try:
         if registro.existe_():
             raise CorreoExistenteException(
@@ -54,4 +52,3 @@ def auth():
         return {"registro": False, "mensaje": str(e)}
     except DatosInvalidoException as e:
         return {"registro": False, "mensaje": str(e)}
-

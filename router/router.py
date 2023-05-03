@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, sessio
 from seguridad.login import *
 from flask_login import logout_user, LoginManager
 from seguridad.datos_usuario import DatosUsuario
+from decorador.decoradores import  *
 
 login = Blueprint('login', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -20,10 +21,11 @@ def index():
     if datos_usuario.validar_campos_vacios():
         return redirect(url_for('datos_personales.actualizar'))
     else:
-        return redirect(url_for('menus.home'))
+        return redirect(url_for('menus.wrapper'))
 
 
-@login.route("/auth", methods=["POST"])
+@login.route("/auth", methods=["POST","GET"])
+@proteccion_ruta
 def auth():
     json = request.get_json()
     email = json['email']

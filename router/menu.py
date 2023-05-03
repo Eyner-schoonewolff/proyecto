@@ -3,19 +3,18 @@ from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
 from seguridad.contacto import Contacto, ValidacionDatosContacto
+from decorador.decoradores import  *
+
 
 menus = Blueprint('menus', __name__, static_url_path='/static',
                   template_folder="templates")
 
 
-@menus.route('/home')
+@menus.route('/home',endpoint='home')
+@login_required_home
 def home():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-    
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     if not tipo_usuario == 'Contratista':
         return render_template("home.html", nombre=nombre_usuario,
@@ -25,13 +24,11 @@ def home():
                            tipo=tipo_usuario)
 
 
-@menus.route('/perfiles', methods=['GET'])
+@menus.route('/perfiles',endpoint='perfiles')
+@login_required_home
 def perfiles():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     perfiles = Perfiles()
     if tipo_usuario == 'Contratista':
@@ -48,7 +45,8 @@ def perfiles():
                            )
 
 
-@menus.route('/perfiles/<id>', methods=['POST'])
+@menus.route('/perfiles/<id>',endpoint="perfiles_id", methods=['POST','GET'])
+@proteccion_ruta
 def perfiles_cliente(id):
     tipo_usuario = session.get('tipo_usuario')
     id_usuario = int(id)
