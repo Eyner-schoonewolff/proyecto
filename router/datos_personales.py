@@ -1,20 +1,18 @@
-from flask import Blueprint, request, session, render_template, redirect, url_for,flash,jsonify
+from flask import Blueprint, request, session, render_template,jsonify
 from seguridad.datos_usuario import DatosUsuario,DatoUnicoEmail,CorreoInvalido
 from seguridad.Model_solicitar_servicio import *
+from decorador.decoradores import  *
 import json
 
 datos_personales = Blueprint('datos_personales', __name__, static_url_path='/static',
                              template_folder="templates")
 
 
-@datos_personales.route("/actualizar")
+@datos_personales.route("/actualizar", endpoint='actualizar')
+@login_required_home
 def actualizar():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado or tipo_usuario=='Admin':
-        return redirect(url_for('login.index'))
     
     datos_usuario = DatosUsuario()
 
@@ -54,14 +52,12 @@ def actualizar():
         )
 
 
-@datos_personales.route("/actualizar_admin", methods=['GET','POST'])
+@datos_personales.route("/actualizar/admin",endpoint='actualizar/admin' ,methods=['GET','POST'])
+@login_required_home
+@proteccion_acceso_usuarios
 def actualizar_admin():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado:
-        return redirect(url_for('login.index'))
     
     if request.method == 'POST':
         email = request.get_json()["email"]
@@ -73,15 +69,13 @@ def actualizar_admin():
         nombre=nombre_usuario,
         tipo=tipo_usuario)
     
-@datos_personales.route("/actualizar_email_usuario", methods=['POST'])
+@datos_personales.route("/actualizar/email_usuario",endpoint='actualizar/email_usuario', methods=['POST','GET'])
+@proteccion_ruta
+@proteccion_acceso_usuarios
 def actualizar_email_usuario():
-    logueado = session.get('login', False)
     json = request.get_json()
     email_actual=json['email_actual']
     email_nuevo=json['email_nuevo']
-
-    if not logueado:
-        return redirect(url_for('login.index'))
     
     datosUsuario=DatosUsuario(email_actual=email_actual,email_nuevo=email_nuevo)
     try:
@@ -95,32 +89,29 @@ def actualizar_email_usuario():
                 )
         
         elif datosUsuario.actualizar_email():
-            return jsonify({"actualizacion":True,"mensaje":f"Se ha actualizado el correo {email_nuevo} correctamente","home":"/actualizar_admin"})
+            return jsonify({"actualizacion":True,"mensaje":f"Se ha actualizado el correo {email_nuevo} correctamente","home":"/actualizar/admin"})
     
     except DatoUnicoEmail as mensaje:
-        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar_admin"})
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar/admin"})
     
     except CorreoInvalido as mensaje:
-        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar_admin"})
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(mensaje),"home":"/actualizar/admin"})
     
     except Exception as error:
-        return jsonify({"actualizacion":False,"mensaje_excepcion":str(error),"home":"/actualizar_admin"})
+        return jsonify({"actualizacion":False,"mensaje_excepcion":str(error),"home":"/actualizar/admin"})
+    
 
 
 
-@datos_personales.route('/auth_actualizar', methods=['POST'])
+@datos_personales.route('/auth/actualizar', endpoint='auth/actualizar',methods=['POST','GET'])
+@proteccion_ruta
 def auth():
-    logueado = session.get('login', False)
-
     json = request.get_json()
     nombre = json['nombre']
     numeroCelular = json['numeroCelular']
     direccion = json['direccion']
     id_udp = session.get('id_udp')
     descripcion = json['descripcion']
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     datos_usuario = DatosUsuario()
 
@@ -129,7 +120,8 @@ def auth():
     return {'actualizar': True, 'home': '/actualizar'}
 
 
-@datos_personales.route('/ocupaciones_contratista', methods=['GET'])
+@datos_personales.route('/ocupaciones_contratista', endpoint='ocupaciones_contratista',methods=['GET'])
+@proteccion_ruta_admin
 def ocup():
     id = session.get('id')
     datos_usuario = DatosUsuario()
@@ -206,13 +198,15 @@ def agregar():
              
         return {"numero": 2,'home': '/actualizar'}
     
-@datos_personales.route('/contratistas', methods=['GET'])
+@datos_personales.route('/contratistas',endpoint='contratistas', methods=['GET'])
+@proteccion_ruta_admin
 def contra():
     datos_usuario = DatosUsuario()
     datos =datos_usuario.informacion_contratistas()
     return datos
 
-@datos_personales.route('/eventos', methods=['GET'])
+@datos_personales.route('/eventos',endpoint='eventos', methods=['GET'])
+@proteccion_ruta_admin
 def event():
     id = session.get('id')
     datos_usuario = DatosUsuario()

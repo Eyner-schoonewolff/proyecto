@@ -1,8 +1,11 @@
-from flask import Blueprint, request, session, redirect, url_for, flash
+from flask import Blueprint, request, session, redirect, url_for
 import os
 import uuid
 from werkzeug.utils import secure_filename
 from seguridad.Model_solicitar_servicio import Solicitar
+from decorador.decoradores import  *
+
+
 solicitar_servi = Blueprint('solicitar_servi', __name__, static_url_path='/static',
                             template_folder="templates")
 
@@ -47,12 +50,9 @@ def solicitar_():
 
 
 @solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET'])
+@login_required_home
 def eliminar_(id):
-    logueado = session.get('login', False)
     tipo_usuario = session.get('tipo_usuario')
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     eliminar_solicitud = Solicitar()
 

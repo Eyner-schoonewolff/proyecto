@@ -15,7 +15,7 @@
         };
     
         $.ajax({
-            url: '/auth_actualizar',
+            url: '/auth/actualizar',
             method: 'POST',
             data: JSON.stringify(datos),
             contentType: "application/json; charset=utf-8",
