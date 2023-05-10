@@ -107,7 +107,7 @@ class Solicitar:
         return cursor.fetchall()
 
         # cambiar query 5
-    def consultar_contratista(self, id_ocupacion) -> Dict:
+    def consultar_contratista(self) -> Dict:
         cursor = db.connection.cursor(dictionary=True)
         query = """
                SELECT uo.id_usuario id,udp.nombre_completo nombre,o.nombre AS ocupacion
@@ -118,7 +118,7 @@ class Solicitar:
                   WHERE uo.id_ocupacion=%s and uo.eliminado=0
                   GROUP BY udp.nombre_completo
         """
-        cursor.execute(query, (id_ocupacion,))
+        cursor.execute(query, (self.id_solicitud,))
         return cursor.fetchall()
 
     def evidencia_(self, id) -> Dict:

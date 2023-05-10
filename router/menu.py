@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify, flash
+from flask import Blueprint, render_template, redirect, url_for, session, request, jsonify
 from seguridad.Model_solicitar_servicio import Solicitar
 from seguridad.datos_usuario import DatosUsuario
 from seguridad.perfiles import Perfiles
@@ -74,16 +74,17 @@ def perfiles_cliente(id):
     return jsonify({'actualizar': True, 'datos': informacion_usuario, 'calificacion': promedio})
 
 
-@menus.route("/solicitar", methods=['GET', 'POST'])
+@menus.route("/solicitar", endpoint='solicitar', methods=['GET', 'POST'])
+@login_required_home
+@proteccion_ruta_admin
 def solicitar_contratista():
-    solicitar = Solicitar()
     contratista_consulta = []
-
     if request.method == 'POST':
         id = int(request.get_json()["id"])
         if not (id == 0):
+            solicitar = Solicitar(id_solicitud=id)
             contratista_consulta.clear()
-            contratistas = solicitar.consultar_contratista(id_ocupacion=id)
+            contratistas = solicitar.consultar_contratista()
             contratista_consulta.append(contratistas)
             return jsonify({'contratista_consulta': contratista_consulta})
         return jsonify({'contratista_consulta': 0})
@@ -91,44 +92,42 @@ def solicitar_contratista():
     else:
         nombre_usuario = session.get('username')
         tipo_usuario = session.get('tipo_usuario')
+        email=session.get('email')
+        numero=session.get('numero_celular')
 
-        logueado = session.get('login', False)
-
-        if not logueado:
-            return redirect(url_for('login.index'))
-
-        return render_template("solicitar.html", nombre=nombre_usuario,
-                               tipo=tipo_usuario, email=session.get('email'),
-                               numero=session.get('numero_celular'), contratista_consulta=contratista_consulta)
+        return render_template("solicitar.html", 
+                               nombre=nombre_usuario,
+                               tipo=tipo_usuario, 
+                               email=email,
+                               numero=numero, 
+                               contratista_consulta=contratista_consulta)
 
 
-@menus.route("/consultar")
+@menus.route("/consultar",endpoint='consultar')
+@login_required_home
+@proteccion_ruta_admin
 def consultar():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado or tipo_usuario == 'Admin':
-        return redirect(url_for('login.index'))
 
     consultar = Solicitar()
 
     if tipo_usuario == 'Cliente':
         return render_template("consultar.html", nombre=nombre_usuario,
                                tipo=tipo_usuario, consultar_cliente=consultar.cliente())
-    else:
+    elif tipo_usuario == 'Contratista':
         return render_template("consultar.html", nombre=nombre_usuario,
                                tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+    else:
+        return redirect(url_for('menus.consultar_admin'))
 
 
-@menus.route("/consultar_admin")
+@menus.route("/consultar/admin",endpoint='consultar_admin')
+@login_required_home
+@proteccion_acceso_usuarios
 def consultar_admin():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     consultar = Solicitar()
 
@@ -155,15 +154,13 @@ def actualizar_estado(id):
         return jsonify({"actualizar": True})
 
 
-@menus.route("/evidencia/<id>")
+@menus.route("/evidencia/<id>",endpoint='evidencias', methods=['GET'])
+@login_required_home
+@proteccion_ruta_admin
 def evidencia_solicitud(id):
     id_evidencia = int(id)
-    logueado = session.get('login', False)
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     consultar = Solicitar()
 
@@ -172,47 +169,42 @@ def evidencia_solicitud(id):
     return render_template("evidencias.html", nombre=nombre_usuario, tipo=tipo_usuario, informacion=consulta)
 
 
-@menus.route("/contacto")
+@menus.route("/contacto",endpoint='contacto')
+@login_required_home
+@proteccion_ruta_admin
 def contacto():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     contacto = Contacto()
 
     consulta = contacto.informacion_usuario_contacto()
 
     return render_template("contacto.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, usuario=consulta)
+                            tipo=tipo_usuario, usuario=consulta)
+   
 
 
-@menus.route("/calendario")
+@menus.route("/calendario",endpoint='calendario')
+@login_required_home
+@proteccion_ruta_admin
 def calendario():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     consultar = Solicitar()
 
     return render_template("calendario.html", nombre=nombre_usuario,
-                           tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
+                            tipo=tipo_usuario, consulta_contratista=consultar.contratista_())
 
 
-@menus.route("/calificar")
+
+@menus.route("/calificar",endpoint='calificar')
+@login_required_home
+@proteccion_ruta_admin
 def calificar():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-
-    if not logueado:
-        return redirect(url_for('login.index'))
-
     consultar = Solicitar()
 
     if consultar.contratista_():
@@ -274,13 +266,12 @@ def enviar_correos():
         return jsonify({'actualizar': False, "endpoint": "/contacto", 'mensaje': str(exepcion), 'titulo': 'Lo lamentamos, hubo un problema con el sevridor...'})
 
 
-@menus.route('/perfiles_contra')
+@menus.route('/perfiles_contra',endpoint='consultar_contratista')
+@login_required_home
+@proteccion_ruta_admin
 def perfiles_contra():
     nombre_usuario = session.get('username')
     tipo_usuario = session.get('tipo_usuario')
-    logueado = session.get('login', False)
-    if not logueado:
-        return redirect(url_for('login.index'))
 
     return render_template("perfiles_contratistas.html", nombre=nombre_usuario,
                            tipo=tipo_usuario,)

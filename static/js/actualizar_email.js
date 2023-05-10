@@ -9,7 +9,7 @@ document.querySelector("#email_cambio")
             const btn = document.querySelector('#btn-actuzalizar_2') 
 
             $.ajax({
-                url: '/actualizar_admin',
+                url: '/actualizar/admin',
                 method: 'POST',
                 data: JSON.stringify(
                     { email: event.target.value }
@@ -67,7 +67,7 @@ document.querySelector("#btn-actuzalizar_2")
             email_nuevo = email_nuevo.trim();
 
             $.ajax({
-                url: '/actualizar_email_usuario',
+                url: '/actualizar/email_usuario',
                 method: 'POST',
                 data: JSON.stringify(
                     {

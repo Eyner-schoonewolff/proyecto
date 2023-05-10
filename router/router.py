@@ -9,19 +9,20 @@ login = Blueprint('login', __name__, static_url_path='/static',
 
 login_manager = LoginManager()
 
-
-@login.route("/", methods=["GET"])
-def index():
-    logueado = session.get('login')
-    if not logueado:
+@login.route("/inicio",endpoint='inicio', methods=["GET"])
+@login_ruta_acceso
+def inicio():
         return render_template("/index.html")
-    
+
+@login.route("/",endpoint='/', methods=["GET"])
+@login_required_home
+def index():
     datos_usuario=DatosUsuario()
 
     if datos_usuario.validar_campos_vacios():
         return redirect(url_for('datos_personales.actualizar'))
     else:
-        return redirect(url_for('menus.wrapper'))
+        return redirect(url_for('menus.home'))
 
 
 @login.route("/auth", methods=["POST","GET"])
@@ -34,16 +35,12 @@ def auth():
     login = Login(email=email, contrasenia=contrasenia)
 
     try:
-        if not (login.verificar_contrasena() or login.verificar_email()):
+        if login.verificar_campos_vacios():
+            raise CamposVacios(
+                "Por favor verifique que los campos no esten vacios")
+        elif not login.verificar_usuario():
             raise EmailContraseniaIncorrecta(
-                "Email y contraseña incorrecta por favor validar")
-        elif not login.verificar_email():
-            raise EmailUsuarioIncorrecto(
-                "El email ingresada es incorrecto")
-
-        elif not login.verificar_contrasena():
-            raise ContrasenaUsuarioIncorrecto(
-                "La contraseña ingresada es incorrecta")
+                "El email y/o contraseña ingresada es incorrecto")
         else:
             session['login'] = True
             session['id'] = login.usuario['id']
@@ -53,13 +50,10 @@ def auth():
             session['tipo_usuario'] = login.usuario["tipo"]
             return {"login": True, "home": "/"}
 
+    except CamposVacios as mensaje:
+        session['login'] = False
+        return {"login": False, "home": "/", "excepcion": str(mensaje)}
     except EmailContraseniaIncorrecta as mensaje:
-        session['login'] = False
-        return {"login": False, "home": "/", "excepcion": str(mensaje)}
-    except EmailUsuarioIncorrecto as mensaje:
-        session['login'] = False
-        return {"login": False, "home": "/", "excepcion": str(mensaje)}
-    except ContrasenaUsuarioIncorrecto as mensaje:
         session['login'] = False
         return {"login": False, "home": "/", "excepcion": str(mensaje)}
 
@@ -69,4 +63,4 @@ def auth():
 def logout():
     logout_user()
     session['login'] = False
-    return redirect(url_for('login.index'))
+    return redirect(url_for('login./'))
