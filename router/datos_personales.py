@@ -8,6 +8,9 @@ datos_personales = Blueprint('datos_personales', __name__, static_url_path='/sta
                              template_folder="templates")
 
 
+def notFound(error):
+    return render_template('noEncontrada.html'),405
+
 @datos_personales.route("/actualizar", endpoint='actualizar')
 @login_required_home
 def actualizar():
@@ -148,7 +151,6 @@ def agregar():
             cadena += '('+str(id) + ',' +ocupaciones[i]+'),'
            
         cadena = cadena[:-1]
-        print(cadena)
         datos_usuario.agregar_ocupaciones(cadena)
         return {"numero": 1,'home': '/actualizar'}
     

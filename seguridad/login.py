@@ -29,7 +29,6 @@ class Login:
             return False
 
     def verificar_campos_vacios(self) -> bool:
-        print(len(self.email) == 0 or len(self.contrasenia) == 0)
         if len(self.email) == 0 or len(self.contrasenia) == 0:
             return True
         else:

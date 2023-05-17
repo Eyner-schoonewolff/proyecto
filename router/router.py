@@ -9,6 +9,9 @@ login = Blueprint('login', __name__, static_url_path='/static',
 
 login_manager = LoginManager()
 
+def notFound(error):
+    return render_template('noEncontrada.html'),404
+
 @login.route("/inicio",endpoint='inicio', methods=["GET"])
 @login_ruta_acceso
 def inicio():
