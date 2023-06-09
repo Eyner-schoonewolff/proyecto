@@ -248,7 +248,7 @@ CREATE TABLE `usuario_datos_personales` (
 LOCK TABLES `usuario_datos_personales` WRITE;
 /*!40000 ALTER TABLE `usuario_datos_personales` DISABLE KEYS */;
 
-INSERT INTO `usuario_datos_personales` (`id`, `id_documento`, `nombre_completo`, `numero_documento`, `numero_celular`, `direccion`, `descripcion`)
+INSERT INTO usuario_datos_personales (id, id_documento, nombre_completo,numero_documento, numero_celular,direccion,descripcion)
 VALUES
 	(1,1,'ENE WOLFF',1002932882,300898975,'calle 95 #43-21','PRUEBA'),
 	(2,1,'LUIS',1352423325,300272671,'calle 20 # 23-12',''),
@@ -348,7 +348,7 @@ CREATE TABLE `usuarios` (
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
 
-INSERT INTO `usuarios` (`id`, `email`, `contraseña`, `id_tipo_usuario`, `id_usuario_datos_personales`)
+INSERT INTO usuarios (id,email,contraseña,id_tipo_usuario,id_usuario_datos_personales)
 VALUES
 	(1,'enewolff@gmail.com','$2b$12$RALR8ADswcXxnvU4jGZBRuki7J8l40.Bk8LoxDUfxxNtHVWyLEGtq',2,1),
 	(2,'jh@gmail.com','$2b$12$RALR8ADswcXxnvU4jGZBRuki7J8l40.Bk8LoxDUfxxNtHVWyLEGtq',3,2),

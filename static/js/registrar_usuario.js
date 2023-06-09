@@ -98,7 +98,6 @@ document.querySelector("#seleccion_rol")
         (event) => {
             var rol = event.target.value;
             var divSelect = document.querySelector('#descricpion')
-
             if (rol == 2) {
                 divSelect.removeAttribute('hidden', false);
             } else if (rol == 0) {

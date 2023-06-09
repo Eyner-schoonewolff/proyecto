@@ -157,7 +157,7 @@ class DatosUsuario:
                            self.id_solicitud, self.id_usuario, cadena_fecha)
 
             query_informacion = """
-                    INSERT INTO calificacion (observaciones,numero_estrellas,id_solicitud,id_usuario,registro)
+                    INSERT INTO calificacion (observaciones,id_estrellas,id_solicitud,id_usuario,registro)
                     VALUES (%s,%s,%s,%s,%s)
                 """
 
