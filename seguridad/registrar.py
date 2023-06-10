@@ -2,7 +2,7 @@ from db.database import *
 from typing import Dict
 import bcrypt
 from flask import request
-
+from psycopg2 import extras,sql
 
 class Usuario:
     def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int,descripcion:str) -> None:
@@ -15,26 +15,24 @@ class Usuario:
         self.descripcion=descripcion
 
     def datos_unico_documento(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
-        #revisar
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """SELECT u.id
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
-            ON u.`id_usuario_datos_personales`=dp.`id`
-            WHERE dp.`numero_documento`=%s"""
+            ON u.id_usuario_datos_personales=dp.id
+            WHERE dp.numero_documento=%s"""
         
         cursor.execute(query, (self.numero_documento,))
         return cursor.fetchone()
     
     def datos_unico_correo(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         #revisar
         query = """SELECT u.id
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
-            ON u.`id_usuario_datos_personales`=dp.`id`
+            ON u.id_usuario_datos_personales=dp.id
             WHERE u.email=%s"""
-        
         cursor.execute(query, (self.email,))
         return cursor.fetchone()
     
@@ -64,12 +62,13 @@ class Usuario:
     def existe_(self) -> bool:
         dato_unico_documento = self.datos_unico_documento()
         dato_unico_correo = self.datos_unico_correo()
-        if dato_unico_documento is None and dato_unico_correo is None:
+        print((dato_unico_documento is None) and (dato_unico_correo is None))
+        if (dato_unico_documento is None) and (dato_unico_correo is None):
             return False
         if dato_unico_documento and dato_unico_correo:
             return True
         else:
-            return True
+            return False
 
     def agregar(self) -> None:
 
@@ -78,22 +77,22 @@ class Usuario:
         informacion = (self.tipo_documento, self.nombre,
                        self.numero_documento,self.descripcion)
 
-        usuario_nuevo = (self.email, self.encriptar_contraseña(),
-                         self.rol, self.numero_documento)
-
         query_informacion = """
                     INSERT INTO usuario_datos_personales (id_documento,nombre_completo,numero_documento,descripcion)
-                    VALUES (%s,%s,%s,%s)
+                    VALUES (%s,%s,%s,%s) RETURNING id;
                 """
-        #revisar
-        query = """INSERT usuarios(email,contraseña,id_tipo_usuario,id_usuario_datos_personales)
-                SELECT %s,%s,%s,id
-                FROM usuario_datos_personales
-                WHERE numero_documento=%s
-        """
-
+        
         cursor.execute(query_informacion, (informacion))
+
+        id_datos_personales = cursor.fetchone()[0]
+
+        query = "INSERT INTO usuarios(email,contraseña,id_tipo_usuario,id_usuario_datos_personales) VALUES (%s,%s,%s,%s)"
+
+        usuario_nuevo = (self.email,self.encriptar_contraseña(),
+                         self.rol,id_datos_personales)
+        
         cursor.execute(query, (usuario_nuevo))
+
         db.connection.commit()
 
         return None

@@ -2,7 +2,7 @@ from flask import session
 from db.database import *
 from typing import Dict
 import datetime
-
+from psycopg2 import extras
 
 class Solicitar:
     def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="", 
@@ -17,6 +17,7 @@ class Solicitar:
         self.id_solicitud = id_solicitud
         self.id_usuario = session.get('id')
 
+    #agregar solicitud
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
 
@@ -35,6 +36,8 @@ class Solicitar:
         db.connection.commit()
 
         return True
+    
+    #eliminar solicitud
 
     def eliminar(self, id) -> bool:
         cursor = db.connection.cursor()
@@ -45,10 +48,13 @@ class Solicitar:
         cursor.close()
         return True
 
+    # Clase administrador 
+    # Query para obtener todas las consultas del contratista
+
     def admin_contratista(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion,s.hora
+            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion,s.horario
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
@@ -58,9 +64,12 @@ class Solicitar:
          """
         cursor.execute(query)
         return cursor.fetchall()
+    
+    #Clase administrador
+    # Query para obtener las consultas del cliente
 
     def admin_cliente(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
               SELECT s.id, s.horario, e.nombre estado, o.nombre ocupacion, udp.nombre_completo nombre
                 FROM solicitud s
@@ -74,9 +83,9 @@ class Solicitar:
         return cursor.fetchall()
 
     def contratista_(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-             SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,s.hora,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
+             SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
@@ -90,7 +99,7 @@ class Solicitar:
         return cursor.fetchall()
 
     def cliente(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
            SELECT s.id, s.horario, e.nombre estado, s.id_ocupacion_solicitud, o.nombre ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
                 FROM solicitud s
@@ -108,7 +117,7 @@ class Solicitar:
 
         # cambiar query 5
     def consultar_contratista(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
                SELECT uo.id_usuario id,udp.nombre_completo nombre,o.nombre AS ocupacion
                   FROM usuario_ocupaciones uo
@@ -122,7 +131,7 @@ class Solicitar:
         return cursor.fetchall()
 
     def evidencia_(self, id) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = "SELECT descripcion,evidencia FROM solicitud WHERE id=%s "
         cursor.execute(query, (id,))
         return cursor.fetchone()

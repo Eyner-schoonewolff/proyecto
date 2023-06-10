@@ -1,6 +1,8 @@
 from db.database import *
 from flask import session
 from typing import Dict
+from psycopg2 import extras
+
 
 class Perfiles:
     def __init__(self,id_usuario_cliente="",id_usuario="") -> None:
@@ -8,8 +10,9 @@ class Perfiles:
         self.id_usuario_cliente=id_usuario_cliente
         self.id_usuario=id_usuario
 
+    #clase calificacion
     def consulta_cliente(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query="""
             SELECT u.id,udp.`nombre_completo` nombre, c.`numero_estrellas` calificacion, c.`observaciones` comentario,c.registro dia_calificacion
                 FROM calificacion c
@@ -22,8 +25,9 @@ class Perfiles:
         cursor.execute(query)
         return cursor.fetchall()
     
+    #clase calificacion
     def consulta_contratista(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query="""
             SELECT u.id,udp.`nombre_completo` nombre, c.`numero_estrellas` calificacion, c.`observaciones` comentario,c.registro dia_calificacion
                 FROM calificacion c
@@ -36,8 +40,9 @@ class Perfiles:
         cursor.execute(query)
         return cursor.fetchall()
     
+    #clase calificacion
     def calificaciones_cliente(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, c.`numero_estrellas` valor, c.`observaciones` comentario,c.`registro` 
@@ -51,7 +56,7 @@ class Perfiles:
         return cursor.fetchall()
     
     def calificaciones_contratista(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, c.`numero_estrellas` valor, c.`observaciones` comentario,c.`registro` 
@@ -65,7 +70,7 @@ class Perfiles:
         return cursor.fetchall()
     
     def promedio_cliente(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, ROUND(SUM(c.`numero_estrellas`) / COUNT(c.`numero_estrellas`), 1) as promedio
@@ -79,7 +84,7 @@ class Perfiles:
         return cursor.fetchone()
     
     def promedio_contratista(self)->Dict:
-        cursor=db.connection.cursor(dictionary=True)
+        cursor=db.connection.cursor(cursor_factory=extras.RealDictCursor)
         valores=(self.id_usuario_cliente,self.id_usuario)
         query="""
             SELECT udp.`nombre_completo` nombre, ROUND(SUM(c.`numero_estrellas`) / COUNT(c.`numero_estrellas`), 1) as promedio

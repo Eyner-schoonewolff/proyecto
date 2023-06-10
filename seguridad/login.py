@@ -1,7 +1,7 @@
 from db.database import *
 from typing import Dict
 import bcrypt
-
+from psycopg2 import extras
 
 class Login:
     def __init__(self, email, contrasenia) -> None:
@@ -9,8 +9,9 @@ class Login:
         self.contrasenia = contrasenia
         self.usuario = self.obtener_usuario()
 
+    #obtener_informacion
     def obtener_usuario(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """SELECT udp.`id` id_udp,u.id,u.email, u.contraseña, tu.nombre tipo,udp.`nombre_completo` nombre
                 FROM usuarios u
                 INNER JOIN tipo_usuario tu on u.id_tipo_usuario = tu.id

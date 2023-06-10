@@ -3,6 +3,7 @@ from flask import session
 from typing import Dict
 import datetime
 import re
+from psycopg2 import extras
 
 
 class DatosUsuario:
@@ -27,7 +28,7 @@ class DatosUsuario:
             return False
 
     def informacion_usuario(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
             SELECT udp.nombre_completo nombre, udp.numero_documento documento, udp.direccion, udp.numero_celular celular
                 FROM usuarios u 
@@ -47,7 +48,7 @@ class DatosUsuario:
         return True
 
     def datos_unico_correo(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = "SELECT id FROM usuarios WHERE email=%s"
         cursor.execute(query, (self.email_nuevo,))
         return cursor.fetchone()
@@ -64,14 +65,14 @@ class DatosUsuario:
             return True
 
     def ocupaciones(self):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = "SELECT id,nombre ocupacion FROM ocupacion o"
         cursor.execute(query)
         return cursor.fetchall()
 
     def obtener(self) -> Dict:
         # Obtener el cursor y el correo electrónico actual
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         # Consultar los datos del usuario con sus ocupaciones
         # Este query es para obtener los contratistas
         query = """
@@ -122,7 +123,7 @@ class DatosUsuario:
         return None
 
     def id_usuarios(self, id) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
             SELECT id_usuario_contratista,id_usuario_cliente
             FROM solicitud
@@ -132,7 +133,7 @@ class DatosUsuario:
         return cursor.fetchone()
 
     def calificar(self) -> bool:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
 
         query_validacion = """
         SELECT count(u.id) cantidad
@@ -169,7 +170,7 @@ class DatosUsuario:
             return False
 
     def ocupaciones_contratista(self, id):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """select us.id_ocupacion as id
                     from usuarios u 
                     join usuario_ocupaciones us on u.id = us.id_usuario
@@ -178,7 +179,7 @@ class DatosUsuario:
         return cursor.fetchall()
 
     def ocupaciones_eliminadas(self, id):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """select us.id_ocupacion as id
                     from usuarios u 
                     join usuario_ocupaciones us on u.id = us.id_usuario
@@ -187,7 +188,7 @@ class DatosUsuario:
         return cursor.fetchall()
 
     def agregar_ocupaciones(self, data):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query_informacion = """
                     INSERT INTO usuario_ocupaciones (id_usuario,id_ocupacion)
                     VALUES """ + data + ";"
@@ -206,7 +207,7 @@ class DatosUsuario:
         return True
 
     def actualizar_ocupaciones(self, id, data):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query_informacion = """
                     UPDATE usuario_ocupaciones set eliminado = 0 
                     where id_usuario = """ + str(id) + " and id_ocupacion in ("+data+");"
@@ -216,7 +217,7 @@ class DatosUsuario:
         return True
 
     def informacion_contratistas(self):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """select u.id,u.email as email,us.nombre_completo,us.numero_celular as celular,GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones
                     from usuarios u
                     join usuario_datos_personales us on u.id_usuario_datos_personales = us.id
@@ -229,7 +230,7 @@ class DatosUsuario:
         return cursor.fetchall()
 
     def eventos_contratistas(self, id):
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """select s.id,s.descripcion,concat(s.horario,'T',s.hora) as fecha ,if(s.id_estado = 1,'#3346FF',if(s.id_estado= 2,'#0cde00',if(s.id_estado = 3,'#FFF033','#E20202'))) as color
                     from solicitud s
                     where s.id_usuario_contratista = %s ;"""
