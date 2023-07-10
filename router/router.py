@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from seguridad.login import *
 from flask_login import logout_user, LoginManager
-from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import  *
+from controlador.c_login import Login_controlador
 
 login = Blueprint('login', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -20,45 +20,15 @@ def inicio():
 @login.route("/",endpoint='/', methods=["GET"])
 @login_required_home
 def index():
-    datos_usuario=DatosUsuario()
-
-    if datos_usuario.validar_campos_vacios():
-        return redirect(url_for('datos_personales.actualizar'))
-    else:
-        return redirect(url_for('menus.home'))
+    c_login=Login_controlador()
+    return c_login.validar_campos_vacios()
 
 
 @login.route("/auth", methods=["POST","GET"])
 @proteccion_ruta
 def auth():
-    json = request.get_json()
-    email = json['email']
-    contrasenia = json['contrasenia']
-
-    login = Login(email=email, contrasenia=contrasenia)
-
-    try:
-        if login.verificar_campos_vacios():
-            raise CamposVacios(
-                "Por favor verifique que los campos no esten vacios")
-        elif not login.verificar_usuario():
-            raise EmailContraseniaIncorrecta(
-                "El email y/o contraseña ingresada es incorrecto")
-        else:
-            session['login'] = True
-            session['id'] = login.usuario['id']
-            session['id_udp'] = login.usuario['id_udp']
-            session['email'] = login.usuario['email']
-            session['username'] = login.usuario["nombre"].upper()
-            session['tipo_usuario'] = login.usuario["tipo"]
-            return {"login": True, "home": "/"}
-
-    except CamposVacios as mensaje:
-        session['login'] = False
-        return {"login": False, "home": "/", "excepcion": str(mensaje)}
-    except EmailContraseniaIncorrecta as mensaje:
-        session['login'] = False
-        return {"login": False, "home": "/", "excepcion": str(mensaje)}
+    c_login=Login_controlador()
+    return c_login.auth()
 
 
 @login.route('/logout')

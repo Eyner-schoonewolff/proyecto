@@ -12,10 +12,10 @@ class DatosUsuario:
         self.email_actual = email_actual
         self.email_nuevo = email_nuevo
         self.verificacion_email = verificacion_email
-        self.observaciones=observaciones
-        self.estrellas=estrellas
-        self.id_solicitud=id_solicitud
-        self.tipo_usuario_calificar=tipo_usuario_calificar
+        self.observaciones = observaciones
+        self.estrellas = estrellas
+        self.id_solicitud = id_solicitud
+        self.tipo_usuario_calificar = tipo_usuario_calificar
         self.id_usuario = session.get('id')
         self.tipo_usuario = session.get('tipo_usuario')
 
@@ -75,15 +75,17 @@ class DatosUsuario:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         # Consultar los datos del usuario con sus ocupaciones
         # Este query es para obtener los contratistas
-        query = """
-            SELECT udp.nombre_completo,udp.numero_celular, udp.numero_documento, udp.direccion, GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones,udp.descripcion,o.id id_ocupacion
-        FROM usuario_datos_personales udp
-        INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
-        INNER JOIN usuario_ocupaciones uo ON uo.id_usuario =u.`id`
-        INNER JOIN ocupacion o ON uo.id_ocupacion = o.id
-        WHERE u.id=%s and uo.eliminado=0
-        GROUP BY udp.nombre_completo, udp.numero_celular, udp.numero_documento, udp.direccion
-        """
+        query = """ 
+        SELECT udp.nombre_completo, MAX(udp.numero_celular) as numero_celular, MAX(udp.numero_documento) as numero_documento,
+            MAX(udp.direccion) as direccion, STRING_AGG(o.nombre, ', ') as ocupaciones, MAX(udp.descripcion) as descripcion,
+            MAX(o.id) as id_ocupacion
+                FROM usuario_datos_personales udp
+                INNER JOIN usuarios u ON u.id_usuario_datos_personales = udp.id
+                INNER JOIN usuario_ocupaciones uo ON uo.id_usuario = u.id
+                INNER JOIN ocupacion o ON uo.id_ocupacion = o.id
+                WHERE u.id = %s AND uo.eliminado = 0
+                GROUP BY udp.nombre_completo
+    """
         cursor.execute(query, (self.id_usuario,))
         datos = cursor.fetchone()
 
@@ -138,9 +140,9 @@ class DatosUsuario:
         query_validacion = """
         SELECT count(u.id) cantidad
             FROM calificacion c
-            INNER JOIN usuarios u ON c.`id_usuario`=u.`id`
+            INNER JOIN usuarios u ON c.id_usuario=u.id
             INNER JOIN tipo_usuario tu ON u.id_tipo_usuario = tu.id
-            WHERE c.`id_solicitud`=%s and tu.id=%s
+            WHERE c.id_solicitud=%s and tu.id=%s
         
         """
         valores = (self.id_solicitud, self.tipo_usuario_calificar)
@@ -153,12 +155,13 @@ class DatosUsuario:
             fecha_actual = datetime.datetime.now()
 
             cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
+            print(self.id_usuario)
 
             informacion = (self.observaciones, self.estrellas,
                            self.id_solicitud, self.id_usuario, cadena_fecha)
 
             query_informacion = """
-                    INSERT INTO calificacion (observaciones,id_estrellas,id_solicitud,id_usuario,registro)
+                    INSERT INTO calificacion (observaciones,id_numero_estrellas,id_solicitud,id_usuario,registro)
                     VALUES (%s,%s,%s,%s,%s)
                 """
 
@@ -218,22 +221,28 @@ class DatosUsuario:
 
     def informacion_contratistas(self):
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
-        query = """select u.id,u.email as email,us.nombre_completo,us.numero_celular as celular,GROUP_CONCAT(o.nombre SEPARATOR ', ') AS ocupaciones
-                    from usuarios u
-                    join usuario_datos_personales us on u.id_usuario_datos_personales = us.id
-                    join usuario_ocupaciones uc on uc.id_usuario = u.id
-                    join ocupacion o on uc.id_ocupacion = o.id
-                    where u.id_tipo_usuario = 2 and uc.eliminado = 0
-                    group by u.id
-                    order by us.nombre_completo,o.nombre;"""
+        query = """  SELECT u.id, u.email as email, MAX(us.nombre_completo) as nombre_completo, MAX(us.numero_celular) as celular, STRING_AGG(o.nombre, ', ') AS ocupaciones
+                        FROM usuarios u
+                        JOIN usuario_datos_personales us ON u.id_usuario_datos_personales = us.id
+                        JOIN usuario_ocupaciones uc ON uc.id_usuario = u.id
+                        JOIN ocupacion o ON uc.id_ocupacion = o.id
+                        WHERE u.id_tipo_usuario = 2 AND uc.eliminado = 0
+                        GROUP BY u.id, u.email
+                        ORDER BY MAX(us.nombre_completo), MAX(o.nombre);"""
         cursor.execute(query)
         return cursor.fetchall()
 
     def eventos_contratistas(self, id):
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
-        query = """select s.id,s.descripcion,concat(s.horario,'T',s.hora) as fecha ,if(s.id_estado = 1,'#3346FF',if(s.id_estado= 2,'#0cde00',if(s.id_estado = 3,'#FFF033','#E20202'))) as color
-                    from solicitud s
-                    where s.id_usuario_contratista = %s ;"""
+        query = """ SELECT s.id, s.descripcion, s.horario || 'T' || s.hora as fecha,
+           CASE
+               WHEN s.id_estado = 1 THEN '#3346FF'
+               WHEN s.id_estado = 2 THEN '#0cde00'
+               WHEN s.id_estado = 3 THEN '#FFF033'
+               ELSE '#E20202'
+           END as color
+            FROM solicitud s
+            WHERE s.id_usuario_contratista = %s;"""
         cursor.execute(query, (id,))
         return cursor.fetchall()
 

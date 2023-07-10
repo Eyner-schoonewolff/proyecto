@@ -23,7 +23,7 @@ document.querySelectorAll(".btn-perfil").forEach(function (button) {
                     var promedio= document.getElementById("promedio-calificacion");
                     modal_contenido.innerHTML = "";
                     promedio.innerHTML="";
-
+                    console.log(respuesta.calificacion.promedio );
                     for (const calificacion of respuesta.datos) {
                         a = div.cloneNode(true);
                         a.classList.remove("d-none")

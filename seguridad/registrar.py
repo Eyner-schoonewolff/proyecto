@@ -2,7 +2,7 @@ from db.database import *
 from typing import Dict
 import bcrypt
 from flask import request
-from psycopg2 import extras,sql
+from psycopg2 import extras
 
 class Usuario:
     def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int,descripcion:str) -> None:

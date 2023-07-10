@@ -4,9 +4,10 @@ from typing import Dict
 import datetime
 from psycopg2 import extras
 
+
 class Solicitar:
-    def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="", 
-                 problema="",id_estado="",id_solicitud="") -> None:
+    def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="",
+                 problema="", id_estado="", id_solicitud="") -> None:
         self.fecha = fecha
         self.hora = hora
         self.contratista = contratista
@@ -17,14 +18,14 @@ class Solicitar:
         self.id_solicitud = id_solicitud
         self.id_usuario = session.get('id')
 
-    #agregar solicitud
+    # agregar solicitud
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
 
         segundo = datetime.datetime.now()
-        hora=self.hora+':'+repr(segundo.second)
+        hora = self.hora+':'+repr(segundo.second)
 
-        informacion = (self.contratista, self.id_usuario, self.tipo_contratista, self.fecha,hora, self.evidencia,
+        informacion = (self.contratista, self.id_usuario, self.tipo_contratista, self.fecha, hora, self.evidencia,
                        self.problema)
 
         query_informacion = """
@@ -36,8 +37,8 @@ class Solicitar:
         db.connection.commit()
 
         return True
-    
-    #eliminar solicitud
+
+    # eliminar solicitud
 
     def eliminar(self, id) -> bool:
         cursor = db.connection.cursor()
@@ -48,33 +49,33 @@ class Solicitar:
         cursor.close()
         return True
 
-    # Clase administrador 
+    # Clase administrador
     # Query para obtener todas las consultas del contratista
 
     def admin_contratista(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-            SELECT s.id,udp.nombre_completo nombre,s.horario,e.nombre estado,udp.direccion,s.horario
-               FROM solicitud s
-               INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
-               INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
-               INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
-               INNER JOIN estado e ON s.id_estado = e.id
-               GROUP BY s.id;
+            SELECT s.id, MAX(udp.nombre_completo) as nombre, MAX(s.horario) as horario, MAX(e.nombre) as estado, MAX(udp.direccion) as direccion
+                FROM solicitud s
+                INNER JOIN usuarios u ON s.id_usuario_cliente = u.id
+                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista = uo.id_usuario
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
+                INNER JOIN estado e ON s.id_estado = e.id
+                GROUP BY s.id
          """
         cursor.execute(query)
         return cursor.fetchall()
-    
-    #Clase administrador
+
+    # Clase administrador
     # Query para obtener las consultas del cliente
 
     def admin_cliente(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-              SELECT s.id, s.horario, e.nombre estado, o.nombre ocupacion, udp.nombre_completo nombre
+              SELECT s.id, MAX(s.horario) as horario,MAX(e.nombre) as estado, MAX(o.nombre) as ocupacion, MAX(udp.nombre_completo) as nombre
                 FROM solicitud s
                 INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
-                INNER JOIN ocupacion o ON s.`id_ocupacion_solicitud`=o.id
+                INNER JOIN ocupacion o ON s.id_ocupacion_solicitud=o.id
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 INNER JOIN estado e ON s.id_estado=e.id
                 GROUP BY s.id;
@@ -85,14 +86,14 @@ class Solicitar:
     def contratista_(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-             SELECT s.id,udp.nombre_completo nombre,udp.numero_celular numero,s.horario,e.nombre estado,s.evidencia,s.descripcion,udp.direccion
+             SELECT s.id, MAX(udp.nombre_completo) nombre, MAX(udp.numero_celular) numero, MAX(s.horario) as horario, MAX(s.hora) as hora, MAX(e.nombre) as estado, MAX(s.evidencia) as evidencia, MAX(s.descripcion) as descripcion, MAX(udp.direccion) as direccion
                FROM solicitud s
                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
                INNER JOIN estado e ON s.id_estado = e.id
-               LEFT JOIN calificacion c ON c.`id_solicitud`=s.id
-               WHERE s.id_usuario_contratista=%s and numero_estrellas is null 
+               LEFT JOIN calificacion c ON c.id_solicitud=s.id
+               WHERE s.id_usuario_contratista=%s and id_numero_estrellas is null 
                GROUP BY s.id;
          """
         cursor.execute(query, (self.id_usuario,))
@@ -101,14 +102,14 @@ class Solicitar:
     def cliente(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-           SELECT s.id, s.horario, e.nombre estado, s.id_ocupacion_solicitud, o.nombre ocupacion, udp.nombre_completo nombre, udp.numero_celular numero
+           SELECT s.id,  MAX(s.horario) as horario, MAX(e.nombre) as estado, MAX(s.id_ocupacion_solicitud), MAX(o.nombre) as ocupacion,  MAX(udp.nombre_completo) as nombre,  MAX(udp.numero_celular) as numero
                 FROM solicitud s
                 INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
-                INNER JOIN ocupacion o ON s.`id_ocupacion_solicitud`=o.id
+                INNER JOIN ocupacion o ON s.id_ocupacion_solicitud=o.id
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 INNER JOIN estado e ON s.id_estado=e.id
-                LEFT JOIN calificacion c ON c.`id_solicitud`=s.id
-                WHERE s.id_usuario_cliente=%s and c.numero_estrellas is null 
+                LEFT JOIN calificacion c ON c.id_solicitud=s.id
+                WHERE s.id_usuario_cliente=%s and c.id_numero_estrellas is null 
                 GROUP BY s.id;
          """
 
@@ -119,7 +120,7 @@ class Solicitar:
     def consultar_contratista(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-               SELECT uo.id_usuario id,udp.nombre_completo nombre,o.nombre AS ocupacion
+               SELECT MAX(uo.id_usuario) as id,udp.nombre_completo as nombre,MAX(o.nombre) as ocupacion
                   FROM usuario_ocupaciones uo
                   INNER JOIN usuarios u ON uo.id_usuario=u.id
                   INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
@@ -138,21 +139,19 @@ class Solicitar:
 
     def actualizar_estado(self):
         cursor = db.connection.cursor()
-        informacion = (self.id_estado,self.id_solicitud)
+        informacion = (self.id_estado, self.id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
 
         return None
-    
+
     def actualizar_fecha_estado(self):
         cursor = db.connection.cursor()
-        informacion = (self.id_estado,self.fecha,self.hora,self.id_solicitud)
+        informacion = (self.id_estado, self.fecha,
+                       self.hora, self.id_solicitud)
         query = 'UPDATE solicitud SET id_estado = %s,horario=%s,hora=%s WHERE id = %s'
         cursor.execute(query, informacion)
         db.connection.commit()
 
         return None
-    
-
-

@@ -4,7 +4,7 @@ from typing import Dict
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+from psycopg2 import extras
 
 class Contacto:
     def __init__(self, correo="", nombre="", numero="", asunto="", mensaje="") -> None:
@@ -66,7 +66,7 @@ class Contacto:
         return True
 
     def informacion_usuario_contacto(self) -> Dict:
-        cursor = db.connection.cursor(dictionary=True)
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
             SELECT udp.nombre_completo nombre,u.email correo,udp.numero_celular celular
                 FROM usuarios u 
