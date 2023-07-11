@@ -1,4 +1,4 @@
-from flask import Blueprint, request, session, render_template, jsonify
+from flask import request, session, render_template, jsonify
 from seguridad.datos_usuario import DatosUsuario, DatoUnicoEmail, CorreoInvalido
 from seguridad.Model_solicitar_servicio import *
 from decorador.decoradores import *
@@ -27,29 +27,30 @@ class Datos_personales_controlador():
 
         if tipo_usuario == 'Contratista':
             session['descripcion'] = usuario['descripcion']
-            return render_template(
-                "actualizar.html",
-                nombre=nombre_usuario,
-                tipo=tipo_usuario,
-                email=session.get('email'),
-                numero=usuario['numero_celular'],
-                numero_documento=usuario['numero_documento'],
-                descripcion=usuario['descripcion'],
-                direccion=usuario['direccion'],
-                ocupacion=usuario['ocupaciones'],
-                ocupaciones_disponibles=ocupaciones
-            )
+            return jsonify({'datos':
+                            [
+                                {'nombre': nombre_usuario,
+                                 'tipo': tipo_usuario,
+                                 'email': session.get('email'),
+                                 'numero': usuario['numero_celular'],
+                                 'descripcion': usuario['descripcion'],
+                                 'direccion':usuario['direccion'],
+                                 'ocupacion':usuario['ocupaciones'],
+                                 'ocupaciones_disponibles':ocupaciones
+                                 }
+                            ]})
         else:
-            return render_template(
-                "actualizar.html",
-                nombre=nombre_usuario,
-                tipo=tipo_usuario,
-                email=session.get('email'),
-                numero=usuario['numero_celular'],
-                numero_documento=usuario['numero_documento'],
-                direccion=usuario['direccion'],
-            )
-
+            return jsonify({'datos':
+                            [
+                                {'nombre': nombre_usuario,
+                                 'tipo': tipo_usuario,
+                                 'email': session.get('email'),
+                                 'numero': usuario['numero_celular'],
+                                 'descripcion': usuario['descripcion'],
+                                 'direccion':usuario['direccion'],
+                                 }
+                            ]})
+    
     def actualizar_admin(self):
         nombre_usuario = session.get('username')
         tipo_usuario = session.get('tipo_usuario')
@@ -60,9 +61,8 @@ class Datos_personales_controlador():
             informacion = consultar.informacion_usuario()
             return jsonify({'datos': informacion})
         else:
-            return render_template("actualizar.html",
-                                   nombre=nombre_usuario,
-                                   tipo=tipo_usuario)
+            return jsonify({'templates': '/actualizar.html','nombre':nombre_usuario,'tipo':tipo_usuario})
+         
 
     def actualizar_email(self):
         json = request.get_json()
@@ -183,10 +183,10 @@ class Datos_personales_controlador():
     def informacion_contratista(self):
         datos_usuario = DatosUsuario()
         datos = datos_usuario.informacion_contratistas()
-        return datos
+        return jsonify({'perfiles':datos})
 
     def eventos(self):
         id = session.get('id')
         datos_usuario = DatosUsuario()
-        datos =datos_usuario.eventos_contratistas(id)
-        return datos
+        datos = datos_usuario.eventos_contratistas(id)
+        return jsonify({'eventos':datos})

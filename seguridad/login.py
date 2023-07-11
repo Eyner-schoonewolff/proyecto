@@ -32,8 +32,6 @@ class Login:
             hashed_password=hashed_password.encode('utf-8')
         else:
             hashed_password = bytes.fromhex(hashed_password[2:])
-            
-        print(hashed_password)
 
         if bcrypt.checkpw(self.contrasenia.encode('utf-8'),hashed_password):
             return True

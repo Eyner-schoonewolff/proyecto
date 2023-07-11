@@ -1,6 +1,7 @@
 from seguridad.login import *
 from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import *
+from flask import redirect, url_for, session, request, jsonify
 
 
 class Login_controlador():
@@ -26,13 +27,18 @@ class Login_controlador():
                 raise EmailContraseniaIncorrecta(
                     "El email y/o contraseña ingresada es incorrecto")
             else:
+                # Generar token
                 session['login'] = True
                 session['id'] = login.usuario['id']
                 session['id_udp'] = login.usuario['id_udp']
                 session['email'] = login.usuario['email']
                 session['username'] = login.usuario["nombre"].upper()
                 session['tipo_usuario'] = login.usuario["tipo"]
-                return {"login": True, "home": "/"}
+                
+                return jsonify({'id': [{'id_usuario': login.usuario['id'], 'id_usuario_datos_personales':login.usuario['id_udp']}],
+                                'session':[{"login": True, "home": "/"}],
+                                'datos_personales': [{'email': login.usuario['email'], 'tipo':login.usuario["tipo"],'nombre':login.usuario["nombre"].upper()}]
+                                })
 
         except CamposVacios as mensaje:
             session['login'] = False

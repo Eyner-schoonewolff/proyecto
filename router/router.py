@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, session
+from flask import Blueprint, render_template, redirect, url_for, jsonify, session
 from seguridad.login import *
 from flask_login import logout_user, LoginManager
 from decorador.decoradores import  *
@@ -15,7 +15,7 @@ def notFound(error):
 @login.route("/inicio",endpoint='inicio', methods=["GET"])
 @login_ruta_acceso
 def inicio():
-        return render_template("/index.html")
+        return jsonify({'template':'/index.html'})
 
 @login.route("/",endpoint='/', methods=["GET"])
 @login_required_home
@@ -35,5 +35,6 @@ def auth():
 @login_manager.user_loader
 def logout():
     logout_user()
+    #eliminar token
     session['login'] = False
     return redirect(url_for('login./'))
