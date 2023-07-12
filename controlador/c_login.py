@@ -34,10 +34,14 @@ class Login_controlador():
                 session['email'] = login.usuario['email']
                 session['username'] = login.usuario["nombre"].upper()
                 session['tipo_usuario'] = login.usuario["tipo"]
-                
-                return jsonify({'id': [{'id_usuario': login.usuario['id'], 'id_usuario_datos_personales':login.usuario['id_udp']}],
-                                'session':[{"login": True, "home": "/"}],
-                                'datos_personales': [{'email': login.usuario['email'], 'tipo':login.usuario["tipo"],'nombre':login.usuario["nombre"].upper()}]
+
+                return jsonify({'id_usuario': login.usuario['id'], 
+                                'id_usuario_datos_personales':login.usuario['id_udp'],
+                                "login": True, 
+                                "home": "/",
+                                'email': login.usuario['email'], 
+                                'tipo':login.usuario["tipo"],
+                                'nombre':login.usuario["nombre"].upper()
                                 })
 
         except CamposVacios as mensaje:

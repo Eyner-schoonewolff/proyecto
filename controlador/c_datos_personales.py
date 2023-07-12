@@ -59,6 +59,7 @@ class Datos_personales_controlador():
             email = request.get_json()["email"]
             consultar = DatosUsuario(verificacion_email=email)
             informacion = consultar.informacion_usuario()
+            
             return jsonify({'datos': informacion})
         else:
             return jsonify({'templates': '/actualizar.html','nombre':nombre_usuario,'tipo':tipo_usuario})

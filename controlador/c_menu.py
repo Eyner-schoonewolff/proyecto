@@ -131,6 +131,7 @@ class Menu_controlador():
             hora = json['hora']
             actualizar = Solicitar(fecha=fecha, hora=hora,
                                    id_estado=id_estado, id_solicitud=id)
+            
             actualizar.actualizar_fecha_estado()
             return jsonify({"actualizar": True})
 
