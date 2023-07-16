@@ -6,9 +6,8 @@ document.querySelectorAll(".btn-perfil").forEach(function (button) {
         if (tipo_usuario!=null){
             tipo_usuario=tipo_usuario.value
         }
-        
         $.ajax({
-            url: '/perfiles/' + id_perfil,
+            url: 'http://127.0.0.1:3000/perfiles/' + id_perfil,
             method: 'POST',
             data: JSON.stringify({
                 id_usuario_cliente: id_perfil,
@@ -20,7 +19,7 @@ document.querySelectorAll(".btn-perfil").forEach(function (button) {
                 if (respuesta.actualizar) {
                     var div = document.querySelector(".contenedor_calificacion");
                     var modal_contenido = document.getElementById('modal_contenido');
-                    var promedio= document.getElementById("promedio-calificacion");
+                    var promedio = document.getElementById("promedio-calificacion");
                     modal_contenido.innerHTML = "";
                     promedio.innerHTML="";
                     console.log(respuesta.calificacion.promedio );

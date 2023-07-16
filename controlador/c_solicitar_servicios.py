@@ -45,7 +45,6 @@ class Solicitar_controlador():
             return {"numero": 0}
 
     def cancelar(self, id):
-
         tipo_usuario = session.get('tipo_usuario')
         eliminar_solicitud = Solicitar()
 

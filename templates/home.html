@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 
-    <link rel="stylesheet" href="{{url_for('static', filename='css/carousel.css')}}">
-
+    <link rel="stylesheet" type="text/css" href="../static/css/carousel.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/carousel/">
     <!-- Bootstrap core CSS -->
     <!-- Custom styles for this template -->
@@ -18,39 +18,75 @@
     <title>Home</title>
 </head>
 
+
 <body>
+    
+    <div id="nvar">
+
+    </div>
+
+    <div id="contenido"></div>
+
+    <script>
+        Promise.all([
+            $.ajax({ url: '../templates/pagina_home.html', type: 'GET', dataType: 'html' }),
+            $.ajax({ url: '../templates/NvarContratista.html', type: 'GET', dataType: 'html' }),
+        ])
+            .then(function (responses) {
+                const paginaHomeResponse = responses[0];
+                const nvarResponse = responses[1];
+
+                const contenido = document.getElementById('contenido');
+                contenido.innerHTML = paginaHomeResponse;
+
+                const nvar = document.getElementById('nvar');
+                nvar.innerHTML = nvarResponse;
+            })
+            .catch(function (error) {
+                console.error('Error al cargar los archivos:', error);
+            });
+
+    </script>
+
+
     <!-- Pagina contratista -->
-    {% if tipo == "Contratista" %}
+    <!-- {% if tipo == "Contratista" %}
+
     {%include 'NvarContratista.html'%}
 
     {%include 'pagina_home.html'%}
 
     {%include 'notificacion.html'%}
 
-    <!-- Pagina cliente -->
-    {% elif tipo == "Cliente" %}
+    Pagina cliente -->
+    <!-- {% elif tipo == "Cliente" %}
+
     {%include 'NvarCliente.html'%}
 
-      {%include 'pagina_home.html'%}
+      {%include 'pagina_home.html'%} -->
 
     <!-- Pagina Administrador -->
-    {% else %}
-    {%include 'NvarAdmin.html'%}
+    <!-- {% else %} -->
 
-    {%include 'pagina_home.html'%}
+    <!-- {%include 'NvarAdmin.html'%} -->
 
-    {% endif %}
+    <!-- {%include 'pagina_home.html'%} -->
+
+    <!-- {% endif %} -->
+
 
 
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="../static/js/home.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
+
 <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
 <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+
+
 
 
 </html>

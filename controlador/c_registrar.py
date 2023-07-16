@@ -31,7 +31,7 @@ class Registrar_controlador():
                 )
             else:
                 registro.agregar()
-                return {"registro": True, "home": "/","mensaje":"registro exitoso"}
+                return {"registro": True, "home": "/templates/index.html","mensaje":"registro exitoso"}
 
         except CorreoExistenteException as e:
             return {"registro": False, "mensaje": str(e)}

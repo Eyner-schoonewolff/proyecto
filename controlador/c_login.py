@@ -2,6 +2,7 @@ from seguridad.login import *
 from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import *
 from flask import redirect, url_for, session, request, jsonify
+from flask_jwt_extended import create_access_token
 
 
 class Login_controlador():
@@ -22,31 +23,28 @@ class Login_controlador():
         try:
             if login.verificar_campos_vacios():
                 raise CamposVacios(
-                    "Por favor verifique que los campos no esten vacios")
+                    "Por favor verifique que los campos no estén vacíos")
             elif not login.verificar_usuario():
                 raise EmailContraseniaIncorrecta(
                     "El email y/o contraseña ingresada es incorrecto")
             else:
-                # Generar token
-                session['login'] = True
-                session['id'] = login.usuario['id']
-                session['id_udp'] = login.usuario['id_udp']
-                session['email'] = login.usuario['email']
-                session['username'] = login.usuario["nombre"].upper()
-                session['tipo_usuario'] = login.usuario["tipo"]
+                identificadores = {
+                    'id': login.usuario['id'],
+                    'id_udp': login.usuario['id_udp'],
+                    'email': login.usuario['email'],
+                    'username': login.usuario["nombre"].upper(),
+                    'tipo_usuario': login.usuario["tipo"]
+                }
 
-                return jsonify({'id_usuario': login.usuario['id'], 
-                                'id_usuario_datos_personales':login.usuario['id_udp'],
-                                "login": True, 
-                                "home": "/",
-                                'email': login.usuario['email'], 
-                                'tipo':login.usuario["tipo"],
-                                'nombre':login.usuario["nombre"].upper()
-                                })
+                access_token = create_access_token(identity=identificadores)
+
+                return jsonify({
+                    "login": True,
+                    "token": access_token,
+                    "home": "/templates/home.html",
+                })
 
         except CamposVacios as mensaje:
-            session['login'] = False
-            return {"login": False, "home": "/", "excepcion": str(mensaje)}
+            return {"login": False, "home": "/templates/index.html", "excepcion": str(mensaje)}
         except EmailContraseniaIncorrecta as mensaje:
-            session['login'] = False
-            return {"login": False, "home": "/", "excepcion": str(mensaje)}
+            return {"login": False, "home": "/templates/index.html", "excepcion": str(mensaje)}

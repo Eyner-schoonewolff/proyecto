@@ -8,7 +8,6 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     descripcion = document.querySelector('#descricpion_input')
     descripcion = descripcion.value ?? "" ;
 
-    console.log(descripcion);
     if (rol == 0) {
         Swal.fire({
             title: "Problema",
@@ -31,7 +30,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
             icon: "error",
             confirmButtonText: "Aceptar",
         }).then(() => {
-            window.location.href = '/registrar';
+            window.location.href = '/templates/registrar.html';
         });
         return; // Detiene la ejecución del código si hay campos vacíos
     }
@@ -42,7 +41,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
             icon: "error",
             confirmButtonText: "Aceptar",
         }).then(() => {
-            window.location.href = '/registrar';
+            window.location.href = '/templates/registrar.html';
         });
         return;
     }
@@ -58,7 +57,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     }
 
     $.ajax({
-        url: '/auth_registro',
+        url: 'http://127.0.0.1:3000/auth_registro',
         method: 'POST',
         data: JSON.stringify(datos),
         contentType: "application/json; charset=utf-8",
