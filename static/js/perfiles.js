@@ -60,10 +60,10 @@ $(document).ready(function () {
                         cardTitle.textContent = perfil.nombre;
 
                         const btnCalificacion = document.createElement("a");
-                        btnCalificacion.href = "perfiles/"+ perfil.id;
                         btnCalificacion.className = "btn btn-success btn-sm bi bi-eye-fill btn-perfil";
                         btnCalificacion.title = "Ver calificacion";
                         btnCalificacion.textContent = "Calificacion";
+                        btnCalificacion.id = "btn-perfil";
                         // Agrega el enlace correspondiente si tienes una URL para ver la calificación
 
                         const idPerfilInput = document.createElement("input");
@@ -75,8 +75,8 @@ $(document).ready(function () {
                         const div_card = document.createElement("div");
                         div_card.className = "card-footer text-muted ";
                         div_card.style.display = "block"; // Hacer que el elemento ocupe todo el ancho
-                        div_card.style.marginTop = "20px"; // Ajustar el margen superior según tus necesidades
-                        div_card.style.marginBottom = "15px";
+                        div_card.style.marginTop = "30px"; // Ajustar el margen superior según tus necesidades
+                        // div_card.style.marginBottom = "15px";
                         div_card.innerText = perfil.dia_calificacion;
 
 

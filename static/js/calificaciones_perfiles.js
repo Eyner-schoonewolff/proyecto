@@ -1,4 +1,5 @@
 document.querySelectorAll(".btn-perfil").forEach(function (button) {
+    console.log(button);
     button.addEventListener('click', function (event) {
         var id_perfil = event.target.parentElement.querySelector(".id_perfil").value;
         var tipo_usuario = event.target.parentElement.querySelector(".tipo_usuario_perfil") ?? null;
