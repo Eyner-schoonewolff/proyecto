@@ -48,7 +48,7 @@ class Menu_controlador():
     def perfiles_cliente(self, id):
 
         identificadores = get_jwt_identity()
-        
+
         tipo_usuario = identificadores.get('tipo_usuario')
 
         id_usuario = int(id)
@@ -103,26 +103,31 @@ class Menu_controlador():
                             'contratista_consulta': contratista_consulta})
 
     def consultar(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
 
-        consultar = Solicitar()
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
+        id = identificadores.get('id')
 
+        consultar = Solicitar(id_usuario=id)
+        
         if tipo_usuario == 'Cliente':
-            return jsonify({'template': 'consultar.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consultar_cliente': consultar.cliente()})
+            return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consultar_cliente': consultar.cliente()})
         elif tipo_usuario == 'Contratista':
-            return jsonify({'template': 'consultar.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
+            return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
 
         else:
             return redirect(url_for('menus.consultar_admin'))
 
     def consultar_admin(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
+
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
 
         consultar = Solicitar()
 
-        return jsonify({'template': 'consultar.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consulta_admin_cliente': consultar.admin_cliente(), 'consulta_admin_contratista': consultar.admin_contratista()})
+        return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_admin_cliente': consultar.admin_cliente(), 'consulta_admin_contratista': consultar.admin_contratista()})
 
     def consultar_estado(self, id):
         json = request.get_json()
@@ -143,43 +148,52 @@ class Menu_controlador():
             return jsonify({"actualizar": True})
 
     def evidencia(self, id):
+        identificadores = get_jwt_identity()
         id_evidencia = int(id)
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
 
         consultar = Solicitar()
 
         consulta = consultar.evidencia_(id=id_evidencia)
 
-        return jsonify({'template': 'evidencias.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'informacion': consulta})
+        return jsonify({'template': 'evidencias.html', 'nombre': nombre, 'tipo': tipo_usuario, 'informacion': consulta})
 
     def contacto(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
+
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
 
         contacto = Contacto()
 
         consulta = contacto.informacion_usuario_contacto()
 
-        return jsonify({'template': 'contacto.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'usuario': consulta})
+        return jsonify({'template': 'contacto.html', 'nombre': nombre, 'tipo': tipo_usuario, 'usuario': consulta})
 
     def calendario(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+
+        identificadores = get_jwt_identity()
+
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
 
         consultar = Solicitar()
 
-        return jsonify({'template': 'calendario.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
+        return jsonify({'template': 'calendario.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
 
     def calificar(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
+        nombre = identificadores.get('username')
+        tipo_usuario = identificadores.get('tipo_usuario')
+
         consultar = Solicitar()
 
         if consultar.contratista_():
-            return jsonify({'template': 'calificacion.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
+            return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
 
-        return jsonify({'template': 'calificacion.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario, 'consulta_cliente': consultar.cliente()})
+        return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_cliente': consultar.cliente()})
 
     def guardar_calificacion(self):
         json = request.get_json()

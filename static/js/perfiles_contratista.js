@@ -19,9 +19,7 @@ function agregar() {
                                     <div class="card-image">
                                         <img src="../static/imagen/perfiles.png" id="img">
                                     </div>
-
                                 </div>
-
                                 <div class="card-body">
                                     <h2>Contratista ${con}</h2>
                                     <p class="card-text">

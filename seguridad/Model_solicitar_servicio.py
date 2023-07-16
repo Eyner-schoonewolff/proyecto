@@ -3,11 +3,14 @@ from db.database import *
 from typing import Dict
 import datetime
 from psycopg2 import extras
+import json
+from psycopg2 import extras
+from datetime import datetime, date, time
 
 
 class Solicitar:
     def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="",
-                 problema="", id_estado="", id_solicitud="") -> None:
+                 problema="", id_estado="", id_solicitud="", id_usuario: int = "") -> None:
         self.fecha = fecha
         self.hora = hora
         self.contratista = contratista
@@ -16,9 +19,16 @@ class Solicitar:
         self.problema = problema
         self.id_estado = id_estado
         self.id_solicitud = id_solicitud
-        self.id_usuario = session.get('id')
+        self.id_usuario = id_usuario
+
+    def custom_json_serializer(self, obj):
+        if isinstance(obj, (datetime, date, time)):
+            return obj.isoformat()
+        else:
+            return str(obj)
 
     # agregar solicitud
+
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
 
@@ -97,7 +107,10 @@ class Solicitar:
                GROUP BY s.id;
          """
         cursor.execute(query, (self.id_usuario,))
-        return cursor.fetchall()
+        result = cursor.fetchall()
+        json_result = json.dumps(result, default=self.custom_json_serializer)
+
+        return json_result
 
     def cliente(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)

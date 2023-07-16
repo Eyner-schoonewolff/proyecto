@@ -41,60 +41,27 @@ $(document).ready(function () {
                 tipo_usuario.appendChild(texto_tipo);
 
                 if (perfil.perfiles_usuario.length > 0) {
-                    const perfilesContainer = document.getElementById("perfilesContainer");
-
-                    // Recorre el array de perfiles
+                    // const perfilesContainer = document.getElementById("perfilesContainer");
                     perfil.perfiles_usuario.forEach(perfil => {
-                        // Crea los elementos HTML correspondientes
-                        const divCol = document.createElement("div");
-                        divCol.className = "col-lg-4";
+                        let html = "";
+                        html += `<div class="col-lg-4">
+                        <div class="card mb-5">
+                            <div class="card-body">
+                                <h5 class="card-title">${perfil.nombre}</h5>
+                                <a onclick="addClickEventToButtons()" class="btn btn-success btn-sm bi bi-eye-fill btn-perfil" title="Ver calificacion">
+                                    Calificacion</a>
+                                <input class="id_perfil" name="idPerfil" type="hidden" value=${perfil.id}>
+                            </div>
+                            <div class="card-footer text-muted">
+                                ${perfil.dia_calificacion}
+                            </div>
+                        </div>
+                    </div>`
+                    
 
-                        const divCard = document.createElement("div");
-                        divCard.className = "card mb-5";
-
-                        const divCardBody = document.createElement("div");
-                        divCardBody.className = "card-body";
-
-                        const cardTitle = document.createElement("h5");
-                        cardTitle.className = "card-title";
-                        cardTitle.textContent = perfil.nombre;
-
-                        const btnCalificacion = document.createElement("a");
-                        btnCalificacion.className = "btn btn-success btn-sm bi bi-eye-fill btn-perfil";
-                        btnCalificacion.title = "Ver calificacion";
-                        btnCalificacion.textContent = "Calificacion";
-                        btnCalificacion.id = "btn-perfil";
-                        // Agrega el enlace correspondiente si tienes una URL para ver la calificación
-
-                        const idPerfilInput = document.createElement("input");
-                        idPerfilInput.className = "id_perfil";
-                        idPerfilInput.name = "idPerfil";
-                        idPerfilInput.type = "hidden";
-                        idPerfilInput.value = perfil.id;
-
-                        const div_card = document.createElement("div");
-                        div_card.className = "card-footer text-muted ";
-                        div_card.style.display = "block"; // Hacer que el elemento ocupe todo el ancho
-                        div_card.style.marginTop = "30px"; // Ajustar el margen superior según tus necesidades
-                        // div_card.style.marginBottom = "15px";
-                        div_card.innerText = perfil.dia_calificacion;
-
-
-                        // Agrega los elementos al DOM en la estructura adecuada
-                        divCardBody.appendChild(cardTitle);
-                        divCardBody.appendChild(btnCalificacion);
-                        divCardBody.appendChild(div_card);
-                        divCardBody.appendChild(idPerfilInput);
-
-                        divCard.appendChild(divCardBody);
-                        divCol.appendChild(divCard);
-
-                        // Agrega el perfil al contenedor
-                        perfilesContainer.querySelector(".row").appendChild(divCol);
-
-                        // let card_footer=querySelector.getElementById('card_footer');
-                        // card_footer.innerHTML=perfil.dia_calificacion;
+                        $("#perfilesContainer").append(html);
                     });
+
 
                 } else {
                     let perfil_vacio = document.querySelector('#perfil_vacio')
@@ -123,60 +90,24 @@ $(document).ready(function () {
 
 
                 if (perfil.perfiles_usuario.length > 0) {
-                    const perfilesContainer = document.getElementById("perfilesContainer");
 
-                    // Recorre el array de perfiles
                     perfil.perfiles_usuario.forEach(perfil => {
-                        // Crea los elementos HTML correspondientes
-                        const divCol = document.createElement("div");
-                        divCol.className = "col-lg-4";
+                        let html = "";
+                        html += `<div class="col-lg-4">
+                        <div class="card mb-5">
+                            <div class="card-body">
+                                <h5 class="card-title">${perfil.nombre}</h5>
+                                <a onclick="addClickEventToButtons()" class="btn btn-success btn-sm bi bi-eye-fill btn-perfil" title="Ver calificacion">
+                                    Calificacion</a>
+                                <input class="id_perfil" name="idPerfil" type="hidden" value=${perfil.id}>
+                            </div>
+                            <div class="card-footer text-muted">
+                                ${perfil.dia_calificacion}
+                            </div>
+                        </div>
+                    </div>`
 
-                        const divCard = document.createElement("div");
-                        divCard.className = "card mb-5";
-
-                        const divCardBody = document.createElement("div");
-                        divCardBody.className = "card-body";
-
-                        const cardTitle = document.createElement("h5");
-                        cardTitle.className = "card-title";
-                        cardTitle.textContent = perfil.nombre;
-
-                        const btnCalificacion = document.createElement("a");
-                        btnCalificacion.href="perfiles/" + perfil.id;
-                        btnCalificacion.className = "btn btn-success btn-sm bi bi-eye-fill btn-perfil";
-                        btnCalificacion.title = "Ver calificacion";
-                        btnCalificacion.textContent = "Calificacion";
-                        // Agrega el enlace correspondiente si tienes una URL para ver la calificación
-                        // btnCalificacion.href = ...;
-
-                        const idPerfilInput = document.createElement("input");
-                        idPerfilInput.className = "id_perfil";
-                        idPerfilInput.name = "idPerfil";
-                        idPerfilInput.type = "hidden";
-                        idPerfilInput.value = perfil.id;
-
-                        const div_card = document.createElement("div");
-                        div_card.className = "card-footer text-muted ";
-                        div_card.style.display = "block"; // Hacer que el elemento ocupe todo el ancho
-                        div_card.style.marginTop = "20px"; // Ajustar el margen superior según tus necesidades
-                        div_card.style.marginBottom = "15px";
-                        div_card.innerText = perfil.dia_calificacion;
-
-
-                        // Agrega los elementos al DOM en la estructura adecuada
-                        divCardBody.appendChild(cardTitle);
-                        divCardBody.appendChild(btnCalificacion);
-                        divCardBody.appendChild(div_card);
-                        divCardBody.appendChild(idPerfilInput);
-
-                        divCard.appendChild(divCardBody);
-                        divCol.appendChild(divCard);
-
-                        // Agrega el perfil al contenedor
-                        perfilesContainer.querySelector(".row").appendChild(divCol);
-
-                        // let card_footer=querySelector.getElementById('card_footer');
-                        // card_footer.innerHTML=perfil.dia_calificacion;
+                        $("#perfilesContainer").append(html);
                     });
 
                 } else {

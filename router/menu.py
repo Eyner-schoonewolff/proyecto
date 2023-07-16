@@ -83,6 +83,8 @@ def actualizar_estado(id):
 
 
 @menus.route("/evidencia/<id>", endpoint='evidencias', methods=['GET'])
+@cross_origin()
+@jwt_required()
 # @login_required_home
 # @proteccion_ruta_admin
 def evidencia_solicitud(id):
