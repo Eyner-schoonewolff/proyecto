@@ -110,7 +110,7 @@ class Menu_controlador():
         id = identificadores.get('id')
 
         consultar = Solicitar(id_usuario=id)
-        
+
         if tipo_usuario == 'Cliente':
             return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consultar_cliente': consultar.cliente()})
         elif tipo_usuario == 'Contratista':
@@ -186,9 +186,12 @@ class Menu_controlador():
     def calificar(self):
         identificadores = get_jwt_identity()
         nombre = identificadores.get('username')
+
         tipo_usuario = identificadores.get('tipo_usuario')
 
-        consultar = Solicitar()
+        id = identificadores.get('id')
+
+        consultar = Solicitar(id_usuario=id)
 
         if consultar.contratista_():
             return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
@@ -197,25 +200,29 @@ class Menu_controlador():
 
     def guardar_calificacion(self):
         json = request.get_json()
+        identificadores = get_jwt_identity()
 
+
+        id = identificadores.get('id')
         observacion = json['observacion']
-        calificacion = json['estrellas']
-        id_solicitud = json['id_solicitud']
-        tipo_usuario_calificar = json['id_tipo_usuario']
+        calificacion = int(json['estrellas'])
+        id_solicitud = int(json['id_solicitud'])
+        tipo_usuario_calificar = int(json['id_tipo_usuario'])
 
         solicitud = DatosUsuario(
             observaciones=observacion,
             estrellas=calificacion,
             id_solicitud=id_solicitud,
             tipo_usuario_calificar=tipo_usuario_calificar,
+            id_usuario=id
         )
 
         agregar = solicitud.calificar()
 
         if agregar:
-            return jsonify({"actualizar": True, "recargar": "/calificar"})
+            return jsonify({"actualizar": True, "recargar": "../templates/calificacion.html"})
 
-        return jsonify({"actualizar": False, "recargar": "/calificar"})
+        return jsonify({"actualizar": False, "recargar": "../templates/calificacion.html"})
 
     def enviar_correos(self):
         json = request.get_json()

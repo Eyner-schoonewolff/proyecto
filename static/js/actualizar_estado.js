@@ -2,6 +2,7 @@
 function guardar_estado() {
     document.querySelectorAll("#btn-guardar-estado").forEach(function (button) {
         button.addEventListener('click', function () {
+            var token = localStorage.getItem('jwt-token');
             var estado_actual = this.closest('.modal-content').querySelector("#estado_actual").innerText;
             var id_consulta = this.closest('.modal-content').querySelector("#id_consulta").value;
             var estado = this.closest('.modal-content').querySelector("#select_estado").value;
@@ -25,8 +26,10 @@ function guardar_estado() {
                 fecha_actualizar = fecha_actualizar.trim() === '' ? fecha_actual : fechaFormateada;
                 hora_actualizar = hora_actualizar.trim() === '' ? hora_actual : hora_actualizar;
 
+
+
                 $.ajax({
-                    url: '/actualizar_estado/' + id_consulta,
+                    url: 'http://localhost:3000/actualizar_estado/' + id_consulta,
                     method: 'POST',
                     data: JSON.stringify(
                         {
@@ -38,6 +41,10 @@ function guardar_estado() {
                     ),
                     dataType: 'json',
                     contentType: 'application/json',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
                     success: function (respuesta) {
                         if (respuesta.actualizar) {
                             Swal.fire({
@@ -54,7 +61,7 @@ function guardar_estado() {
 
             } else {
                 $.ajax({
-                    url: '/actualizar_estado/' + id_consulta,
+                    url: 'http://localhost:3000/actualizar_estado/' + id_consulta,
                     method: 'POST',
                     data: JSON.stringify(
                         {
@@ -64,6 +71,10 @@ function guardar_estado() {
                     ),
                     dataType: 'json',
                     contentType: 'application/json',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
                     success: function (respuesta) {
                         console.log(respuesta)
                         if (respuesta.actualizar) {

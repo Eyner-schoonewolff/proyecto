@@ -15,16 +15,31 @@
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/actualizar_info.css.css')}}">
+    <link rel="stylesheet" href="../static/css/actualizar_info.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+
 
     <title>Modificar</title>
 </head>
 
 <body>
     <!-- Pagina contratista -->
-    {% if tipo == "Contratista" %}
-    {%include 'NvarContratista.html'%}
-    {%include 'notificacion.html'%}
+    <div id="nvar">
+
+    </div>
 
     <section class="h-100 text-center">
         <div class="container mt-5 h-125">
@@ -35,7 +50,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div id="formulario" class="mb-4 m-2">
-                                        <h2 class="fw-bold mb-5">Datos personales de {{nombre}} </h2>
+                                        <h2 id="h2_nombre" class="fw-bold mb-5"></h2>
 
                                         <div class="form-outline mb-5">
 
@@ -44,15 +59,15 @@
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label m-2" for="form3Example3">Nombre
                                                         completo</label>
-                                                    <input type="text" name="nombre" class="form-control"
-                                                        value="{{nombre}}" readonly />
+                                                    <input id="info-nombre" type="text" name="nombre" class="form-control"
+                                                        value="" readonly />
 
                                                 </div>
 
                                                 <div class="col-6 mb-2">
                                                     <label for="email" class="m-2">Email</label>
-                                                    <input type="email" class="form-control" name="email"
-                                                        value="{{email}}" placeholder="" readonly>
+                                                    <input id="info-email" type="email" class="form-control" name="email"
+                                                        value="" placeholder="" readonly>
                                                 </div>
 
 
@@ -61,16 +76,16 @@
                                                 <div class="col mb-2">
                                                     <label class="form-label" for="form3Example3">Numero de
                                                         documento</label>
-                                                    <input type="number" name="documento" min="4" max="12"
-                                                        class="form-control" value="{{numero_documento}}" readonly />
+                                                    <input id="info-documento" type="number" name="documento" min="4" max="12"
+                                                        class="form-control" value="" readonly />
 
                                                 </div>
 
 
                                                 <div class="col mb-2">
                                                     <label class="form-label" for="form3Example3">Dirección</label>
-                                                    <input type="text" name="direccion" class="form-control"
-                                                        value="{{direccion}}" readonly />
+                                                    <input id="info-direccion" type="text" name="direccion" class="form-control"
+                                                        value="" readonly />
 
                                                 </div>
 
@@ -79,16 +94,16 @@
                                             <div class="row">
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label" for="form3Example3">Celular</label>
-                                                    <input type="number" name="numeroCelular" min="4" max="12"
-                                                        class="form-control" value={{numero}} readonly />
+                                                    <input id="info-numero_celular" type="number" name="numeroCelular" min="4" max="12"
+                                                        class="form-control" value="" readonly />
 
                                                 </div>
 
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label" for="form3Example3">
                                                         Ocupaciones</label>
-                                                    <input type="text" name="nombre_ocupaciones" class="form-control"
-                                                        value="{{ocupacion}}" readonly />
+                                                    <input id="info-ocupacion" type="text" name="nombre_ocupaciones" class="form-control"
+                                                        value="" readonly />
                                                 </div>
 
                                             </div>
@@ -97,7 +112,7 @@
                                                     <label class="form-label" for="form3Example3">Descripcion 
                                                         Contratista</label>
                                                     <input id="descricpion_input" type="text" name="descricpion_input"
-                                                       class="form-control" value="{{descripcion}}" readonly />
+                                                       class="form-control" value="" readonly />
 
                                                 </div>
                                             </div>
@@ -130,13 +145,13 @@
                                                                         for="form3Example3">Nombre
                                                                         completo</label>
                                                                     <input id="nombre" type="text" name="nombre"
-                                                                        class="form-control" value="{{nombre}}" />
+                                                                        class="form-control" value="" />
                                                                 </div>
                                                                 <div class="col-6 mb-2">
                                                                     <label class="form-label m-2"
                                                                         for="form3Example3">Dirección</label>
                                                                     <input id="direccion" type="text" name="direccion"
-                                                                        class="form-control" value="{{direccion}}" />
+                                                                        class="form-control" value="" />
                                                                 </div>
 
                                                             </div>
@@ -146,14 +161,14 @@
                                                                         for="form3Example3">Celular</label>
                                                                     <input id="numeroCelular" type="number"
                                                                         name="numeroCelular" min="4" max="12"
-                                                                        class="form-control" value={{numero}} />
+                                                                        class="form-control" value="" />
 
                                                                 </div>
                                                                 <div class="col-6 mb-2">
                                                                     <label class="form-label m-2"
                                                                         for="form3Example3">Descripcion</label>
                                                                     <input id="descripcion" type="text" name="descripcion"
-                                                                        class="form-control" value="{{descripcion}}" />
+                                                                        class="form-control" value="" />
                                                                 </div>
 
 
@@ -187,9 +202,7 @@
                                     <div class="col-6 mt-5 text-center" style="margin: auto; text-align: center;">
                                         <select id="agregar_ocupacion" multiple name="ocupacion"
                                             class="form-control mb-3">
-                                            {% for ocu in ocupaciones_disponibles %}
-                                            <option value="{{ ocu.id }}">{{ ocu.ocupacion }}</option>
-                                            {% endfor %}
+                                           
                                         </select>
 
 
@@ -213,238 +226,16 @@
         </div>
     </section>
 
-    <!-- Pagina cliente -->
-    {% elif tipo == "Cliente" %}
-    {%include 'NvarCliente.html'%}
-
-    <section class="h-100 text-center">
-        <div class="container mt-5 h-100">
-            <div class="row justify-content-sm-center h-100">
-                <div class="col-xxl-7 col-xl-5 col-lg-7 col-md-9 col-sm-9">
-                    <div class="card shadow-lg">
-                        <div class="card-body p-5">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-lg-12">
-                                    <div id="formulario" class="mb-4 m-2">
-                                        <h2 class="fw-bold mb-5">Datos personales de {{nombre}} </h2>
-
-                                        <div class="form-outline mb-5">
-                                            <div class="row">
-                                                <div class="col-6 mb-2">
-                                                    <label class="form-label m-2" for="form3Example3">Nombre
-                                                        completo</label>
-                                                    <input type="text" name="nombre" class="form-control text-center"
-                                                        value="{{nombre}}" readonly />
-                                                </div>
-
-                                                <div class="col-6 mb-2">
-                                                    <label for="email" class="m-2">Email</label>
-                                                    <input type="email" class="form-control text-center" name="email"
-                                                        placeholder="" value={{email}} readonly>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col mb-2">
-                                                    <label class="form-label" for="form3Example3">Numero de
-                                                        documento</label>
-                                                    <input type="number" name="documento" min="4" max="12"
-                                                        class="form-control text-center" value={{numero_documento}}
-                                                        readonly />
-                                                </div>
-
-
-                                                <div class="col mb-2">
-                                                    <label class="form-label" for="form3Example3">Dirección</label>
-                                                    <input type="text" name="direccion" class="form-control"
-                                                        value="{{direccion}}" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 mb-2">
-                                                    <label class="form-label" for="form3Example3">Numero de
-                                                        Celular</label>
-                                                    <input type="number" name="documento" min="4" max="12"
-                                                        class="form-control text-center" value="{{numero}}" readonly />
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4 row justify-content-center">
-                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal">
-                                                <i class="bi bi-pencil-square"></i>
-                                                Actualizar
-                                            </button>
-                                        </div>
-
-                                        <div class="modal fade " data-bs-backdrop="static" data-bs-keyboard="false"
-                                            tabindex="-1" id="exampleModal" aria-labelledby="exampleModalLabel"
-                                            aria-hidden="true">
-                                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Actualizar
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-outline mb-5">
-                                                            <div class="row">
-                                                                <div class="col-6 mb-2">
-                                                                    <label class="form-label m-2"
-                                                                        for="form3Example3">Nombre
-                                                                        completo</label>
-                                                                    <input id="nombre" type="text" name="nombre"
-                                                                        class="form-control text-center"
-                                                                        value="{{nombre}}" />
-                                                                </div>
-
-                                                                <div class="col-6 mb-2">
-                                                                    <label class="form-label m-2"
-                                                                        for="form3Example3">Dirección</label>
-                                                                    <input id="direccion" type="text" name="direccion"
-                                                                        class="form-control text-center"
-                                                                        value="{{direccion}}" />
-                                                                </div>
-
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col-12 mb-2">
-                                                                    <label class="form-label" for="form3Example3">Numero
-                                                                        de
-                                                                        Celular</label>
-                                                                    <input id="numeroCelular" type="number"
-                                                                        name="numeroCelular" min="4" max="12"
-                                                                        class="form-control text-center"
-                                                                        value="{{numero}}" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" id="btn-actuzalizar"
-                                                            class="btn btn-success">
-                                                            Guardar</button>
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Cerrar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Section: Design Block -->
-
-        </div>
-        </div>
-    </section>
-
-    <!-- Pagina Administrador -->
-    {% else %}
-    {%include 'NvarAdmin.html'%}
-    <section class="h-100 text-center">
-        <div class="container mt-5 h-100">
-            <div class="row justify-content-sm-center h-100">
-                <div class="col-xxl-7 col-xl-5 col-lg-7 col-md-9 col-sm-9">
-                    <div class="card shadow-lg">
-                        <div class="card-body p-5">
-                            <div class="row d-flex justify-content-center">
-                                <div class="col-lg-12">
-                                    <div id="formulario" class="mb-4 m-2">
-                                        <h2 class="fw-bold mb-5">Modificar correo Usuarios </h2>
-
-                                        <div class="form-outline mb-5">
-                                            <div class="row">
-                                                <div class="col-6 mb-2">
-                                                    <label for="email" class="m-2">Email</label>
-                                                    <input id="email_cambio" type="email"
-                                                        class="form-control text-center" name="email" placeholder=""
-                                                        value="">
-                                                </div>
-                                                <div class="col-6 mb-2">
-                                                    <label for="email" class="m-2">Email actualizar</label>
-                                                    <input id="email_actualizacion" type="email"
-                                                        class="form-control text-center" name="email_actualizar"
-                                                        placeholder="" value="Nah" readonly>
-                                                </div>
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col mb-2">
-                                                    <label class="form-label m-2" for="form3Example3">Nombre
-                                                        completo</label>
-                                                    <input id="nombre_completo" type="text" name="nombre"
-                                                        class="form-control text-center" value="Nah" readonly />
-                                                </div>
-
-
-
-                                                <div class="col mb-2">
-                                                    <label class="form-label" for="form3Example3">Dirección</label>
-                                                    <input id="direccion" type="text" name="direccion"
-                                                        class="form-control" value="Nah" readonly />
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col mb-2">
-                                                    <label class="form-label" for="form3Example3">Numero de
-                                                        documento</label>
-                                                    <input id="documento_numero" type="number" name="documento" min="4"
-                                                        max="12" class="form-control text-center" value="0" readonly />
-                                                </div>
-                                                <div class="col mb-2">
-                                                    <label class="form-label" for="form3Example3">Numero de
-                                                        Celular</label>
-                                                    <input id="cel" type="number" name="celular" min="4" max="12"
-                                                        class="form-control text-center" value='0' readonly />
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mb-4 row justify-content-center">
-                                            <button id="btn-actuzalizar_2" type="button" class="btn btn-warning" disabled>
-                                                <i class="bi bi-pencil-square"></i>
-                                                Actualizar
-                                            </button>
-                                        </div>
-
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-    </section>
-    {% endif %}
-
-
 </body>
 <style>
     body {
         /* min-height: 100vh; */
-    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-attachment: fixed;
-    overflow: hidden;
-    
+        background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        background-attachment: fixed;
+        overflow: hidden;
+
 
     }
 </style>
@@ -452,10 +243,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-{% if tipo == "Contratista" or tipo == "Cliente" %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/datos_personales.js') }}"></script>
-{%else%}
-<script type="text/javascript" src="{{ url_for('static', filename='js/actualizar_email.js') }}"></script>
-{% endif %}
+
+<script type="text/javascript" src="../static/js/modificar_datos_usuario.js"></script>
+<script type="text/javascript" src="../static/js/datos_personales.js"></script>
+<!-- <script type="text/javascript" src="../static/js/actualizar_email.js"></script> -->
 
 </html>

@@ -3,6 +3,7 @@ from seguridad.datos_usuario import DatosUsuario, DatoUnicoEmail, CorreoInvalido
 from seguridad.Model_solicitar_servicio import *
 from decorador.decoradores import *
 import json
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 
 class Datos_personales_controlador():
@@ -10,10 +11,14 @@ class Datos_personales_controlador():
         pass
 
     def c_actualizar_ocupaciones(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
 
-        datos_usuario = DatosUsuario()
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
+        nombre = identificadores.get('username')
+        tipo = identificadores.get('tipo_usuario')
+        email = identificadores.get('email')
+
+        datos_usuario = DatosUsuario(id_usuario=id)
 
         ocupaciones = datos_usuario.ocupaciones()
 
@@ -21,17 +26,13 @@ class Datos_personales_controlador():
 
         usuario = datos_usuario.obtener()
 
-        session['username'] = usuario['nombre_completo']
-        session['numero_celular'] = usuario['numero_celular']
-        session['direccion'] = usuario['direccion']
-
-        if tipo_usuario == 'Contratista':
-            session['descripcion'] = usuario['descripcion']
+        if tipo == 'Contratista':
             return jsonify({'datos':
                             [
-                                {'nombre': nombre_usuario,
-                                 'tipo': tipo_usuario,
-                                 'email': session.get('email'),
+                                {'nombre': nombre,
+                                 'tipo': tipo,
+                                 'email': email,
+                                 'numero_documento': usuario['numero_documento'],
                                  'numero': usuario['numero_celular'],
                                  'descripcion': usuario['descripcion'],
                                  'direccion':usuario['direccion'],
@@ -42,15 +43,16 @@ class Datos_personales_controlador():
         else:
             return jsonify({'datos':
                             [
-                                {'nombre': nombre_usuario,
-                                 'tipo': tipo_usuario,
-                                 'email': session.get('email'),
+                                {'nombre': nombre,
+                                 'tipo': tipo,
+                                 'email': email,
+                                 'numero_documento': usuario['numero_documento'],
                                  'numero': usuario['numero_celular'],
                                  'descripcion': usuario['descripcion'],
                                  'direccion':usuario['direccion'],
                                  }
                             ]})
-    
+
     def actualizar_admin(self):
         nombre_usuario = session.get('username')
         tipo_usuario = session.get('tipo_usuario')
@@ -59,11 +61,10 @@ class Datos_personales_controlador():
             email = request.get_json()["email"]
             consultar = DatosUsuario(verificacion_email=email)
             informacion = consultar.informacion_usuario()
-            
+
             return jsonify({'datos': informacion})
         else:
-            return jsonify({'templates': '/actualizar.html','nombre':nombre_usuario,'tipo':tipo_usuario})
-         
+            return jsonify({'templates': '/actualizar.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario})
 
     def actualizar_email(self):
         json = request.get_json()
@@ -96,10 +97,11 @@ class Datos_personales_controlador():
 
     def actualizar_informacion(self):
         json = request.get_json()
+        identificadores = get_jwt_identity()
         nombre = json['nombre']
         numeroCelular = json['numeroCelular']
         direccion = json['direccion']
-        id_udp = session.get('id_udp')
+        id_udp = identificadores.get('id_udp')
         descripcion = json['descripcion']
 
         datos_usuario = DatosUsuario()
@@ -107,10 +109,13 @@ class Datos_personales_controlador():
         datos_usuario.actualizar(
             nombre, numeroCelular, direccion, descripcion, id_udp)
 
-        return {'actualizar': True, 'home': '/actualizar'}
+        return {'actualizar': True, 'home': '../templates/actualizar.html'}
 
     def ocupaciones_contratista(self):
-        id = session.get('id')
+        identificadores = get_jwt_identity()
+
+        id = identificadores.get('id')
+
         datos_usuario = DatosUsuario()
         datos = datos_usuario.ocupaciones_contratista(id)
 
@@ -120,7 +125,8 @@ class Datos_personales_controlador():
             return {"numero": 2}
 
     def agregar_ocupacion(self):
-        id = session.get('id')
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
         json_ = request.get_json()
         ocupaciones = json_['datos']
         datos_usuario = DatosUsuario()
@@ -184,10 +190,11 @@ class Datos_personales_controlador():
     def informacion_contratista(self):
         datos_usuario = DatosUsuario()
         datos = datos_usuario.informacion_contratistas()
-        return jsonify({'perfiles':datos})
+        return jsonify({'perfiles': datos})
 
     def eventos(self):
-        id = session.get('id')
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
         datos_usuario = DatosUsuario()
         datos = datos_usuario.eventos_contratistas(id)
-        return jsonify({'eventos':datos})
+        return jsonify({'eventos': datos})

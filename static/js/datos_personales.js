@@ -1,5 +1,6 @@
 
     document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
+        let token = localStorage.getItem('jwt-token');
         nombre = document.querySelector("#nombre").value;
         direccion = document.querySelector("#direccion").value;
         numeroCelular = document.querySelector("#numeroCelular").value;
@@ -15,11 +16,15 @@
         };
     
         $.ajax({
-            url: '/auth/actualizar',
+            url: 'http://localhost:3000/auth/actualizar',
             method: 'POST',
             data: JSON.stringify(datos),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
             success: function (respuesta) {
                 if (respuesta.actualizar) {
                     window.location.href = respuesta.home
@@ -30,11 +35,16 @@
 
 
 function ocupaciones() {
+    let token = localStorage.getItem('jwt-token');
     $.ajax({
-        url: '/ocupaciones_contratista',
+        url: 'http://localhost:3000/ocupaciones_contratista',
         method: 'GET',
         processData: false,
         contentType: false,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
         success: function (datos) {
 
             if (datos.numero == 1) {
@@ -51,6 +61,7 @@ function ocupaciones() {
 
 
 function actualizar_ocu() {
+    let token = localStorage.getItem('jwt-token');
     let datos = $("#agregar_ocupacion").val()
 
     if (datos.length == 0) {
@@ -65,11 +76,15 @@ function actualizar_ocu() {
             datos
         };
         $.ajax({
-            url: '/agregar_ocupaciones',
+            url: 'http://localhost:3000/agregar_ocupaciones',
             method: 'POST',
             data: JSON.stringify(datos_),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
             success: function (respuesta) {
                 if (respuesta.numero == 1){
                     Swal.fire({

@@ -8,7 +8,7 @@ from psycopg2 import extras
 
 class DatosUsuario:
     def __init__(self, email_actual="", email_nuevo="", verificacion_email="",
-                 observaciones="", estrellas="", id_solicitud="", tipo_usuario_calificar="") -> None:
+                 observaciones="", estrellas="", id_solicitud="", tipo_usuario_calificar="",tipo_usuario="",id_usuario:int="") -> None:
         self.email_actual = email_actual
         self.email_nuevo = email_nuevo
         self.verificacion_email = verificacion_email
@@ -16,8 +16,8 @@ class DatosUsuario:
         self.estrellas = estrellas
         self.id_solicitud = id_solicitud
         self.tipo_usuario_calificar = tipo_usuario_calificar
-        self.id_usuario = session.get('id')
-        self.tipo_usuario = session.get('tipo_usuario')
+        self.id_usuario = id_usuario
+        self.tipo_usuario = tipo_usuario
 
     def validar_correo_electronico(self):
         # Expresión regular para validar correos electrónicos
