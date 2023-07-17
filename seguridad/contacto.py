@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from psycopg2 import extras
 
 class Contacto:
-    def __init__(self, correo="", nombre="", numero="", asunto="", mensaje="") -> None:
+    def __init__(self, correo="", nombre="", numero="", asunto="", mensaje="",tipo_usuario="",id_usuario:int=0) -> None:
         self.correo = correo
         self.nombre = nombre
         self.numero = numero
@@ -17,8 +17,8 @@ class Contacto:
         self.contrasena='kdsmhsnwqacecycn'
         self.username='serviciossbarranquilla@gmail.com'
         self.puerto=587
-        self.tipo_usuario = session.get('tipo_usuario')
-        self.id_usuario = session.get('id')
+        self.tipo_usuario = tipo_usuario
+        self.id_usuario = id_usuario
 
     def enviar_correos(self) -> bool:
         # Ejemplo para Gmail, cambiar si se usa otro proveedor

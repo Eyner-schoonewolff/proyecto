@@ -61,6 +61,7 @@
         var calendarEl = document.getElementById('calendar');
         var evento = eventos();
         let arry = new Array();
+
         for (let index = 0; index < evento.length; index++) {
             arry.push({
                 id: evento[index].id, title: evento[index].descripcion, start: evento[index].fecha, overlap: false,
@@ -74,7 +75,7 @@
             initialView: 'dayGridMonth',
             locale: 'es',// especificamos el idioma español
             events: arry,
-           
+
             headerToolbar: {
                 left: 'prev, next, today',
                 center: 'title',
@@ -87,15 +88,19 @@
     });
 
     function eventos() {
+        var token = localStorage.getItem('jwt-token');
         var dato = '';
         $.ajax({
-            url: '/eventos',
+            url: 'http://localhost:3000/eventos',
             method: 'GET',
             async: false,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
             success: function (datos) {
-                dato = datos
-
-            }
+                dato = datos.eventos;
+            },
 
         });
         return dato;

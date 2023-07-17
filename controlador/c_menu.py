@@ -163,10 +163,11 @@ class Menu_controlador():
     def contacto(self):
         identificadores = get_jwt_identity()
 
+        id = identificadores.get('id')
         nombre = identificadores.get('username')
         tipo_usuario = identificadores.get('tipo_usuario')
 
-        contacto = Contacto()
+        contacto = Contacto(id_usuario=id)
 
         consulta = contacto.informacion_usuario_contacto()
 
