@@ -1,68 +1,71 @@
 let token = localStorage.getItem('jwt-token');
 let respuesta = { nombre: "", tipo: "" };
 
+const fileInput = document.querySelector('#formFileSm');
 
-function guardarsolicitud() {
-    const formData = new FormData();
-    let fecha = $("#fecha").val();
-    let hora = $("#hora").val();
-    let servicio = $("#opciones").val();
-    let contratista = $("#contratistas").val();
-    let problema = $("#carta").val();
-    let evidencia = $("#formFileSm")[0].files[0];
+// Listen for the change event so we can capture the file
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+});
 
-    if (evidencia) {
-        formData.append('evidencia', evidencia);
+fileInput.addEventListener("change", function() {
+    Main()
+})
+
+async function Main() {
+   const file = document.querySelector('#formFileSm').files[0];
+   fileInput.data = await toBase64(file);
+}
+
+
+
+async function guardarsolicitud() {
+    let request = {
+        fecha:$("#fecha").val(),
+        hora:$("#hora").val(),
+        servicio:$("#opciones").val(),
+        contratista:$("#contratistas").val(),
+        problema:$("#carta").val(),
+        evidencia:fileInput.data,
     }
 
-    else if (!evidencia && !$("#formFileSm").val()) {
-        formData.append('evidencia', '');
-    }
-
-    formData.append('fecha', fecha);
-    formData.append('hora', hora);
-    formData.append('servicio', servicio);
-    formData.append('contratista', contratista);
-    formData.append('problema', problema);
-
-
-    $.ajax({
-        url: 'http://127.0.0.1:3000/solicitar_serv',
-        method: 'POST',
-        data: formData,
-        processData: false,
-        contentType: false,
-        headers: {
-            'Authorization': 'Bearer ' + token
-            // 'Content-Type': 'multipart/form-data'
-        },
-        success: function (respuesta) {
-            console.log(respuesta.numero);
-            if (respuesta.numero == 1) {
-                setTimeout(function () {
-                    Swal.fire({
-                        title: "¡Éxito!",
-                        text: "Se ha realizado correctamente la solicitud",
-                        icon: "success",
-                        confirmButtonText: "Aceptar",
-                    }).then(() => {
-                        $("#fecha").val('');
-                        $("#hora").val('');
-                        $("#opciones").val();
-                        $("#contratistas").val();
-                        $("#formFileSm").val();
-                        $("#carta").val('');
-                    });
-                }, 1000);
-
-            } else {
-                alert('Error')
+    try {
+        const respuesta = await $.ajax({
+            url: 'http://127.0.0.1:3000/solicitar_serv',
+            method: 'POST',
+            data: JSON.stringify(request),
+            contentType: "application/json", // Especificar el tipo de contenido como JSON
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json',
             }
+        });
+
+        if (respuesta.numero == 1) {
+            console.log('entro');
+            Swal.fire({
+                title: "¡Éxito!",
+                text: "Se ha realizado correctamente la solicitud",
+                icon: "success",
+                confirmButtonText: "Aceptar",
+            }).then(() => {
+                $("#fecha").val('');
+                $("#hora").val('');
+                $("#opciones").val();
+                $("#contratistas").val();
+                $("#formFileSm").val('');
+                $("#carta").val('');
+            });
+        } else {
+            alert('Error')
         }
-
-    });
-
-
+    } catch(error) {
+        console.error(error);
+    }
 }
 
 

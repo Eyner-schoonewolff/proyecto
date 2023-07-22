@@ -8,6 +8,7 @@ from psycopg2 import extras
 from datetime import date, time
 import datetime
 
+
 class Solicitar:
     def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="",
                  problema="", id_estado="", id_solicitud="", id_usuario: int = "") -> None:
@@ -29,21 +30,17 @@ class Solicitar:
 
     # agregar solicitud
 
-
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
-
         segundo = datetime.datetime.now()
-
-        print(self.hora)
 
         if self.hora is not None:
             hora = self.hora + ':' + str(segundo.second)
         else:
-            hora = str(segundo.second) 
-    
+            hora = str(segundo.second)
+
         informacion = (self.contratista, self.id_usuario, self.tipo_contratista,
-                    self.fecha, hora, self.evidencia, self.problema)
+                       self.fecha, hora, self.evidencia, self.problema)
 
         query_informacion = """
                     INSERT INTO solicitud 
@@ -51,7 +48,7 @@ class Solicitar:
                     VALUES (%s, %s, %s, %s, %s, %s, %s, 1)
                 """
         cursor.execute(query_informacion, informacion)
-        db.connection.commit()
+        # db.connection.commit()
 
         return True
 
