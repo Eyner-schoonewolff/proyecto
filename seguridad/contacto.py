@@ -49,7 +49,6 @@ class Contacto:
             'correo': self.correo,
             'numero': self.numero,
             'tipo': self.tipo_usuario,
-
         }
         # Cuerpo del mensaje
         body = render_template("enviar_correos.html",informacion=informacion)

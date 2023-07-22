@@ -245,6 +245,104 @@ class DatosUsuario:
             WHERE s.id_usuario_contratista = %s;"""
         cursor.execute(query, (id,))
         return cursor.fetchall()
+    
+    def datos_solicitudes(self, id):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """ SELECT  e.nombre,count(id_estado) as contador,
+                CASE
+                WHEN s.id_estado = 1 THEN '#3346FF'
+                WHEN s.id_estado = 2 THEN '#0cde00'
+                WHEN s.id_estado = 3 THEN '#FFF033'
+                ELSE '#E20202'
+                END as color
+                FROM solicitud s
+                left join estado e on e.id = s.id_estado 
+                where id_usuario_contratista = %s
+                GROUP BY e.nombre, s.id_estado
+                ORDER BY s.id_estado;"""
+        cursor.execute(query, (id,))
+        return cursor.fetchall()
+    
+    def datosestadisticaslinea(self, id):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """ SELECT  count(s.id) as contador,
+        case when TO_CHAR(s.horario,'MM') = '01' then 'Enero' 
+        when TO_CHAR(s.horario,'MM') = '02' then 'Febrero'
+        when TO_CHAR(s.horario,'MM') = '03' then 'Marzo' 
+        when TO_CHAR(s.horario,'MM') = '04' then 'Abril' 
+        when TO_CHAR(s.horario,'MM') = '05' then 'Mayo'
+        when TO_CHAR(s.horario,'MM') = '06' then 'Junio'
+        when TO_CHAR(s.horario,'MM') = '07' then 'Julio' 
+        when TO_CHAR(s.horario,'MM') = '08' then 'Agosto' 
+        when TO_CHAR(s.horario,'MM') = '09' then 'Septiembre' 
+        when TO_CHAR(s.horario,'MM') = '10' then 'Octubre' 
+        when TO_CHAR(s.horario,'MM') = '11' then 'Noviembre'
+        ELSE 'Diciembre'
+        end as mes,
+        case when TO_CHAR(s.horario,'MM') = '01' then 'rgb(244, 67, 54)' 
+        when TO_CHAR(s.horario,'MM') = '02' then 'rgb(74, 20, 140)'
+        when TO_CHAR(s.horario,'MM') = '03' then 'rgb(49, 27, 146)' 
+        when TO_CHAR(s.horario,'MM') = '04' then 'rgb(33, 150, 243)' 
+        when TO_CHAR(s.horario,'MM') = '05' then 'rgb(0, 137, 123)'
+        when TO_CHAR(s.horario,'MM') = '06' then 'rgb(76, 175, 80)'
+        when TO_CHAR(s.horario,'MM') = '07' then 'rgb(255, 235, 59)' 
+        when TO_CHAR(s.horario,'MM') = '08' then 'rgb(245, 127, 23)' 
+        when TO_CHAR(s.horario,'MM') = '09' then 'rgb(0, 56, 196)' 
+        when TO_CHAR(s.horario,'MM') = '10' then 'rgb(161, 2, 175)' 
+        when TO_CHAR(s.horario,'MM') = '11' then 'rgb(38, 164, 26)'
+        ELSE 'rgb(1, 234, 220)'
+        end as color
+        FROM solicitud s
+        join estado e on e.id = s.id_estado 
+        where id_usuario_contratista = %s
+        group by TO_CHAR(s.horario,'YYYY-MM'),TO_CHAR(s.horario,'MM')
+        order by TO_CHAR(s.horario,'MM');"""
+        cursor.execute(query, (id,))
+        return cursor.fetchall()
+
+    def datosestadisticastorta(self, id):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """SELECT  trunc(avg(c.id_numero_estrellas),1) as prom,
+            case when TO_CHAR(s.horario,'MM') = '01' then 'Enero' 
+            when TO_CHAR(s.horario,'MM') = '02' then 'Febrero'
+            when TO_CHAR(s.horario,'MM') = '03' then 'Marzo' 
+            when TO_CHAR(s.horario,'MM') = '04' then 'Abril' 
+            when TO_CHAR(s.horario,'MM') = '05' then 'Mayo'
+            when TO_CHAR(s.horario,'MM') = '06' then 'Junio'
+            when TO_CHAR(s.horario,'MM') = '07' then 'Julio' 
+            when TO_CHAR(s.horario,'MM') = '08' then 'Agosto' 
+            when TO_CHAR(s.horario,'MM') = '09' then 'Septiembre' 
+            when TO_CHAR(s.horario,'MM') = '10' then 'Octubre' 
+            when TO_CHAR(s.horario,'MM') = '11' then 'Noviembre'
+            ELSE 'Diciembre'
+            end as mes,
+            case when TO_CHAR(s.horario,'MM') = '01' then 'rgb(244, 67, 54)' 
+            when TO_CHAR(s.horario,'MM') = '02' then 'rgb(74, 20, 140)'
+            when TO_CHAR(s.horario,'MM') = '03' then 'rgb(49, 27, 146)' 
+            when TO_CHAR(s.horario,'MM') = '04' then 'rgb(33, 150, 243)' 
+            when TO_CHAR(s.horario,'MM') = '05' then 'rgb(0, 137, 123)'
+            when TO_CHAR(s.horario,'MM') = '06' then 'rgb(76, 175, 80)'
+            when TO_CHAR(s.horario,'MM') = '07' then 'rgb(255, 235, 59)' 
+            when TO_CHAR(s.horario,'MM') = '08' then 'rgb(245, 127, 23)' 
+            when TO_CHAR(s.horario,'MM') = '09' then 'rgb(0, 56, 196)' 
+            when TO_CHAR(s.horario,'MM') = '10' then 'rgb(161, 2, 175)' 
+            when TO_CHAR(s.horario,'MM') = '11' then 'rgb(38, 164, 26)'
+            ELSE 'rgb(1, 234, 220)'
+            end as color
+            FROM solicitud s
+            join estado e on e.id = s.id_estado
+            join calificacion c on c.id_solicitud = s.id
+            where id_usuario_contratista = %s
+            group by TO_CHAR(s.horario,'YYYY-MM'),TO_CHAR(s.horario,'MM')
+            order by TO_CHAR(s.horario,'MM');"""
+        cursor.execute(query, (id,))
+        return cursor.fetchall()
+    
+    def ocupaciones_(self):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """select id,nombre from ocupacion;"""
+        cursor.execute(query)
+        return cursor.fetchall()
 
 
 class DatoUnicoEmail(Exception):

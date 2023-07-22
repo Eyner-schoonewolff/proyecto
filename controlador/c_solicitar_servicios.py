@@ -1,24 +1,30 @@
-from flask import request, session, redirect, url_for
+from flask import request, redirect, url_for
 import os
 import uuid
 from werkzeug.utils import secure_filename
 from seguridad.Model_solicitar_servicio import Solicitar
 from decorador.decoradores import *
+from flask_jwt_extended import get_jwt_identity
 
 
 class Solicitar_controlador():
     def servicio(self):
-        logueado = session.get('login', False)
-        fecha = request.form.get('fecha')
-        hora = request.form.get('hora')
-        tipo_contratista = request.form.get('servicio')
-        contratista = request.form.get('contratista')
-        problema = request.form.get('problema')
+        identificadores = get_jwt_identity()
+        id_usuario=identificadores.get('id')
+        nombre = identificadores.get('username')
+        tipo = identificadores.get('tipo_usuario')
 
-        if not logueado:
-            return redirect(url_for('login.index'))
+        if request.method=='GET':
+            return {'nombre':nombre,'tipo':tipo}
+        
+        fecha = request.form['fecha']
+        hora = request.form['hora']
+        contratista = request.form['contratista']
+        problema = request.form['problema']
+        tipo_contratista = request.form['servicio']
 
         file = request.files.get('evidencia')
+
         if not (file is None):
             filename = secure_filename(file.filename)
             # Capturando extensión del archivo ejemplo: (.png, .jpg, .pdf ...etc)
@@ -34,18 +40,20 @@ class Solicitar_controlador():
                               contratista=contratista,
                               tipo_contratista=tipo_contratista,
                               evidencia=nuevo_nombre_file,
-                              problema=problema
+                              problema=problema,
+                              id_usuario=id_usuario
                               )
 
-        valor = solicitar.agregar()
-        
+        # valor = solicitar.agregar()
+        valor=True
         if valor:
             return {"numero": 1}
         else:
             return {"numero": 0}
 
     def cancelar(self, id):
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
+        tipo_usuario = identificadores.get('tipo_usuario')
         eliminar_solicitud = Solicitar()
 
         if eliminar_solicitud.eliminar(id=id) and tipo_usuario != 'Admin':

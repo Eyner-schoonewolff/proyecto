@@ -5,8 +5,8 @@ import datetime
 from psycopg2 import extras
 import json
 from psycopg2 import extras
-from datetime import datetime, date, time
-
+from datetime import date, time
+import datetime
 
 class Solicitar:
     def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="",
@@ -29,19 +29,26 @@ class Solicitar:
 
     # agregar solicitud
 
+
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
 
         segundo = datetime.datetime.now()
-        hora = self.hora+':'+repr(segundo.second)
 
-        informacion = (self.contratista, self.id_usuario, self.tipo_contratista, self.fecha, hora, self.evidencia,
-                       self.problema)
+        print(self.hora)
+
+        if self.hora is not None:
+            hora = self.hora + ':' + str(segundo.second)
+        else:
+            hora = str(segundo.second) 
+    
+        informacion = (self.contratista, self.id_usuario, self.tipo_contratista,
+                    self.fecha, hora, self.evidencia, self.problema)
 
         query_informacion = """
                     INSERT INTO solicitud 
-                    (id_usuario_contratista,id_usuario_cliente,id_ocupacion_solicitud,horario,hora,evidencia,descripcion,id_estado)
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,1)
+                    (id_usuario_contratista, id_usuario_cliente, id_ocupacion_solicitud, horario, hora, evidencia, descripcion, id_estado)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, 1)
                 """
         cursor.execute(query_informacion, informacion)
         db.connection.commit()

@@ -72,8 +72,8 @@ $(document).ready(function () {
                 }
 
             } else if (perfil.tipo == "Cliente") {
-
                 nvar.innerHTML = nvarCliente;
+
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
@@ -87,6 +87,7 @@ $(document).ready(function () {
                 h5_nombre_usuario.appendChild(nombre_texto);
                 tipo_usuario.appendChild(texto_tipo);
 
+                console.log(perfil.perfiles_usuario);
 
                 if (perfil.perfiles_usuario.length > 0) {
 

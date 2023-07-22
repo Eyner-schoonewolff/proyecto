@@ -85,22 +85,10 @@ class Menu_controlador():
                 contratista_consulta.clear()
                 contratistas = solicitar.consultar_contratista()
                 contratista_consulta.append(contratistas)
+                print(contratistas)
                 return jsonify({'contratista_consulta': contratista_consulta})
-
             return jsonify({'contratista_consulta': 0})
 
-        else:
-            nombre_usuario = session.get('username')
-            tipo_usuario = session.get('tipo_usuario')
-            email = session.get('email')
-            numero = session.get('numero_celular')
-
-            return jsonify({'template': '/solicitar.html',
-                            'nombre': nombre_usuario,
-                            'tipo': tipo_usuario,
-                            'email': email,
-                            'numero': numero,
-                            'contratista_consulta': contratista_consulta})
 
     def consultar(self):
         identificadores = get_jwt_identity()
@@ -227,30 +215,35 @@ class Menu_controlador():
 
     def enviar_correos(self):
         json = request.get_json()
+        identificadores = get_jwt_identity()
+
         correo = json['correo']
         nombre = json['nombre']
         numero = json['numero']
         asunto = json['asunto']
         mensaje = json['mensaje']
+        tipo_usuario=identificadores.get('tipo_usuario')
+        id = identificadores.get('id')
 
         correo = Contacto(correo=correo, nombre=nombre,
-                          numero=numero, asunto=asunto, mensaje=mensaje)
+                          numero=numero, asunto=asunto, mensaje=mensaje,tipo_usuario=tipo_usuario,id_usuario=id)
         try:
             if correo.validacion_contacto():
                 raise ValidacionDatosContacto(
                     'No se pudo enviar el correo, hubo acceso a los datos')
 
             if correo.enviar_correos():
-                return jsonify({"actualizar": True, "endpoint": "/contacto", 'mensaje': 'Por favor espere la respuesta de serviciossbarranquilla@gmail.com'})
+                return jsonify({"actualizar": True, "endpoint": "../templates/contacto.html", 'mensaje': 'Por favor espere la respuesta de serviciossbarranquilla@gmail.com'})
 
         except ValidacionDatosContacto as exepcion:
-            return jsonify({'actualizar': False, "endpoint": "/contacto", 'mensaje': str(exepcion), 'titulo': 'Ups... Hubo un problema con los datos'})
+            return jsonify({'actualizar': False, "endpoint": "../templates/contacto.html", 'mensaje': str(exepcion), 'titulo': 'Ups... Hubo un problema con los datos'})
 
         except Exception as exepcion:
-            return jsonify({'actualizar': False, "endpoint": "/contacto", 'mensaje': str(exepcion), 'titulo': 'Lo lamentamos, hubo un problema con el sevridor...'})
+            return jsonify({'actualizar': False, "endpoint": "../templates/contacto.html", 'mensaje': str(exepcion), 'titulo': 'Lo lamentamos, hubo un problema con el sevridor...'})
 
     def perfiles_contratista(self):
-        nombre_usuario = session.get('username')
-        tipo_usuario = session.get('tipo_usuario')
+        identificadores = get_jwt_identity()
+        nombre = identificadores.get('username')
+        tipo_usuario=identificadores.get('tipo_usuario')
 
-        return jsonify({'template': '/perfiles_contratistas.html', 'nombre': nombre_usuario, 'tipo': tipo_usuario})
+        return jsonify({'template': '/perfiles_contratistas.html', 'nombre': nombre, 'tipo': tipo_usuario})

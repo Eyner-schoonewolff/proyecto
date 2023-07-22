@@ -96,7 +96,7 @@ $(document).ready(function () {
                 document.getElementById("info-ocupacion").value = datos_usuario.ocupacion;
                 document.getElementById("info-ocupacion").value = datos_usuario.ocupacion;
                 document.getElementById("descricpion_input").value = datos_usuario.descripcion;
-
+             
 
             }
 

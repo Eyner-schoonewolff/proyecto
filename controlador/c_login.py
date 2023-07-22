@@ -1,7 +1,7 @@
 from seguridad.login import *
 from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import *
-from flask import redirect, url_for, session, request, jsonify
+from flask import redirect, url_for, request, jsonify
 from flask_jwt_extended import create_access_token
 
 

@@ -20,12 +20,12 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#menulateral">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand text-white" href="../templates/home.html">Bienvenido Usuario  </a>
-        <a href="{{url_for('login.logout')}}" class="btn btn-danger">Cerrar sesion</a>
+        <a id="tipo_usuario"  class="navbar-brand text-white" href="../templates/home.html">Bienvenido Usuario  </a>
+        <a href="../templates/index.html" class="btn btn-danger">Cerrar sesion</a>
         <!-- off camvas -->
         <section class="offcanvas offcanvas-start " id="menulateral" tabindex="-1">
             <div class="offcanvas-header" data-bs-theme="dark">
-                <h5 class="offcanvas-title">{{nombre}}</h5>
+                <h5 id="nombre_usuario" class="offcanvas-title"></h5>
                 <button class="btn-close" type="button" aria-label="Close" data-bs-dismiss="offcanvas"></button>
             </div>
 
@@ -36,7 +36,7 @@
                     <li class="nav-item p-3 py-md-1"><a href="../templates/perfiles.html" class="nav-link">CALIFICACIONES</a></li>
                     <li class="nav-item p-3 py-md-1"><a href="../templates/solicitar.html" class="nav-link">SOLICITAR</a></li>
                     <li class="nav-item p-3 py-md-1"><a href="../templates/consultar.html" class="nav-link">CONSULTAR</a></li>
-                    <li class="nav-item p-3 py-md-1"><a href="..templates/calificar.html" class="nav-link">CALIFICAR</a></li>
+                    <li class="nav-item p-3 py-md-1"><a href="../templates/calificar.html" class="nav-link">CALIFICAR</a></li>
                     <li class="nav-item p-3 py-md-1"><a href="../templates/actualizar.html" class="nav-link">MODIFICAR</a></li>
                     <li class="nav-item p-3 py-md-1"><a href="../templates/contacto.html" class="nav-link">CONTACTO</a></li>
                 </ul>

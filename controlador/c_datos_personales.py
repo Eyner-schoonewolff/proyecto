@@ -188,13 +188,51 @@ class Datos_personales_controlador():
             return {"numero": 2, 'home': '/actualizar'}
 
     def informacion_contratista(self):
+        identificadores = get_jwt_identity()
+        nombre = identificadores.get('username')
+        tipo = identificadores.get('tipo_usuario')
         datos_usuario = DatosUsuario()
         datos = datos_usuario.informacion_contratistas()
-        return jsonify({'perfiles': datos})
+        return jsonify({'perfiles': datos, 'nombre': nombre, 'tipo': tipo})
 
     def eventos(self):
         identificadores = get_jwt_identity()
         id = identificadores.get('id')
+        nombre = identificadores.get('username')
+        tipo = identificadores.get('tipo_usuario')
         datos_usuario = DatosUsuario()
         datos = datos_usuario.eventos_contratistas(id)
-        return jsonify({'eventos': datos})
+        return jsonify({'eventos': datos, 'nombre': nombre, 'tipo': tipo})
+
+    def datosestadistica(self):
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
+        datos_usuario = DatosUsuario()
+        datos = datos_usuario.datos_solicitudes(id)
+        return datos
+
+    def datosestadisticaslinea(self):
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
+        datos_usuario = DatosUsuario()
+        datos = datos_usuario.datosestadisticaslinea(id)
+        return datos
+
+    def datosestadisticastorta(self):
+        identificadores = get_jwt_identity()
+        id = identificadores.get('id')
+        datos_usuario = DatosUsuario()
+        datos = datos_usuario.datosestadisticastorta(id)
+        return datos
+
+    def header_usuarios(self):
+
+        identificadores = get_jwt_identity()
+        nombre = identificadores.get('username')
+        tipo = identificadores.get('tipo_usuario')
+        return {"tipo": tipo, "nombre": nombre}
+
+    def ocupaciones_(self):
+        datos_usuario = DatosUsuario()
+        datos = datos_usuario.ocupaciones_()
+        return {"datos": datos}

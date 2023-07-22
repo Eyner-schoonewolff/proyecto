@@ -1,5 +1,6 @@
 from seguridad.registrar import *
 from decorador.decoradores import *
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 class Registrar_controlador():
 

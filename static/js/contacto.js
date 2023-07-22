@@ -39,35 +39,26 @@ $(document).ready(function () {
                 a_tipo_usuario.appendChild(tipo_usuario_texto);
                 h5_nombre_usuario.appendChild(nombre_texto);
 
-
+                document.getElementById("nombreContacto").value = contacto.nombre;
+                document.getElementById("emailContacto").value = contacto.usuario.correo;
+                document.getElementById("telefonoContacto").value = contacto.usuario.celular;
               
 
             }
-            else if (datos_usuario.tipo == "Cliente") {
+            else if (contacto.tipo == "Cliente") {
                 nvar.innerHTML = nvarCliente;
 
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
                 // Crea nodos de texto para tipo_usuario y nombre
-                let tipo_usuario_texto = document.createTextNode(datos_usuario.tipo);
-                let nombre_texto = document.createTextNode(datos_usuario.nombre);
+                let tipo_usuario_texto = document.createTextNode(contacto.tipo);
+                let nombre_texto = document.createTextNode(contacto.nombre);
 
                 // Agrega los nodos de texto a los elementos del DOM
                 a_tipo_usuario.appendChild(tipo_usuario_texto);
                 h5_nombre_usuario.appendChild(nombre_texto);
 
-                document.getElementById("h2_nombre").innerText = "Datos personales de " + datos_usuario.nombre;
-
-                document.getElementById("info-nombre").value = datos_usuario.nombre;
-
-                document.getElementById("info-email").value = datos_usuario.email;
-                document.getElementById("info-documento").value = datos_usuario.numero_documento;
-                document.getElementById("info-direccion").value = datos_usuario.direccion;
-                document.getElementById("info-numero_celular").value = datos_usuario.numero;
-                document.getElementById("info-ocupacion").value = datos_usuario.ocupacion;
-                document.getElementById("info-ocupacion").value = datos_usuario.ocupacion;
-                document.getElementById("descricpion_input").value = datos_usuario.descripcion;
 
 
             }

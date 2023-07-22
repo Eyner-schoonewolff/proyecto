@@ -1,4 +1,5 @@
 document.querySelector("#btn-registro").addEventListener('click', () => {
+
     rol = document.querySelector("#seleccion_rol").value
     email = document.querySelector("#email").value
     nombre = document.querySelector("#nombre").value
@@ -6,7 +7,7 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
     numero_documento = document.querySelector('#numeroDocumento').value
     tipo_documento = document.querySelector("#documento").value
     descripcion = document.querySelector('#descricpion_input')
-    descripcion = descripcion.value ?? "" ;
+    descripcion = descripcion.value ?? "";
 
     if (rol == 0) {
         Swal.fire({
@@ -55,13 +56,18 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
         numero_documento,
         descripcion
     }
-
+    let token = localStorage.getItem('jwt-token');
+    
     $.ajax({
         url: 'http://127.0.0.1:3000/auth_registro',
         method: 'POST',
         data: JSON.stringify(datos),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
         success: function (respuesta) {
             if (respuesta.registro) {
                 Swal.fire({
@@ -101,7 +107,7 @@ document.querySelector("#seleccion_rol")
                 divSelect.removeAttribute('hidden', false);
             } else if (rol == 0) {
                 divSelect.setAttribute('hidden', false);
-            
+
             } else if (rol == 3) {
                 divSelect.setAttribute('hidden', true);
             }
