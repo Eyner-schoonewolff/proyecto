@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for
+from flask import request
 import os
 import uuid
 from seguridad.Model_solicitar_servicio import Solicitar
@@ -7,17 +7,15 @@ from flask_jwt_extended import get_jwt_identity
 from PIL import Image
 import base64
 from io import BytesIO
-import asyncio
 
 
 class Solicitar_controlador():
 
-    async def guardar_imagen(self, file):
+    def guardar_imagen(self, file):
         image = self.base64_to_image(file)
         extension = self.get_base64_extension(image)
         nuevo_nombre_file = str(uuid.uuid4()) + '.' + extension
-        upload_path = os.path.join('static/img', nuevo_nombre_file)
-
+        upload_path = os.path.join('evidencias/img', nuevo_nombre_file)
         # Guarda los datos binarios en el archivo en el sistema de archivos.
         image.save(upload_path)
 
@@ -38,29 +36,23 @@ class Solicitar_controlador():
             tipo_contratista = json['servicio']
             file = json['evidencia']
 
+
             if file:
-                asyncio.run(self.guardar_imagen(file))
-                # asyncio.create_task(self.guardar_imagen(file))
-                # image = self.base64_to_image(file)
-                # extension = self.get_base64_extension(image)
-                # nuevo_nombre_file = str(uuid.uuid4()) +'.'+ extension
-                # upload_path = os.path.join('static/img', nuevo_nombre_file)
-                # # Guarda los datos binarios en el archivo en el sistema de archivos.
-                # image.save(upload_path)
+                nuevo_nombre_file=self.guardar_imagen(file)
             else:
                 nuevo_nombre_file = ""
 
-            # solicitar = Solicitar(fecha=fecha,
-            #                       hora=hora,
-            #                       contratista=contratista,
-            #                       tipo_contratista=tipo_contratista,
-            #                       evidencia=nuevo_nombre_file,
-            #                       problema=problema,
-            #                       id_usuario=id_usuario
-            #                       )
-            # valor = solicitar.agregar()
-            valor = True
-
+            solicitar = Solicitar(fecha=fecha,
+                                  hora=hora,
+                                  contratista=contratista,
+                                  tipo_contratista=tipo_contratista,
+                                  evidencia=nuevo_nombre_file,
+                                  problema=problema,
+                                  id_usuario=id_usuario
+                                  )
+            
+            valor = solicitar.agregar()
+            
             if valor:
                 return {"numero": 1}
             else:
@@ -69,9 +61,19 @@ class Solicitar_controlador():
             return {'nombre': nombre, 'tipo': tipo}
 
     def base64_to_image(self, base64_string: str):
+        print(base64_string[:40])
         bytes_image = base64.b64decode(base64_string.split(",")[1])
         image = Image.open(BytesIO(bytes_image))
         return image
+    
+    def get_base64_extension(self, img: str):
+        img_format = img.format.lower()
+        return img_format
+
+
+    # def base64_to_image(self, base64_string: str):
+    #     image_bytes = base64.b64decode(base64_string)
+    #     return Image.open(io.BytesIO(image_bytes))
 
     # def cancelar(self, id):
     #     identificadores = get_jwt_identity()
