@@ -1,0 +1,38 @@
+.panel{
+
+    display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    flex-direction: row;
+    /* align-items: flex-end; */
+    flex: 95%;
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+body {
+  
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+    /* background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed; */
+    overflow-x: hidden;
+    overflow-y: auto;
+  margin: auto;
+  padding: auto;
+
+}
+
+#titulo {
+    font-size: 35px;
+    color: white;
+    font: bold;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fondo{
+    background-color: white !important;
+    margin: 2px;
+
+}

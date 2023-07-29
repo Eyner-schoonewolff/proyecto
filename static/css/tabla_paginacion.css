@@ -1,0 +1,41 @@
+
+table th {
+    background-color: #1e293b !important;
+    color: white;
+}
+table>tbody>tr>td {
+    vertical-align: middle !important;
+}
+
+/*para alinear los botones y cuadro de busqueda*/
+.btn-group, .btn-group-vertical {
+    position: absolute !important;
+}
+
+.dataTables_wrapper .btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.dataTables_wrapper .btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.dataTables_wrapper .btn-info {
+    background-color: #0dcaf0;
+    color: rgb(0, 0, 0);
+}
+
+body{
+    /* min-height: 100vh; */
+    background: linear-gradient(to bottom right, #052648, #0f078c, #041ac4, #052648);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+    
+}
+
+#paginacion_filter{
+    margin: 2%;
+}
