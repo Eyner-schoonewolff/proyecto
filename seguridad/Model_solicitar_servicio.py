@@ -1,4 +1,4 @@
-from flask import session
+from flask import jsonify
 from db.database import *
 from typing import Dict
 import datetime
@@ -7,6 +7,7 @@ import json
 from psycopg2 import extras
 from datetime import date, time
 import datetime
+from functools import partial
 
 
 class Solicitar:
@@ -22,13 +23,21 @@ class Solicitar:
         self.id_solicitud = id_solicitud
         self.id_usuario = id_usuario
 
-    def custom_json_serializer(self, obj):
-        if isinstance(obj, (datetime, date, time)):
-            return obj.isoformat()
-        else:
-            return str(obj)
+    def convertir_a_formato_json(self, resultados):
+        informacion = []
 
-    # agregar solicitud
+        for row in resultados:
+            data = {}
+            for key, value in row.items():
+                if isinstance(value, date):
+                    data[key] = value.isoformat()
+                elif isinstance(value, time):
+                    data[key] = value.isoformat()
+                else:
+                    data[key] = value
+            informacion.append(data)
+
+        return json.dumps(informacion)
 
     def agregar(self) -> bool:
         cursor = db.connection.cursor()
@@ -48,7 +57,7 @@ class Solicitar:
                     VALUES (%s, %s, %s, %s, %s, %s, %s, 1)
                 """
         cursor.execute(query_informacion, informacion)
-        # db.connection.commit()
+        db.connection.commit()
 
         return True
 
@@ -107,33 +116,84 @@ class Solicitar:
                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
                INNER JOIN estado e ON s.id_estado = e.id
                LEFT JOIN calificacion c ON c.id_solicitud=s.id
-               WHERE s.id_usuario_contratista=%s and id_numero_estrellas is null 
+               WHERE s.id_usuario_contratista=%s
                GROUP BY s.id;
          """
         cursor.execute(query, (self.id_usuario,))
         result = cursor.fetchall()
-        json_result = json.dumps(result, default=self.custom_json_serializer)
 
-        return json_result
+        convertir_json = self.convertir_a_formato_json(result)
+        return convertir_json
 
-    def cliente(self) -> Dict:
+    def contratista_calificar(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-           SELECT s.id,  MAX(s.horario) as horario, MAX(e.nombre) as estado, MAX(s.id_ocupacion_solicitud), MAX(o.nombre) as ocupacion,  MAX(udp.nombre_completo) as nombre,  MAX(udp.numero_celular) as numero
+     SELECT s.id,  s.horario as horario, e.nombre as estado,
+       s.id_ocupacion_solicitud as id_ocupacion, o.nombre as ocupacion,
+       udp.nombre_completo as nombre, udp.numero_celular as numero, udp.direccion as direccion
+            FROM solicitud s
+            INNER JOIN usuarios u ON s.id_usuario_contratista = u.id
+            INNER JOIN ocupacion o ON s.id_ocupacion_solicitud = o.id
+            INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
+            INNER JOIN estado e ON s.id_estado = e.id
+            LEFT JOIN (
+                SELECT id_solicitud, id_numero_estrellas
+                FROM calificacion
+                WHERE id_usuario = %s
+            ) c ON c.id_solicitud = s.id
+            WHERE s.id_usuario_cliente = %s AND e.nombre = 'Finalizada' and c.id_numero_estrellas is null;
+         """
+        cursor.execute(query, (self.id_usuario, self.id_usuario,))
+        result = cursor.fetchall()
+
+        convertir_json = self.convertir_a_formato_json(result)
+        return convertir_json
+
+    def cliente_calificar(self):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """
+             SELECT s.id, udp.nombre_completo as nombre, udp.numero_celular numero, s.horario as horario, s.hora as hora, e.nombre as estado, s.evidencia as evidencia, s.descripcion as descripcion, udp.direccion as direccion, c.id_numero_estrellas as estrellas
+                FROM solicitud s
+                INNER JOIN usuarios u ON s.id_usuario_cliente=u.id
+                INNER JOIN usuario_ocupaciones uo ON s.id_usuario_contratista=uo.id_usuario
+                INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales = udp.id
+                INNER JOIN estado e ON s.id_estado = e.id
+                LEFT JOIN (
+                    SELECT id_solicitud, id_numero_estrellas
+                    FROM calificacion
+                    WHERE id_usuario = %s
+                ) c ON c.id_solicitud = s.id
+                WHERE s.id_usuario_contratista=%s AND e.nombre = 'Finalizada' and c.id_numero_estrellas is null
+                GROUP BY s.id, udp.nombre_completo, udp.numero_celular, s.horario, s.hora, e.nombre, s.evidencia, s.descripcion, udp.direccion, c.id_numero_estrellas;
+         """
+        cursor.execute(query, (self.id_usuario, self.id_usuario,))
+        resultos = cursor.fetchall()
+
+        resultado_json = self.convertir_a_formato_json(resultos)
+        return resultado_json
+
+    def cliente(self):
+        cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
+        query = """
+             SELECT s.id,  MAX(s.horario) as horario,MAX(s.hora) as hora, MAX(e.nombre) as estado, MAX(s.id_ocupacion_solicitud) as id_ocupacion, MAX(o.nombre) as ocupacion,  MAX(udp.nombre_completo) as nombre,  MAX(udp.numero_celular) as numero
                 FROM solicitud s
                 INNER JOIN usuarios u ON s.id_usuario_contratista=u.id
                 INNER JOIN ocupacion o ON s.id_ocupacion_solicitud=o.id
                 INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                 INNER JOIN estado e ON s.id_estado=e.id
                 LEFT JOIN calificacion c ON c.id_solicitud=s.id
-                WHERE s.id_usuario_cliente=%s and c.id_numero_estrellas is null 
+                WHERE s.id_usuario_cliente=%s
                 GROUP BY s.id;
          """
 
         cursor.execute(query, (self.id_usuario,))
-        return cursor.fetchall()
+        resultos = cursor.fetchall()
+
+        resultado_json = self.convertir_a_formato_json(resultos)
+        return resultado_json
 
         # cambiar query 5
+
     def consultar_contratista(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
@@ -143,7 +203,7 @@ class Solicitar:
                   INNER JOIN usuario_datos_personales udp ON u.id_usuario_datos_personales=udp.id
                   INNER JOIN ocupacion o ON uo.id_ocupacion= o.id
                   WHERE uo.id_ocupacion=%s and uo.eliminado=0
-                  GROUP BY udp.nombre_completo
+                  GROUP BY udp.nombre_completo;
         """
         cursor.execute(query, (self.id_solicitud,))
         return cursor.fetchall()

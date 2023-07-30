@@ -52,7 +52,7 @@ class Solicitar_controlador():
                                   )
             
             valor = solicitar.agregar()
-            
+
             if valor:
                 return {"numero": 1}
             else:
@@ -61,7 +61,6 @@ class Solicitar_controlador():
             return {'nombre': nombre, 'tipo': tipo}
 
     def base64_to_image(self, base64_string: str):
-        print(base64_string[:40])
         bytes_image = base64.b64decode(base64_string.split(",")[1])
         image = Image.open(BytesIO(bytes_image))
         return image
@@ -71,21 +70,15 @@ class Solicitar_controlador():
         return img_format
 
 
-    # def base64_to_image(self, base64_string: str):
-    #     image_bytes = base64.b64decode(base64_string)
-    #     return Image.open(io.BytesIO(image_bytes))
+    def cancelar(self, id):
+        identificadores = get_jwt_identity()
+        tipo_usuario = identificadores.get('tipo_usuario')
+        eliminar_solicitud = Solicitar()
 
-    # def cancelar(self, id):
-    #     identificadores = get_jwt_identity()
-    #     tipo_usuario = identificadores.get('tipo_usuario')
-    #     eliminar_solicitud = Solicitar()
+        if eliminar_solicitud.eliminar(id=id) and tipo_usuario != 'Admin':
+            return redirect(url_for('menus.consultar'))
+        else:
+            eliminar_solicitud.eliminar(id=id)
+            return redirect(url_for('menus.consultar_admin'))
 
-    #     if eliminar_solicitud.eliminar(id=id) and tipo_usuario != 'Admin':
-    #         return redirect(url_for('menus.consultar'))
-    #     else:
-    #         eliminar_solicitud.eliminar(id=id)
-    #         return redirect(url_for('menus.consultar_admin'))
-
-    def get_base64_extension(self, img: str):
-        img_format = img.format.lower()
-        return img_format
+ 

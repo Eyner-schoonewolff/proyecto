@@ -85,7 +85,6 @@ class Menu_controlador():
                 contratista_consulta.clear()
                 contratistas = solicitar.consultar_contratista()
                 contratista_consulta.append(contratistas)
-                print(contratistas)
                 return jsonify({'contratista_consulta': contratista_consulta})
             return jsonify({'contratista_consulta': 0})
 
@@ -100,6 +99,7 @@ class Menu_controlador():
         consultar = Solicitar(id_usuario=id)
 
         if tipo_usuario == 'Cliente':
+       
             return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consultar_cliente': consultar.cliente()})
         elif tipo_usuario == 'Contratista':
             return jsonify({'template': 'consultar.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
@@ -182,10 +182,9 @@ class Menu_controlador():
 
         consultar = Solicitar(id_usuario=id)
 
-        if consultar.contratista_():
-            return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.contratista_()})
-
-        return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_cliente': consultar.cliente()})
+        if tipo_usuario=='Contratista':
+            return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_contratista': consultar.cliente_calificar()})
+        return jsonify({'template': 'calificacion.html', 'nombre': nombre, 'tipo': tipo_usuario, 'consulta_cliente': consultar.contratista_calificar()})
 
     def guardar_calificacion(self):
         json = request.get_json()
