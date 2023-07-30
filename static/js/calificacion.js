@@ -22,14 +22,16 @@ $(document).ready(function () {
             let nvarCliente = respuesta[1];
             let calificar = respuesta[2];
 
-            let consulta_contratista = calificar.consulta_contratista;
-
+            let consultas=""
             let nvar = document.getElementById('nvar');
-            let tipo_usuario = document.getElementById('tipo_usuario');
+            let h2_texto_calificar=document.querySelector('#calificar')
+            
 
             if (calificar.tipo == "Contratista") {
+                consultas=calificar.consulta_contratista;
                 nvar.innerHTML = nvarContratista;
-
+                
+                h2_texto_calificar.innerHTML='Calificar Clientes'
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
@@ -41,7 +43,7 @@ $(document).ready(function () {
                 a_tipo_usuario.appendChild(tipo_usuario_texto);
                 h5_nombre_usuario.appendChild(nombre_texto);
 
-                const objetos = JSON.parse(consulta_contratista);
+                const objetos = JSON.parse(consultas);
                 $(document).ready(function () {
                     objetos.forEach((consulta) => {
                         let html = "";
@@ -141,10 +143,10 @@ $(document).ready(function () {
                 });
 
             }
-            else if (perfil.tipo == "Cliente") {
+            else if (calificar.tipo == "Cliente") {
 
                 nvar.innerHTML = nvarCliente;
-
+                h2_texto_calificar.innerHTML='Calificar Contratistas';
 
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
@@ -157,7 +159,7 @@ $(document).ready(function () {
                 a_tipo_usuario.appendChild(tipo_usuario_texto);
                 h5_nombre_usuario.appendChild(nombre_texto);
 
-                const objetos = JSON.parse(consulta_contratista);
+                const objetos = JSON.parse(calificar.consulta_cliente);
                 $(document).ready(function () {
                     objetos.forEach((consulta) => {
                         let html = "";

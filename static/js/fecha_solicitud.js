@@ -29,7 +29,7 @@ async function guardarsolicitud() {
         servicio:$("#opciones").val(),
         contratista:$("#contratistas").val(),
         problema:$("#carta").val(),
-        evidencia:fileInput.data,
+        evidencia:fileInput.data || '',
     }
 
     try {

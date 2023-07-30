@@ -49,6 +49,7 @@ function ocupaciones() {
 
             if (datos.numero == 1) {
                 $.each(datos.datos, function (i, e) {
+                    console.log(e);
                     $("#agregar_ocupacion option[value='" + e.id + "']").prop("selected", true);
                     $("#agregar_ocupacion").select2()
                 });
