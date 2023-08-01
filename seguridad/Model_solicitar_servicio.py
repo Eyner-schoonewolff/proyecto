@@ -63,7 +63,7 @@ class Solicitar:
 
     # eliminar solicitud
 
-    def eliminar(self, id) -> bool:
+    def cancelar(self, id) -> bool:
         cursor = db.connection.cursor()
         valor_id = (id,)
         query = 'UPDATE solicitud SET id_estado = 3 WHERE id = %s'

@@ -17,11 +17,11 @@ def solicitar_():
     return solicitar_controlador.servicio()
 
 
-@solicitar_servi.route("/eliminar_solicitud/<id>", methods=['GET'])
+@solicitar_servi.route("/cancelar", methods=['POST','GET'])
 @cross_origin()
 @jwt_required()
 # @login_required_home
-def eliminar_(id):
+def cancelar_():
     solicitar_controlador=Solicitar_controlador()
-    return solicitar_controlador.cancelar(id)
+    return solicitar_controlador.cancelar()
 

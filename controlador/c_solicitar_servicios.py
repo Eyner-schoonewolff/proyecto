@@ -36,9 +36,8 @@ class Solicitar_controlador():
             tipo_contratista = json['servicio']
             file = json['evidencia']
 
-
             if file:
-                nuevo_nombre_file=self.guardar_imagen(file)
+                nuevo_nombre_file = self.guardar_imagen(file)
             else:
                 nuevo_nombre_file = ""
 
@@ -50,7 +49,7 @@ class Solicitar_controlador():
                                   problema=problema,
                                   id_usuario=id_usuario
                                   )
-            
+
             valor = solicitar.agregar()
 
             if valor:
@@ -64,21 +63,24 @@ class Solicitar_controlador():
         bytes_image = base64.b64decode(base64_string.split(",")[1])
         image = Image.open(BytesIO(bytes_image))
         return image
-    
+
     def get_base64_extension(self, img: str):
         img_format = img.format.lower()
         return img_format
 
-
-    def cancelar(self, id):
+    def cancelar(self):
         identificadores = get_jwt_identity()
+        json = request.get_json()
+        id = json['id']
+        confirmacion = json['confirmacion']
         tipo_usuario = identificadores.get('tipo_usuario')
-        eliminar_solicitud = Solicitar()
+        solicitar = Solicitar()
 
-        if eliminar_solicitud.eliminar(id=id) and tipo_usuario != 'Admin':
-            return redirect(url_for('menus.consultar'))
+        if tipo_usuario == 'Cliente' and confirmacion:
+            cancelar = solicitar.cancelar(id=id)
+            return {'recargar': '../templates/consultar.html', 'confirmar': cancelar, 'id': id}
+        elif tipo_usuario == 'Admin' and confirmacion:
+            cancelar = solicitar.cancelar(id=id)
+            return {'confirmar': cancelar, 'id': id}
         else:
-            eliminar_solicitud.eliminar(id=id)
-            return redirect(url_for('menus.consultar_admin'))
-
- 
+            return {'confirmar': False}
