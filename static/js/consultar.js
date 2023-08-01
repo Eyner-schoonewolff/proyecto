@@ -138,7 +138,7 @@ $(document).ready(function () {
                         $("#modal").append(modal);
 
                         const btnAbrirModal = document.getElementById(`guardar-id-${consulta.id}`);
-                        
+
                         if (btnAbrirModal) {
                             btnAbrirModal.addEventListener("click", function () {
                                 setTimeout(function () {
@@ -190,7 +190,7 @@ $(document).ready(function () {
                           <td class="mt-2">
                             ${consulta.estado === "Aceptada" || consulta.estado === "Cancelada"
                                 ? `<a class="btn btn-secondary"> <i class="bi bi-trash3"></i></a>`
-                                : ` <a class="btn btn-danger" href="http://localhost:3000//${consulta.id}"><i
+                                : ` <a type="button" id="${consulta.id}" class="btn btn-danger "><i
                                 class="bi bi-trash3">`
                             }
                           </td>
@@ -204,6 +204,62 @@ $(document).ready(function () {
                     });
                 });
 
+                $(function () {
+                    $(document).on('click', 'a[type="button"]', function (event) {
+                        let id = this.id;
+                        var confirmar_respuesta = new Boolean(false);
+
+                        Swal.fire({
+                            title: '¿Estas seguro de cancelar su solicitud?',
+                            text: "¡No podrás revertir esto!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Si, deseo cancelar!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                confirmar_respuesta.value = result.isConfirmed
+
+                            } else {
+                                confirmar_respuesta.value = result.isConfirmed;
+                            }
+
+                            $.ajax({
+                                url: 'http://localhost:3000/cancelar', type: 'POST', data: JSON.stringify({
+                                    'id': id,
+                                    'confirmacion': confirmar_respuesta.value
+                                }),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                success: function (respuesta) {
+                                    if (respuesta.confirmar) {
+                                        Swal.fire(
+                                            'Solicitud cancelada!',
+                                            'Se ha cancelado con exito.',
+                                            'success'
+                                        ).then(() => {
+                                            window.location.href = respuesta.recargar;
+                                        });
+                                    } else {
+                                        return;
+                                    }
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+
+                    });
+                });
+
+
+
             }
 
         })
@@ -213,5 +269,6 @@ $(document).ready(function () {
         });
 
 });
+
 
 

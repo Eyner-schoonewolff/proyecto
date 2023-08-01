@@ -1,4 +1,4 @@
-
+function actuzalizar(){
     document.querySelector("#btn-actuzalizar").addEventListener('click', () => {
         let token = localStorage.getItem('jwt-token');
         nombre = document.querySelector("#nombre").value;
@@ -27,14 +27,17 @@
             },
             success: function (respuesta) {
                 if (respuesta.actualizar) {
-                    window.location.href = respuesta.home
+                    // // window.location.href = respuesta.home
+                    $('#exampleModal').modal('hide'); 
+                    window.location.reload();
                 } 
             }
         });
     });
+}
 
 
-function ocupaciones() {
+function mostrar_ocupaciones() {
     let token = localStorage.getItem('jwt-token');
     $.ajax({
         url: 'http://localhost:3000/ocupaciones_contratista',
@@ -117,5 +120,5 @@ function actualizar_ocu() {
 
 }
 
-ocupaciones()
+// ocupaciones()
 
