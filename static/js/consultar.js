@@ -61,9 +61,9 @@ $(document).ready(function () {
                           <td class="mt-2">
                             ${consulta.estado === "Finalizada" || consulta.estado === "Cancelada"
                                 ? `<a class="btn btn-secondary bi bi-arrow-clockwise m-1" title="desactivado"></a>`
-                                : `<a id="guardar-id-${consulta.id}" class="btn btn-warning bi bi-arrow-clockwise m-1" title="actualizar estado"></a>`
+                                : `<a type="button" id="guardar-id-${consulta.id}" class="btn btn-warning bi bi-arrow-clockwise m-1" title="actualizar estado"></a>`
                             }
-                            <a href="http://localhost:3000/evidencia/${consulta.id}" class="btn btn-info bi bi-eye-fill"></a>
+                            <a type="button" id="${consulta.id}" class="btn btn-info bi bi-eye-fill"></a>
                           </td>
                         </tr>
                       `;
@@ -137,6 +137,8 @@ $(document).ready(function () {
                         $("#consultar").append(html);
                         $("#modal").append(modal);
 
+
+
                         const btnAbrirModal = document.getElementById(`guardar-id-${consulta.id}`);
 
                         if (btnAbrirModal) {
@@ -149,7 +151,41 @@ $(document).ready(function () {
                             });
                         }
                     });
+
+                    $(function () {
+
+                        $(document).on('click', 'a[type="button"]', function () {
+                            let id = this.id;
+
+                            $.ajax({
+                                url: 'http://localhost:3000/evidencia/'+id,
+                                type: 'GET',
+                                // data: JSON.stringify(id),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Bearer ' + token
+                                },
+                                success: function (respuesta) {
+                                    let imagenURL = '/Users/eynerschoonewolff/python/proyecto_backend/evidencias/img' + respuesta.informacion.evidencia;
+                                    let descripcion = respuesta.informacion.descripcion;
+
+                                    let parametrosURL = '?imagenURL=' + encodeURIComponent(imagenURL) + '&descripcion=' + encodeURIComponent(descripcion);
+
+                                    // Redirigir a la nueva página con los parámetros en la URL
+                                    window.location.href = '/templates/evidencias.html' + parametrosURL;
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                }
+                            });
+                        });
+
+                    });
                 });
+
+
 
 
             }

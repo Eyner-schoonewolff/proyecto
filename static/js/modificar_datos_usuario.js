@@ -20,7 +20,8 @@ $(document).ready(function () {
             let nvarContratista = respuesta[0];
             let nvarCliente = respuesta[1];
             let datos_usuario = respuesta[2].datos[0];
-
+            
+            console.log(datos_usuario);
 
             let nvar = document.getElementById('nvar');
             let tipo_usuario = document.getElementById('tipo_usuario');
@@ -59,7 +60,7 @@ $(document).ready(function () {
                                                 <div class="col-6 mb-2">
                                                     <label class="form-label m-2" for="form3Example3">Nombre
                                                         completo</label>
-                                                    <input id="info-nombre" type="text" name="nombre" class="form-control"
+                                                    <input id="nombre_input" type="text" name="nombre" class="form-control"
                                                         value="" readonly />
 
                                                 </div>
@@ -218,7 +219,7 @@ $(document).ready(function () {
 
                  document.getElementById("h2_nombre").innerText = "Datos personales de " + datos_usuario.nombre;
 
-                document.getElementById("info-nombre").value = datos_usuario.nombre;
+                document.getElementById("nombre_input").value = datos_usuario.nombre;
 
                 document.getElementById("info-email").value = datos_usuario.email;
                 document.getElementById("info-documento").value = datos_usuario.numero_documento;
@@ -278,7 +279,7 @@ $(document).ready(function () {
                                                         <div class="col-6 mb-2">
                                                             <label class="form-label m-2" for="form3Example3">Nombre
                                                                 completo</label>
-                                                            <input type="text" name="nombre" class="form-control text-center"
+                                                            <input id="nombre_input" type="text" name="nombre" class="form-control text-center"
                                                                 value="${datos_usuario.nombre}" readonly />
                                                         </div>
         

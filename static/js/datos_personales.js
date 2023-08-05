@@ -27,9 +27,17 @@ function actuzalizar(){
             },
             success: function (respuesta) {
                 if (respuesta.actualizar) {
-                    // // window.location.href = respuesta.home
+                    // window.location.href = respuesta.home;
+                    console.log(nombre);
+
+                    document.getElementById("h2_nombre").innerText = "Datos personales de " + nombre;
+
+                    document.getElementById("nombre_input").value = nombre;
+                    document.getElementById("info-direccion").value = direccion;
+                    document.getElementById("info-numero_celular").value = numeroCelular;
+                    document.getElementById("descricpion_input").value = descripcion;
+
                     $('#exampleModal').modal('hide'); 
-                    window.location.reload();
                 } 
             }
         });

@@ -20,7 +20,6 @@ function agregar() {
         let nvar = document.getElementById('nvar');
         nvar.innerHTML = nvarCliente;
 
-        console.log(datos);
         let a_tipo_usuario = document.querySelector('#tipo_usuario');
         let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
