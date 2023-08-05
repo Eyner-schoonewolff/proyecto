@@ -25,11 +25,10 @@ class Datos_personales_controlador():
         session['login'] = True
 
         usuario = datos_usuario.obtener()
-
         if tipo == 'Contratista':
             return jsonify({'datos':
                             [
-                                {'nombre': nombre,
+                                {'nombre': usuario['nombre_completo'],
                                  'tipo': tipo,
                                  'email': email,
                                  'numero_documento': usuario['numero_documento'],
@@ -43,7 +42,7 @@ class Datos_personales_controlador():
         else:
             return jsonify({'datos':
                             [
-                                {'nombre': nombre,
+                                {'nombre': usuario['nombre_completo'],
                                  'tipo': tipo,
                                  'email': email,
                                  'numero_documento': usuario['numero_documento'],
@@ -107,7 +106,7 @@ class Datos_personales_controlador():
         datos_usuario = DatosUsuario()
 
         datos_usuario.actualizar(
-            nombre, numeroCelular, direccion, descripcion, id_udp)
+            nombre=nombre, celular=numeroCelular, direccion=direccion, descripcion=descripcion, id_usuario=id_udp)
 
         return {'actualizar': True, 'home': '../templates/actualizar.html'}
 

@@ -10,8 +10,8 @@ datos_personales = Blueprint('datos_personales', __name__, static_url_path='/sta
                              template_folder="templates")
 
 
-def notFound(error):
-    return render_template('noEncontrada.html'), 405
+# def notFound(error):
+#     return render_template('noEncontrada.html'), 405
 
 
 @datos_personales.route("/actualizar", endpoint='actualizar')

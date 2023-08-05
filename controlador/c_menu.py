@@ -135,7 +135,7 @@ class Menu_controlador():
             actualizar.actualizar_fecha_estado()
             return jsonify({"actualizar": True})
 
-    def evidencia(self, id):
+    def evidencia(self,id):
         identificadores = get_jwt_identity()
         id_evidencia = int(id)
 
@@ -146,7 +146,7 @@ class Menu_controlador():
 
         consulta = consultar.evidencia_(id=id_evidencia)
 
-        return jsonify({'template': 'evidencias.html', 'nombre': nombre, 'tipo': tipo_usuario, 'informacion': consulta})
+        return jsonify({'template': '/templates/evidencias.html', 'nombre': nombre, 'tipo': tipo_usuario, 'informacion': consulta})
 
     def contacto(self):
         identificadores = get_jwt_identity()
