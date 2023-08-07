@@ -1,4 +1,4 @@
-
+function paginacion_datatable() {
     $(document).ready(function () {
         var table = $('#paginacion_usuarios').DataTable({
             language: {
@@ -139,4 +139,5 @@
 
         // Redibujar la tabla al cambiar los campos de entrada de fecha
     });
+}
 

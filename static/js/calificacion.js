@@ -1,6 +1,71 @@
+var table;
+
+function paginacion_datatable() {
+    table = $('#paginacion').DataTable({
+        language: {
+            processing: "Tratamiento en curso...",
+            search: "Buscar&nbsp;:",
+            lengthMenu: "Agrupar de _MENU_ items",
+            info: "Mostrando del item _START_ al _END_ de un total de _TOTAL_ items",
+            infoEmpty: "No existen datos.",
+            infoFiltered: "(filtrado de _MAX_ elementos en total)",
+            infoPostFix: "",
+            loadingRecords: "Cargando...",
+            zeroRecords: "No se encontraron datos con tu busqueda",
+            emptyTable: "No hay datos disponibles en la tabla.",
+            paginate: {
+                first: "Primero",
+                previous: "Anterior",
+                next: "Siguiente",
+                last: "Ultimo"
+            },
+            aria: {
+                sortAscending: ": active para ordenar la columna en orden ascendente",
+                sortDescending: ": active para ordenar la columna en orden descendente"
+            }
+        },
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success'
+            },
+            {
+                extend: 'pdfHtml5',
+                text: '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },
+        ],
+        scrollY: 400,
+        lengthMenu: [[4, 10, -1], [5, 10, "All"]],
+    });
+}
+
+
+function agregarFilaConsulta(consulta) {
+    if (consulta.estado === "Finalizada") {
+        table.row.add([
+            consulta.nombre,
+            consulta.numero,
+            consulta.horario,
+            consulta.direccion,
+            consulta.estado,
+            `<a id="guardar-id-${consulta.id}" title="calificar" class="btn btn-success bi bi-check m-1"
+            data-bs-toggle="modal" data-bs-target="#exampleModal-${consulta.id}"></a>`
+        ]);
+    }
+}
 
 $(document).ready(function () {
-
     var respuesta = {};
     var token = localStorage.getItem('jwt-token');
 
@@ -22,16 +87,15 @@ $(document).ready(function () {
             let nvarCliente = respuesta[1];
             let calificar = respuesta[2];
 
-            let consultas=""
+            let consultas = ""
             let nvar = document.getElementById('nvar');
-            let h2_texto_calificar=document.querySelector('#calificar')
-            
+            let h2_texto_calificar = document.querySelector('#calificar')
 
             if (calificar.tipo == "Contratista") {
-                consultas=calificar.consulta_contratista;
+                consultas = calificar.consulta_contratista;
                 nvar.innerHTML = nvarContratista;
-                
-                h2_texto_calificar.innerHTML='Calificar Clientes'
+
+                h2_texto_calificar.innerHTML = 'Calificar Clientes'
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
@@ -44,32 +108,13 @@ $(document).ready(function () {
                 h5_nombre_usuario.appendChild(nombre_texto);
 
                 const objetos = JSON.parse(consultas);
-                $(document).ready(function () {
-                    objetos.forEach((consulta) => {
-                        let html = "";
-                        let modal = "";
-                        html += `
-                        <tr>
-                        ${consulta.estado === "Finalizada"
-                                ? `<tr id="fila-${consulta.id}">
-                            <td scope="row">${consulta.nombre} <a style="font-size: 1.3em;"
-                                    class="bi bi-person-circle m-2 "
-                                    data-id="${consulta.id}"></a> </td>
-                            <td>${consulta.numero}</td>
-                            <td>${consulta.horario}</td>
-                            <td>${consulta.direccion}</td>
-                            <td>${consulta.estado}</td>
-                            <td class="mt-2">
-                                <a id="guardar-id-${consulta.id}" title="calificar"
-                                    class="btn btn-success bi bi-check m-1"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal-${consulta.id}"></a>
-                            </td>
-                        </tr>`
-                                : ``
-                            }
-                      `;
-                        modal += `
+                paginacion_datatable();
+                objetos.forEach((consulta) => {
+                    let html = "";
+                    let modal = "";
+                    agregarFilaConsulta(consulta);
+           
+                    modal += `
                       <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                           id="exampleModal-${consulta.id}" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -134,19 +179,14 @@ $(document).ready(function () {
                           </div>
                       </div>
                   `;
-
-
-                        $("#consultar").append(html);
-                        $("#modal").append(modal);
-
-                    });
+                    $("#modal").append(modal);
                 });
-
+                table.draw();
             }
             else if (calificar.tipo == "Cliente") {
 
                 nvar.innerHTML = nvarCliente;
-                h2_texto_calificar.innerHTML='Calificar Contratistas';
+                h2_texto_calificar.innerHTML = 'Calificar Contratistas';
 
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
@@ -160,31 +200,10 @@ $(document).ready(function () {
                 h5_nombre_usuario.appendChild(nombre_texto);
 
                 const objetos = JSON.parse(calificar.consulta_cliente);
-                $(document).ready(function () {
+                    paginacion_datatable();
                     objetos.forEach((consulta) => {
-                        let html = "";
                         let modal = "";
-                        html += `
-                        <tr>
-                        ${consulta.estado === "Finalizada"
-                                ? `<tr id="fila-${consulta.id}">
-                            <td scope="row">${consulta.nombre} <a style="font-size: 1.3em;"
-                                    class="bi bi-person-circle m-2 "
-                                    data-id="${consulta.id}"></a> </td>
-                            <td>${consulta.numero}</td>
-                            <td>${consulta.horario}</td>
-                            <td>${consulta.direccion}</td>
-                            <td>${consulta.estado}</td>
-                            <td class="mt-2">
-                                <a id="guardar-id-${consulta.id}" title="calificar"
-                                    class="btn btn-success bi bi-check m-1"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal-${consulta.id}"></a>
-                            </td>
-                        </tr>`
-                                : ``
-                            }
-                      `;
+                        agregarFilaConsulta(consulta)
                         modal += `
                       <div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                           id="exampleModal-${consulta.id}" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -251,14 +270,12 @@ $(document).ready(function () {
                       </div>
                   `;
 
-
-                        $("#consultar").append(html);
                         $("#modal").append(modal);
 
                     });
-                });
-            }
 
+                    table.draw();
+            }
         })
 
         .catch(function (error) {
@@ -266,5 +283,3 @@ $(document).ready(function () {
         });
 
 });
-
-

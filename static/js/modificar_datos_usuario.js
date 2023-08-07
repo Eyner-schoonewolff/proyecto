@@ -272,7 +272,7 @@ $(document).ready(function () {
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-lg-12">
                                             <div id="formulario" class="mb-4 m-2">
-                                                <h2 class="fw-bold mb-5">Datos personales de ${datos_usuario.nombre}</h2>
+                                                <h2 id="h2_nombre" class="fw-bold mb-5">Datos personales de ${datos_usuario.nombre}</h2>
         
                                                 <div class="form-outline mb-5">
                                                     <div class="row">
@@ -303,7 +303,7 @@ $(document).ready(function () {
         
                                                         <div class="col mb-2">
                                                             <label class="form-label" for="form3Example3">Dirección</label>
-                                                            <input type="text" name="direccion" class="form-control"
+                                                            <input id="info-direccion" type="text" name="direccion" class="form-control"
                                                                 value="${datos_usuario.direccion}" readonly />
                                                         </div>
                                                     </div>
@@ -311,7 +311,7 @@ $(document).ready(function () {
                                                         <div class="col-12 mb-2">
                                                             <label class="form-label" for="form3Example3">Numero de
                                                                 Celular</label>
-                                                            <input type="number" name="documento" min="4" max="12"
+                                                            <input id="info-numero_celular" type="number" name="documento" min="4" max="12"
                                                                 class="form-control text-center" value="${datos_usuario.numero}" readonly />
         
                                                         </div>

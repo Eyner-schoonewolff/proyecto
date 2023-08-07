@@ -137,7 +137,7 @@ $(document).ready(function () {
                         $("#consultar").append(html);
                         $("#modal").append(modal);
 
-
+                        
 
                         const btnAbrirModal = document.getElementById(`guardar-id-${consulta.id}`);
 
@@ -151,6 +151,8 @@ $(document).ready(function () {
                             });
                         }
                     });
+
+                    paginacion_datatable();
 
                     $(function () {
 
@@ -168,7 +170,7 @@ $(document).ready(function () {
                                     'Authorization': 'Bearer ' + token
                                 },
                                 success: function (respuesta) {
-                                    let imagenURL = '/Users/eynerschoonewolff/python/proyecto_backend/evidencias/img' + respuesta.informacion.evidencia;
+                                    let imagenURL = 'http://localhost:3000/static/img/' + respuesta.informacion.evidencia;
                                     let descripcion = respuesta.informacion.descripcion;
 
                                     let parametrosURL = '?imagenURL=' + encodeURIComponent(imagenURL) + '&descripcion=' + encodeURIComponent(descripcion);
@@ -239,6 +241,8 @@ $(document).ready(function () {
 
                     });
                 });
+
+                paginacion_datatable();
 
                 $(function () {
                     $(document).on('click', 'a[type="button"]', function (event) {
