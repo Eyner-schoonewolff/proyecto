@@ -30,15 +30,17 @@ $(document).ready(function () {
 
         let a_tipo_usuario = document.querySelector('#tipo_usuario');
         let h5_nombre_usuario = document.querySelector('#nombre_usuario');
-  
+
         let nombre = data.nombre;
         // Crea nodos de texto para tipo_usuario y nombre
         let tipo_usuario_texto = document.createTextNode(tipo_usuario);
         let nombre_texto = document.createTextNode(nombre);
-  
+
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
+
+        logout();
 
       } else if (tipo_usuario === 'Cliente') {
         let nvar = document.getElementById('nvar');
@@ -46,19 +48,21 @@ $(document).ready(function () {
 
         let a_tipo_usuario = document.querySelector('#tipo_usuario');
         let h5_nombre_usuario = document.querySelector('#nombre_usuario');
-  
+
         let nombre = data.nombre;
         // Crea nodos de texto para tipo_usuario y nombre
         let tipo_usuario_texto = document.createTextNode(tipo_usuario);
         let nombre_texto = document.createTextNode(nombre);
-  
+
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
-      }
 
+        logout();
+      }
     })
     .catch(function (error) {
+      // window.location.href='../templates/index.html'
       console.error('Error al cargar los archivos:', error);
     });
 

@@ -1,3 +1,4 @@
+var token="";
 document.querySelector("#BotonLogin").addEventListener('click', async () => {
     const email = document.querySelector("#inputEmail").value;
     const contrasenia = document.querySelector("#inputcontrasenia").value;

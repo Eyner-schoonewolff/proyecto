@@ -189,7 +189,7 @@ $(document).ready(function () {
 
 
 
-
+                logout();
             }
             else if (trabajos.tipo == "Cliente") {
                 nvar.innerHTML = nvarCliente;
@@ -298,8 +298,7 @@ $(document).ready(function () {
                     });
                 });
 
-
-
+                logout();
             }
 
         })

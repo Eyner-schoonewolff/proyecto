@@ -182,6 +182,7 @@ $(document).ready(function () {
                     $("#modal").append(modal);
                 });
                 table.draw();
+                logout();
             }
             else if (calificar.tipo == "Cliente") {
 
@@ -275,6 +276,7 @@ $(document).ready(function () {
                     });
 
                     table.draw();
+                    logout();
             }
         })
 

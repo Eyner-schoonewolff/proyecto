@@ -246,6 +246,9 @@ $(document).ready(function () {
                 actuzalizar();
                 mostrar_ocupaciones();
 
+                logout();
+
+
             }
             else if (datos_usuario.tipo == "Cliente") {
                 let html = "";
@@ -394,6 +397,7 @@ $(document).ready(function () {
 
                 $("#contenedor-pagina").append(html);
 
+                logout();
             }
             actuzalizar();
 

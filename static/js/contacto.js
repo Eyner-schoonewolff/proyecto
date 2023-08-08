@@ -43,7 +43,7 @@ $(document).ready(function () {
                 document.getElementById("emailContacto").value = contacto.usuario.correo;
                 document.getElementById("telefonoContacto").value = contacto.usuario.celular;
               
-
+                logout();
             }
             else if (contacto.tipo == "Cliente") {
                 nvar.innerHTML = nvarCliente;
@@ -62,7 +62,8 @@ $(document).ready(function () {
                 document.getElementById("nombreContacto").value = contacto.nombre;
                 document.getElementById("emailContacto").value = contacto.usuario.correo;
                 document.getElementById("telefonoContacto").value = contacto.usuario.celular;
-
+                
+                logout();
             }
 
         })

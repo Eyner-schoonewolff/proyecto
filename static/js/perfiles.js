@@ -71,6 +71,8 @@ $(document).ready(function () {
                   `;
                 }
 
+                logout();
+
             } else if (perfil.tipo == "Cliente") {
                 nvar.innerHTML = nvarCliente;
 
@@ -118,6 +120,7 @@ $(document).ready(function () {
                     </div>
                   `;
                 }
+                logout();
 
             }
             // const contenido = document.getElementById('contenido');

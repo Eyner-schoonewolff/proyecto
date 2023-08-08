@@ -68,6 +68,7 @@ function agregar() {
         })
 
         $("#container_div").append(html);
+        logout();
 
     });
 }

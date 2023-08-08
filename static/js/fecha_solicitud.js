@@ -11,25 +11,25 @@ const toBase64 = file => new Promise((resolve, reject) => {
     reader.onerror = reject;
 });
 
-fileInput.addEventListener("change", function() {
+fileInput.addEventListener("change", function () {
     Main()
 })
 
 async function Main() {
-   const file = document.querySelector('#formFileSm').files[0];
-   fileInput.data = await toBase64(file);
+    const file = document.querySelector('#formFileSm').files[0];
+    fileInput.data = await toBase64(file);
 }
 
 
 console.log(token);
 async function guardarsolicitud() {
     let request = {
-        fecha:$("#fecha").val(),
-        hora:$("#hora").val(),
-        servicio:$("#opciones").val(),
-        contratista:$("#contratistas").val(),
-        problema:$("#carta").val(),
-        evidencia:fileInput.data || '',
+        fecha: $("#fecha").val(),
+        hora: $("#hora").val(),
+        servicio: $("#opciones").val(),
+        contratista: $("#contratistas").val(),
+        problema: $("#carta").val(),
+        evidencia: fileInput.data || '',
     }
 
     try {
@@ -63,7 +63,7 @@ async function guardarsolicitud() {
         } else {
             alert('Error')
         }
-    } catch(error) {
+    } catch (error) {
         console.error(error);
     }
 }
@@ -102,6 +102,31 @@ Promise.all([
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
+
+
+        document.querySelector("#logout")
+            .addEventListener("click",
+                () => {
+                    console.log('eschuchando');
+
+                    $.ajax({
+                        url: 'http://localhost:3000/logout',
+                        method: 'GET',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        success: function (respuesta) {
+                            if (respuesta.message == 'ok') {
+                                localStorage.removeItem('jwt-token');
+                                window.location.href = '../templates/index.html'
+                            }
+                        }
+                    });
+                }
+            );
     })
     .catch(function (error) {
         console.error('Error al cargar los archivos:', error);

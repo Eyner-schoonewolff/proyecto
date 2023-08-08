@@ -82,5 +82,5 @@ Promise.all([
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
 
-
+        logout();
     });
