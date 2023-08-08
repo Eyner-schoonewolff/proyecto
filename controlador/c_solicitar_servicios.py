@@ -15,7 +15,7 @@ class Solicitar_controlador():
         image = self.base64_to_image(file)
         extension = self.get_base64_extension(image)
         nuevo_nombre_file = str(uuid.uuid4()) + '.' + extension
-        upload_path = os.path.join('evidencias/img', nuevo_nombre_file)
+        upload_path = os.path.join('static/img', nuevo_nombre_file)
         # Guarda los datos binarios en el archivo en el sistema de archivos.
         image.save(upload_path)
 

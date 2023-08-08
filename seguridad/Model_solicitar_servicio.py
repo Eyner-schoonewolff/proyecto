@@ -4,7 +4,6 @@ from typing import Dict
 import datetime
 from psycopg2 import extras
 import json
-from psycopg2 import extras
 from datetime import date, time
 import datetime
 from functools import partial
