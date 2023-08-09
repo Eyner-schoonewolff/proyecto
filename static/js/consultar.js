@@ -137,7 +137,6 @@ $(document).ready(function () {
                         $("#consultar").append(html);
                         $("#modal").append(modal);
 
-                        
 
                         const btnAbrirModal = document.getElementById(`guardar-id-${consulta.id}`);
 

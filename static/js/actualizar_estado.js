@@ -76,7 +76,6 @@ function guardar_estado() {
                         'Authorization': 'Bearer ' + token
                     },
                     success: function (respuesta) {
-                        console.log(respuesta)
                         if (respuesta.actualizar) {
                             Swal.fire({
                                 title: "¡Éxito!",

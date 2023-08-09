@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var respuesta = {};
+    var respuesta ;
     var token = localStorage.getItem('jwt-token');
 
     Promise.all([
@@ -88,8 +88,6 @@ $(document).ready(function () {
                 a_tipo_usuario.appendChild(tipo_usuario_texto);
                 h5_nombre_usuario.appendChild(nombre_texto);
                 tipo_usuario.appendChild(texto_tipo);
-
-                console.log(perfil.perfiles_usuario);
 
                 if (perfil.perfiles_usuario.length > 0) {
 

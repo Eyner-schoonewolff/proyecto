@@ -66,7 +66,7 @@ function agregarFilaConsulta(consulta) {
 }
 
 $(document).ready(function () {
-    var respuesta = {};
+    var respuesta ;
     var token = localStorage.getItem('jwt-token');
 
     Promise.all([

@@ -11,7 +11,7 @@ function paginacion_datatable() {
                 infoPostFix: "",
                 loadingRecords: "Cargando...",
                 zeroRecords: "No se encontraron datos con tu busqueda",
-                emptyTable: "No hay datos disponibles en la tabla.",
+                emptyTable: "No hay solicitudes disponibles en la tabla.",
                 paginate: {
                     first: "Primero",
                     previous: "Anterior",

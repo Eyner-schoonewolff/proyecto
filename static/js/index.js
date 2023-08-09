@@ -32,7 +32,6 @@ document.querySelector("#BotonLogin").addEventListener('click', async () => {
 
             window.location.href = data.home;
             localStorage.setItem("jwt-token", data.token);
-            console.log(token);
             return data;
 
         } else {

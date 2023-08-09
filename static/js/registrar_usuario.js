@@ -79,7 +79,6 @@ document.querySelector("#btn-registro").addEventListener('click', () => {
                     window.location.href = respuesta.home
                 });
             } else {
-                console.log(respuesta.mensaje)
                 Swal.fire({
                     title: "Problema",
                     text: respuesta.mensaje,

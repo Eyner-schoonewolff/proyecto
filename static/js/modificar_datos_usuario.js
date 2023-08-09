@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var respuesta = {};
+    var respuesta ;
     var token = localStorage.getItem('jwt-token');
 
     Promise.all([
@@ -21,7 +21,6 @@ $(document).ready(function () {
             let nvarCliente = respuesta[1];
             let datos_usuario = respuesta[2].datos[0];
             
-            console.log(datos_usuario);
 
             let nvar = document.getElementById('nvar');
             let tipo_usuario = document.getElementById('tipo_usuario');

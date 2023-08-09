@@ -4,8 +4,6 @@ function logout(){
   document.querySelector("#logout")
   .addEventListener("click",
     () => {
-      console.log('eschuchando');
-  
       $.ajax({
           url: 'http://localhost:3000/logout',
           method: 'GET',

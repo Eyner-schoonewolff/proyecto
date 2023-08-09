@@ -21,7 +21,6 @@ async function Main() {
 }
 
 
-console.log(token);
 async function guardarsolicitud() {
     let request = {
         fecha: $("#fecha").val(),
@@ -46,7 +45,6 @@ async function guardarsolicitud() {
         });
 
         if (respuesta.numero == 1) {
-            console.log('entro');
             Swal.fire({
                 title: "¡Éxito!",
                 text: "Se ha realizado correctamente la solicitud",
@@ -107,8 +105,6 @@ Promise.all([
         document.querySelector("#logout")
             .addEventListener("click",
                 () => {
-                    console.log('eschuchando');
-
                     $.ajax({
                         url: 'http://localhost:3000/logout',
                         method: 'GET',

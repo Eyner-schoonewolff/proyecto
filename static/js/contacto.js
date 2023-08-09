@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    var respuesta = {};
+    var respuesta;
     var token = localStorage.getItem('jwt-token');
 
     Promise.all([
@@ -62,7 +62,7 @@ $(document).ready(function () {
                 document.getElementById("nombreContacto").value = contacto.nombre;
                 document.getElementById("emailContacto").value = contacto.usuario.correo;
                 document.getElementById("telefonoContacto").value = contacto.usuario.celular;
-                
+
                 logout();
             }
 
