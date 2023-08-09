@@ -155,7 +155,6 @@ class DatosUsuario:
             fecha_actual = datetime.datetime.now()
 
             cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
-            print(self.id_usuario)
 
             informacion = (self.observaciones, self.estrellas,
                            self.id_solicitud, self.id_usuario, cadena_fecha)

@@ -15,7 +15,7 @@ cors = CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:3000"}})
 jwt = JWTManager(app)
 app.config['SECRET_KEY'] = 'secret_key_parking'
 app.config['SESSION_TYPE'] = 'filesystem'
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=1)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(seconds=30)
 
 
 app.register_blueprint(login)

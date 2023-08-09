@@ -4,8 +4,9 @@ from flask_login import logout_user, LoginManager
 from decorador.decoradores import  *
 from controlador.c_login import Login_controlador
 from flask_cors import cross_origin
-from flask_jwt_extended import unset_jwt_cookies
-
+from flask_jwt_extended import unset_jwt_cookies,get_jwt_identity
+import jwt
+from functools import wraps
 
 login = Blueprint('login', __name__, static_url_path='/static',
                   template_folder="templates")
@@ -14,6 +15,14 @@ login_manager = LoginManager()
 
 # def notFound(error):
 #     return render_template('noEncontrada.html'),404
+
+@login.route('/proteccion')
+@jwt_required()
+@cross_origin()
+@token_requeried
+def proteccion():
+    return jsonify({'mensaje': 'ok'}),200
+ 
 
 @login.route("/inicio",endpoint='inicio', methods=["GET"])
 @cross_origin()

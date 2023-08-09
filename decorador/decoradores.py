@@ -1,6 +1,42 @@
-from flask import session, redirect, url_for, request
 from functools import wraps
+from flask import  redirect, url_for, jsonify, session,request
+from seguridad.login import *
+from flask_jwt_extended import get_jwt_identity,jwt_required
+from functools import wraps
+import jwt
 
+
+def token_requeried(f):
+    @wraps(f)
+    def ruta_proteccion(*args, **kwargs):
+        try:
+             # Verifica el token aquí antes de obtener la identidad
+            identificador: Dict = get_jwt_identity()
+            token_id = identificador.get('id')
+            print(token_id)
+            if not token_id:
+                return jsonify({'messague': 'Token is missing!'}), 403
+            print(token_id)
+        except jwt.ExpiredSignatureError:
+            return jsonify({'messague': 'Token has expired'}), 401
+        return f(*args, **kwargs)
+    return ruta_proteccion
+
+
+# def token_requeried(f):
+#     @wraps(f)
+#     def ruta_protecion(*args, **kwargs):
+#         identificador:Dict = get_jwt_identity()
+#         # token=request.args.get('token')
+#         token_id=identificador.get('id')
+#         if not token_id:
+#             return jsonify({'messague':'Token is missing!'}),403
+#         try:
+#             print(token_id)
+#         except:
+#              return jsonify({'messague':'Token is invalid'}),403
+#         return f(*args, **kwargs)
+#     return ruta_protecion
 
 def login_ruta_acceso(funcion_interna_home):
     def principal_acceso_funcion(*args, **kwargs):

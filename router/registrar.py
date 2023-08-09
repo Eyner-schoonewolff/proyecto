@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,jsonify
+from flask import Blueprint,jsonify
 from decorador.decoradores import *
 from controlador.c_registrar import *
 from flask_cors import cross_origin
@@ -11,12 +11,6 @@ def handle_unsupported_media_type_error(e):
     response = jsonify({'error': 'No se enviaron datos en el cuerpo de la solicitud'})
     response.status_code = 400
     return response
-
-@registrar.route("/registrar")
-# @login_required_login
-@cross_origin()
-def registro():
-    return render_template('registrar.html')
 
 
 @registrar.route("/auth_registro", methods=["POST", "GET"])

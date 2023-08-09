@@ -10,7 +10,6 @@ menus = Blueprint('menus', __name__, static_url_path='/static',
 @menus.route('/home', endpoint='home')
 @cross_origin()
 @jwt_required()
-# @login_required_home
 def home():
     c_menu = Menu_controlador()
     return c_menu.home()

@@ -3,6 +3,7 @@ from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import *
 from flask import redirect, url_for, request, jsonify
 from flask_jwt_extended import create_access_token
+import datetime
 
 
 class Login_controlador():
@@ -33,10 +34,12 @@ class Login_controlador():
                     'id_udp': login.usuario['id_udp'],
                     'email': login.usuario['email'],
                     'username': login.usuario["nombre"].upper(),
-                    'tipo_usuario': login.usuario["tipo"]
+                    'tipo_usuario': login.usuario["tipo"],
+                    'exp':datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
                 }
 
                 access_token = create_access_token(identity=identificadores)
+
 
                 return jsonify({
                     "login": True,
