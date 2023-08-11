@@ -5,7 +5,6 @@ from flask import redirect, url_for, request, jsonify
 from flask_jwt_extended import create_access_token
 import datetime
 
-
 class Login_controlador():
     def validar_campos_vacios(self):
         datos_usuario = DatosUsuario()
@@ -29,21 +28,26 @@ class Login_controlador():
                 raise EmailContraseniaIncorrecta(
                     "El email y/o contraseña ingresada es incorrecto")
             else:
+                # fecha_expiracion=datetime.datetime.utcnow()+ datetime.timedelta(seconds=30)
+                # unix_timestamp = int(fecha_expiracion.timestamp())
+
                 identificadores = {
                     'id': login.usuario['id'],
                     'id_udp': login.usuario['id_udp'],
                     'email': login.usuario['email'],
                     'username': login.usuario["nombre"].upper(),
                     'tipo_usuario': login.usuario["tipo"],
-                    'exp':datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
+                    'exp':datetime.datetime.utcnow()+ datetime.timedelta(minutes=1),
+                    'exp_token_seg':str(datetime.timedelta(minutes=1))
                 }
-
+                
                 access_token = create_access_token(identity=identificadores)
-
 
                 return jsonify({
                     "login": True,
                     "token": access_token,
+                    "exp":identificadores['exp'],
+                    "exp_token_seg":identificadores['exp_token_seg'],
                     "home": "/templates/home.html",
                 })
 
