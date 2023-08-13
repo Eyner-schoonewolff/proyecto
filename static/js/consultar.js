@@ -23,6 +23,9 @@ $(document).ready(function () {
 
             let nvar = document.getElementById('nvar');
 
+            let table;
+            table = document.querySelector('#paginacion_usuarios');
+
             if (trabajos.tipo == "Contratista") {
                 nvar.innerHTML = nvarContratista;
 
@@ -150,16 +153,18 @@ $(document).ready(function () {
                             });
                         }
                     });
-
-                    paginacion_datatable();
+                    if (table) {
+                        paginacion_datatable();
+                    }
 
                     $(function () {
 
                         $(document).on('click', 'a[type="button"]', function () {
                             let id = this.id;
+                            console.log(id);
 
                             $.ajax({
-                                url: 'http://localhost:3000/evidencia/'+id,
+                                url: 'http://localhost:3000/evidencia/' + id,
                                 type: 'GET',
                                 // data: JSON.stringify(id),
                                 contentType: 'application/json; charset=utf-8',
