@@ -64,7 +64,7 @@ $(document).ready(function () {
                           <td class="mt-2">
                             ${consulta.estado === "Finalizada" || consulta.estado === "Cancelada"
                                 ? `<a class="btn btn-secondary bi bi-arrow-clockwise m-1" title="desactivado"></a>`
-                                : `<a type="button" id="guardar-id-${consulta.id}" class="btn btn-warning bi bi-arrow-clockwise m-1" title="actualizar estado"></a>`
+                                : `<a id="guardar-id-${consulta.id}" class="btn btn-warning bi bi-arrow-clockwise m-1" title="actualizar estado"></a>`
                             }
                             <a type="button" id="${consulta.id}" class="btn btn-info bi bi-eye-fill"></a>
                           </td>
@@ -86,8 +86,23 @@ $(document).ready(function () {
                                         <div class="row mt-3">
                                             <div class="col-12 mb-2">
                                                 <label for="estado" class="m-2">Estado actual</label>
-                                                    <h3 id="estado_actual" class="mt-2 text-center">${consulta.estado}</h3>
-                                                    <input id="id_consulta" name="prodId" type="hidden" value=${consulta.id}>
+                                                ${consulta.estado === 'Aceptada' ? `
+
+                                                <h3 id="estado_actual" style="color:green;" class="mt-2 text-center">${consulta.estado}</h3>
+                                                <input id="id_consulta" name="prodId" type="hidden" value=${consulta.id}>
+
+                                                `: consulta.estado === 'Pendiente' ? `
+                                                <h3 id="estado_actual" style="color:darkblue;" class="mt-2 text-center">${consulta.estado}</h3>
+                                                <input id="id_consulta" name="prodId" type="hidden" value=${consulta.id}>
+                                                `
+
+                                                 : consulta.estado == 'Finalizada' ? `
+                                                <h3 id="estado_actual" style="color:red;" class="mt-2 text-center">${consulta.estado}</h3>
+                                                <input id="id_consulta" name="prodId" type="hidden" value=${consulta.id}>
+                                                `
+
+                                    : ''}
+                                                 
                                             </div>
                                          </div>
                                 
