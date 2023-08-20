@@ -15,7 +15,11 @@ class DataBaseConnector:
             user=self.user,
             password=self.password,
             database=self.database,
-            port=self.port
+            port=self.port,
+            keepalives=1,
+            keepalives_idle=30,
+            keepalives_interval=10,
+            keepalives_count=5
         )
 
     def disconnect(self):

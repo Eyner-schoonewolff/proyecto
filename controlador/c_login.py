@@ -37,8 +37,8 @@ class Login_controlador():
                     'email': login.usuario['email'],
                     'username': login.usuario["nombre"].upper(),
                     'tipo_usuario': login.usuario["tipo"],
-                    'exp':datetime.datetime.utcnow()+ datetime.timedelta(minutes=1),
-                    'exp_token_seg':str(datetime.timedelta(minutes=1))
+                    'exp':datetime.datetime.utcnow()+ datetime.timedelta(minutes=30),
+                    'exp_token_seg':str(datetime.timedelta(minutes=30))
                 }
                 
                 access_token = create_access_token(identity=identificadores)

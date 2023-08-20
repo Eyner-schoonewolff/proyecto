@@ -148,28 +148,25 @@ class DatosUsuario:
         valores = (self.id_solicitud, self.tipo_usuario_calificar)
 
         cursor.execute(query_validacion, valores)
+ 
+        fecha_actual = datetime.datetime.now()
 
-        calificacion = cursor.fetchone()['cantidad']
+        cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
 
-        if calificacion == 0:
-            fecha_actual = datetime.datetime.now()
-
-            cadena_fecha = fecha_actual.strftime("%Y-%m-%d %H:%M:%S")
-
-            informacion = (self.observaciones, self.estrellas,
+        informacion = (self.observaciones, self.estrellas,
                            self.id_solicitud, self.id_usuario, cadena_fecha)
 
-            query_informacion = """
+        query_informacion = """
                     INSERT INTO calificacion (observaciones,id_numero_estrellas,id_solicitud,id_usuario,registro)
                     VALUES (%s,%s,%s,%s,%s)
                 """
 
-            cursor.execute(query_informacion, informacion)
-            db.connection.commit()
-            return True
+        cursor.execute(query_informacion, informacion)
+        db.connection.commit()
+        return True
 
-        elif calificacion == 1:
-            return False
+        # elif calificacion == 1:
+        #     return False
 
     def ocupaciones_contratista(self, id):
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
