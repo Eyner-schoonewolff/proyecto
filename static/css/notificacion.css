@@ -1,0 +1,59 @@
+/* Estilo del contenedor */
+.contenedor-icono {
+    display: inline-block;
+    /* Para que el contenedor se ajuste al tamaño del contenido */
+    position: relative;
+    /* Para permitir posicionar elementos hijos de forma absoluta */
+}
+
+/* Establece el tamaño del icono dentro del círculo blanco */
+.bi-bell {
+    font-size: 150%;
+    /* Tamaño personalizado en píxeles o ems */
+    color: rgb(0, 0, 0);
+    /* Cambia el color del icono a blanco */
+    position: relative;
+    /* Para permitir posicionar el círculo */
+    z-index: 1;
+    /* Para que el icono esté por encima del círculo */
+}
+
+/* Estilo del círculo blanco */
+.circulo-blanco {
+    width: 40px;
+    /* Diámetro del círculo personalizado en píxeles */
+    height: 40px;
+    /* Diámetro del círculo personalizado en píxeles */
+    background-color: white;
+    border-radius: 50%;
+    /* Para hacer que el elemento sea un círculo */
+    position: absolute;
+    /* Para posicionar el círculo dentro del contenedor */
+    top: 18%;
+    right: 12%;
+    display: flex;
+    /* Para centrar el icono verticalmente */
+    justify-content: center;
+    /* Para centrar el icono horizontalmente */
+    align-items: center;
+    /* Para centrar el icono verticalmente */
+    z-index: 0;
+    /* Para que el círculo esté detrás del icono */
+}
+
+.usuario_contenedor {
+    position: absolute;
+    right: 41%;
+
+}
+
+.btn-circle {
+    width: 50px; /* Establece el ancho deseado */
+    height: 50px; /* Establece la altura deseada (debe ser igual al ancho para que sea un círculo) */
+    border-radius: 50%; /* Hace que el botón sea circular */
+    text-align: center; /* Centra el contenido del botón verticalmente */
+    padding: 0; /* Elimina el relleno del botón */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

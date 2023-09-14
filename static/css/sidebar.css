@@ -3,6 +3,10 @@ nav,
     background-color: #1e293b !important;
 }
 
+#offcanvasScrolling{
+    background-color: #ffffff !important;
+}
+
 .navbar-toggler{
     border: none !important;
 }
