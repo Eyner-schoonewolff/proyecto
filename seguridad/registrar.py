@@ -62,7 +62,6 @@ class Usuario:
     def existe_(self) -> bool:
         dato_unico_documento = self.datos_unico_documento()
         dato_unico_correo = self.datos_unico_correo()
-        print((dato_unico_documento is None) and (dato_unico_correo is None))
         if (dato_unico_documento is None) and (dato_unico_correo is None):
             return False
         if dato_unico_documento and dato_unico_correo:

@@ -82,7 +82,7 @@ class Contacto:
         if 'nombre' not in json or 'correo' not in json or 'numero' not in json:
             return False
 
-        if usuario['nombre'] != json['nombre'].lower() or usuario['correo'] != json['correo'] or int(usuario['celular']) != int(json['numero']):
+        if usuario['nombre'].lower() != json['nombre'].lower() or usuario['correo'] != json['correo'] or int(usuario['celular']) != int(json['numero']):
             return True
 
         return False

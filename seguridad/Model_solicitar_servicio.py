@@ -143,7 +143,6 @@ class Solicitar:
             WHERE s.id_usuario_cliente = %s AND e.nombre = 'Finalizada' and c.id_numero_estrellas is null;
          """
         cursor.execute(query, (self.id_usuario, self.id_usuario,))
-        print(self.id_usuario)
         result = cursor.fetchall()
 
         convertir_json = self.convertir_a_formato_json(result)
@@ -168,7 +167,6 @@ class Solicitar:
          """
         cursor.execute(query, (self.id_usuario, self.id_usuario,))
         resultos = cursor.fetchall()
-        print(self.id_usuario)
         resultado_json = self.convertir_a_formato_json(resultos)
         return resultado_json
 
