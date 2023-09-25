@@ -36,5 +36,14 @@ class Notificacion_controlador():
         return jsonify({
             'eliminar':eliminar
         })
+    
+    def obtener_numero_de_notificacion(self,id):
+        notificacion = Noticacion()
+
+        cantidad = notificacion.cantidad_notificaciones(id)
+
+        return jsonify({
+            'cantidad': cantidad
+        })
         
  

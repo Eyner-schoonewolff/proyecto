@@ -3,19 +3,19 @@ from decorador.decoradores import *
 from flask_cors import cross_origin
 from controlador.c_notificaciones import Notificacion_controlador
 
-notifiacion = Blueprint('notificacion', __name__, static_url_path='/static',
+notificacion = Blueprint('notificacion', __name__, static_url_path='/static',
                   template_folder="templates")
 
 
-@notifiacion.route('/notificacion', endpoint = 'notificacion', methods=['GET'])
+@notificacion.route('/notificacion', endpoint = 'notificacion', methods=['GET'])
 @cross_origin()
 @jwt_required()
-def notificacion():
+def notificaciones():
    controlador = Notificacion_controlador()
    return controlador.obtener_notificaciones()
 
 
-@notifiacion.route('/leer_notificacion',endpoint ='notificaion_activar', methods=['POST'])
+@notificacion.route('/leer_notificacion',endpoint ='notificaion_activar', methods=['POST'])
 @cross_origin()
 @jwt_required()
 def notificacion_leida():
@@ -23,10 +23,18 @@ def notificacion_leida():
    controlador = Notificacion_controlador()
    return controlador.leer_notificacion(id)
 
-@notifiacion.route('/eliminar_notificacion',endpoint ='eliminar_notificacion', methods=['POST'])
+@notificacion.route('/eliminar_notificacion',endpoint ='eliminar_notificacion', methods=['POST'])
 @cross_origin()
 @jwt_required()
 def notificacion_eliminada():
    id = request.get_json()
    controlador = Notificacion_controlador()
    return controlador.eliminar_notificacion(id)
+
+
+@notificacion.route('/cantidad_notificacion/<id>', endpoint = 'cantidad_notificacion', methods=['GET'])
+@cross_origin()
+@jwt_required()
+def numero_de_notificaciones(id):
+    controlador = Notificacion_controlador()
+    return controlador.obtener_numero_de_notificacion(id)

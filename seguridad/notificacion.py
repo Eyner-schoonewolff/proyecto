@@ -30,7 +30,7 @@ class Noticacion():
     def obtener_notificaciones_contratista(self,id)->List:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-                    SELECT n.id, n.titulo, n.contenido,n.leido,n.estado,
+                    SELECT n.id, n.titulo, n.contenido,n.leido,n.estado,CURRENT_DATE as fecha,
                         CASE
                             WHEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion)) = 1 THEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion))   || ' día'
                             WHEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion)) > 0 THEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion))   || ' días'
@@ -39,7 +39,7 @@ class Noticacion():
                             ELSE EXTRACT(MONTH FROM (NOW() - n.fecha_creacion)) || ' semanas'
                         END AS tiempo_transcurrido
                         FROM notificacion n
-                        WHERE n.id_usuario = %s
+                        WHERE n.id_usuario = %s and n.estado = false
                         ORDER BY n.id DESC;
                          """
         
@@ -48,7 +48,7 @@ class Noticacion():
         diccionario_notificacion = json.loads(convertir_json)
         return diccionario_notificacion
 
-    def eliminar_notificacion(self,id_notificacion):
+    def eliminar_notificacion(self,id_notificacion)->bool:
         cursor = db.connection.cursor()
         query = 'UPDATE notificacion SET estado = TRUE WHERE id = %s'
         cursor.execute(query,id_notificacion)
@@ -57,7 +57,7 @@ class Noticacion():
         return True
 
     
-    def cambiar_estado(self,id_notificacion):
+    def cambiar_estado(self,id_notificacion)->bool:
         cursor = db.connection.cursor()
 
         query='SELECT n.leido FROM notificacion n WHERE id = %s'
@@ -76,4 +76,17 @@ class Noticacion():
         cursor.close()
         return notificacion
 
+    def cantidad_notificaciones(self,id):
+        cursor = db.connection.cursor()
+
+        query = """
+            SELECT count(n.id) as notificaciones
+                FROM notificacion n
+                 WHERE n.id_usuario = %s and n.estado = false
+        """
+
+        cursor.execute(query,id)
+
+        return cursor.fetchone()[0]
+        
  
