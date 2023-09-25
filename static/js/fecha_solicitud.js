@@ -26,6 +26,7 @@ async function guardarsolicitud() {
         fecha: $("#fecha").val(),
         hora: $("#hora").val(),
         servicio: $("#opciones").val(),
+        nombre_servicio: $("#opciones option:selected").text(),
         contratista: $("#contratistas").val(),
         problema: $("#carta").val(),
         evidencia: fileInput.data || '',

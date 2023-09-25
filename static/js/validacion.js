@@ -1,5 +1,4 @@
 let tokenExpirationTime = localStorage.getItem('exp');
-console.log(tokenExpirationTime);
 var timeString = localStorage.getItem('exp_seg');;
 let timeout;
 
@@ -94,7 +93,6 @@ function makeAuthenticatedRequest(url, method, data) {
 const apiUrl = 'http://localhost:3000/proteccion';
 makeAuthenticatedRequest(apiUrl, 'GET')
     .done(function (response) {
-        console.log('Respuesta exitosa:', response);
     })
     .fail(function (jqXHR, textStatus) {
         console.log(jqXHR.status)

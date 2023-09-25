@@ -1,11 +1,29 @@
-var token="";
-document.querySelector("#BotonLogin").addEventListener('click', async () => {
-    const email = document.querySelector("#inputEmail").value;
-    const contrasenia = document.querySelector("#inputcontrasenia").value;
+var token = "";
+
+const email = document.querySelector("#inputEmail");
+const contrasenia = document.querySelector("#inputcontrasenia");
+const btn_login = document.querySelector("#BotonLogin");
+
+email.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        btn_login.click();
+    }
+});
+
+contrasenia.addEventListener("keydown", function (event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        btn_login.click();
+    }
+});
+
+
+btn_login.addEventListener('click', async () => {
 
     const datos = {
-        email,
-        contrasenia
+        email:email.value,
+        contrasenia:contrasenia.value
     };
 
     try {
@@ -20,16 +38,7 @@ document.querySelector("#BotonLogin").addEventListener('click', async () => {
         const data = await respuesta.json();
 
         if (data.login) {
-            await Swal.fire({
-                title: "¡Éxito!",
-                text: "El usuario se ha logueado correctamente",
-                icon: "success",
-                confirmButtonText: "Aceptar",
-                customClass: {
-                    container: 'my-swal-container'
-                }
-            });
-
+            
             window.location.href = data.home;
             localStorage.setItem("jwt-token", data.token);
             localStorage.setItem("exp", data.exp);
