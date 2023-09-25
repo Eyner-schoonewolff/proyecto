@@ -1,6 +1,5 @@
-from flask import request, session, render_template, jsonify
+from flask import jsonify
 from decorador.decoradores import *
-import json
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from seguridad.notificacion import *
 
@@ -9,15 +8,33 @@ class Notificacion_controlador():
         pass
 
 
-    def c_informacion(self):
-        identificadores=get_jwt_identity()
-        id=identificadores.get('id')
-        tipo = identificadores.get('tipo_usuario')
+    def obtener_notificaciones(self):
+        usuario : dict = get_jwt_identity()
+        id_usuario = usuario.get('id')
 
-        notificacion=Noticacion()
+        notificacion = Noticacion()
 
-        if tipo=='Contratista':
-            datos=notificacion.informacion_contratista(id)
-            return jsonify({'informacion':datos})
-        else:
-            ...
+        datos = notificacion.obtener_notificaciones_contratista(id_usuario)
+        return jsonify({
+            'informacion' : datos
+        })
+   
+
+    def leer_notificacion(self,id):
+        notificacion = Noticacion()
+
+        leer = notificacion.cambiar_estado(id)
+        return jsonify({
+                'leer':leer
+            })
+    
+    def eliminar_notificacion(self,id):
+        notificacion = Noticacion()
+
+        eliminar = notificacion.eliminar_notificacion(id)
+
+        return jsonify({
+            'eliminar':eliminar
+        })
+        
+ 

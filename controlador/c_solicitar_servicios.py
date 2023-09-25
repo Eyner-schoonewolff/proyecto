@@ -22,10 +22,10 @@ class Solicitar_controlador():
         return nuevo_nombre_file
 
     def servicio(self):
-        identificadores = get_jwt_identity()
-        id_usuario = identificadores.get('id')
-        nombre = identificadores.get('username')
-        tipo = identificadores.get('tipo_usuario')
+        usuario:Dict = get_jwt_identity()
+        id_usuario = usuario.get('id')
+        nombre = usuario.get('username')
+        tipo_usuario = usuario.get('tipo_usuario')
 
         if request.method == 'POST':
             json = request.get_json()
@@ -34,6 +34,7 @@ class Solicitar_controlador():
             contratista = json['contratista']
             problema = json['problema']
             tipo_contratista = json['servicio']
+            tipo_nombre_servicio = json['nombre_servicio']
             file = json['evidencia']
 
             if file:
@@ -45,9 +46,11 @@ class Solicitar_controlador():
                                   hora=hora,
                                   contratista=contratista,
                                   tipo_contratista=tipo_contratista,
+                                  tipo_nombre_servicio=tipo_nombre_servicio,
                                   evidencia=nuevo_nombre_file,
                                   problema=problema,
-                                  id_usuario=id_usuario
+                                  id_usuario=id_usuario,
+                                  nombre_usuario = nombre
                                   )
 
             valor = solicitar.agregar()
@@ -57,7 +60,7 @@ class Solicitar_controlador():
             else:
                 return {"numero": 0}
         else:
-            return {'nombre': nombre, 'tipo': tipo}
+            return {'nombre': nombre, 'tipo': tipo_usuario}
 
     def base64_to_image(self, base64_string: str):
         bytes_image = base64.b64decode(base64_string.split(",")[1])

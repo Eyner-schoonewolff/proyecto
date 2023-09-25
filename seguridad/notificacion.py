@@ -27,31 +27,53 @@ class Noticacion():
 
         return json.dumps(informacion)
 
-    def informacion_contratista(self,id)->List:
+    def obtener_notificaciones_contratista(self,id)->List:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
         query = """
-                    SELECT
-                        s.id,
-                        s.horario AS fecha,
-                        s.hora,
-                        udp.nombre_completo AS nombre,
-                        o.nombre AS ocupacion,
+                    SELECT n.id, n.titulo, n.contenido,n.leido,n.estado,
                         CASE
-                            WHEN EXTRACT(DAY FROM (NOW() - s.fecha_insercion)) = 1 THEN EXTRACT(DAY FROM (NOW() - s.fecha_insercion))   || ' día'
-                            WHEN EXTRACT(DAY FROM (NOW() - s.fecha_insercion)) > 0 THEN EXTRACT(DAY FROM (NOW() - s.fecha_insercion))   || ' días'
-                            WHEN EXTRACT(HOUR FROM (NOW() - s.fecha_insercion)) > 0 THEN EXTRACT(HOUR FROM (NOW() - s.fecha_insercion)) || ' horas'
-                            WHEN EXTRACT(HOUR FROM (NOW() - s.fecha_insercion)) <= 0 THEN EXTRACT(MINUTE FROM (NOW() - s.fecha_insercion)) || ' minutos'
-                            ELSE EXTRACT(MONTH FROM (NOW() - s.fecha_insercion)) || ' semanas'
+                            WHEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion)) = 1 THEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion))   || ' día'
+                            WHEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion)) > 0 THEN EXTRACT(DAY FROM (NOW() - n.fecha_creacion))   || ' días'
+                            WHEN EXTRACT(HOUR FROM (NOW() - n.fecha_creacion)) > 0 THEN EXTRACT(HOUR FROM (NOW() - n.fecha_creacion)) || ' horas'
+                            WHEN EXTRACT(HOUR FROM (NOW() - n.fecha_creacion)) <= 0 THEN EXTRACT(MINUTE FROM (NOW() - n.fecha_creacion)) || ' minutos'
+                            ELSE EXTRACT(MONTH FROM (NOW() - n.fecha_creacion)) || ' semanas'
                         END AS tiempo_transcurrido
-                        FROM solicitud s
-                        JOIN usuarios u ON u.id = s.id_usuario_cliente
-                        JOIN usuario_datos_personales udp ON udp.id = u.id_usuario_datos_personales
-                        JOIN ocupacion o ON o.id = s.id_ocupacion_solicitud
-                        WHERE s.id_usuario_contratista = %s
-                        ORDER BY s.id ASC;
+                        FROM notificacion n
+                        WHERE n.id_usuario = %s
+                        ORDER BY n.id DESC;
                          """
         
         cursor.execute(query, (id,))
         convertir_json = self.convertir_a_formato_json(cursor.fetchall())
-        diccionario_notificacion=json.loads(convertir_json)
+        diccionario_notificacion = json.loads(convertir_json)
         return diccionario_notificacion
+
+    def eliminar_notificacion(self,id_notificacion):
+        cursor = db.connection.cursor()
+        query = 'UPDATE notificacion SET estado = TRUE WHERE id = %s'
+        cursor.execute(query,id_notificacion)
+        db.connection.commit()
+        cursor.close()
+        return True
+
+    
+    def cambiar_estado(self,id_notificacion):
+        cursor = db.connection.cursor()
+
+        query='SELECT n.leido FROM notificacion n WHERE id = %s'
+        cursor.execute(query, id_notificacion)
+        notificacion_activa = cursor.fetchone()[0]
+
+        if notificacion_activa:
+            query = 'UPDATE notificacion SET leido = FALSE WHERE id = %s'
+            notificacion = False
+        else:
+            query = 'UPDATE notificacion SET leido = TRUE WHERE id = %s'
+            notificacion = True
+
+        cursor.execute(query, id_notificacion)
+        db.connection.commit()
+        cursor.close()
+        return notificacion
+
+ 

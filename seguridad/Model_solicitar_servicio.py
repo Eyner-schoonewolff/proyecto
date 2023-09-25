@@ -10,17 +10,19 @@ from functools import partial
 
 
 class Solicitar:
-    def __init__(self, fecha="", hora="", contratista="", tipo_contratista="", evidencia="",
-                 problema="", id_estado="", id_solicitud="", id_usuario: int = "") -> None:
+    def __init__(self, fecha="", hora="", contratista="", tipo_contratista:str="",tipo_nombre_servicio:str="", evidencia="",
+                 problema="", id_estado="", id_solicitud="", id_usuario: int = "",nombre_usuario:str="") -> None:
         self.fecha = fecha
         self.hora = hora
         self.contratista = contratista
         self.tipo_contratista = tipo_contratista
+        self.tipo_nombre_servicio = tipo_nombre_servicio
         self.evidencia = evidencia
         self.problema = problema
         self.id_estado = id_estado
         self.id_solicitud = id_solicitud
         self.id_usuario = id_usuario
+        self.nombre_usuario = nombre_usuario
 
     def convertir_a_formato_json(self, resultados):
         informacion = []
@@ -56,6 +58,20 @@ class Solicitar:
                     VALUES (%s, %s, %s, %s, %s, %s, %s, 1)
                 """
         cursor.execute(query_informacion, informacion)
+
+
+        notificacion = (
+            self.contratista, 
+            f"Solicitud de {self.nombre_usuario} ",
+            f"Usted tiene una nueva oferta para {self.tipo_nombre_servicio} programada para la fecha de {self.fecha} a la hora {hora}"
+        )
+        query_notificacion = """
+                    INSERT INTO notificacion 
+                    (id_usuario, titulo, contenido)
+                    VALUES (%s, %s, %s)
+                """
+        cursor.execute(query_notificacion, notificacion)
+        
         db.connection.commit()
 
         return True
