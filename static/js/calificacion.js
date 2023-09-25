@@ -182,6 +182,8 @@ $(document).ready(function () {
                     $("#modal").append(modal);
                 });
                 table.draw();
+
+                notificacion();
                 logout();
             }
             else if (calificar.tipo == "Cliente") {

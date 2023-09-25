@@ -70,7 +70,7 @@ $(document).ready(function () {
                     </div>
                   `;
                 }
-
+                notificacion();
                 logout();
 
             } else if (perfil.tipo == "Cliente") {

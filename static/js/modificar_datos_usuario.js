@@ -245,6 +245,7 @@ $(document).ready(function () {
                 actuzalizar();
                 mostrar_ocupaciones();
 
+                notificacion();
                 logout();
 
 

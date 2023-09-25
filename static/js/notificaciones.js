@@ -12,13 +12,9 @@ function notificacion() {
         'Authorization': 'Bearer ' + token
       },
       success: function (notificaciones) {
-
         let consulta = notificaciones.informacion;
-
         consulta.forEach((notifi) => {
           let contenido = `
-          ${!notifi.estado ?
-              `
               <div id="contenedor_notificacion_${notifi.id}" class="card mb-3" style="max-width: 540px;">
               <div class = "row g-0">
                   <div class="col-md-10">
@@ -28,13 +24,13 @@ function notificacion() {
                           <p class="card-text"><small class="text-muted">Notificaion enviada hace ${notifi.tiempo_transcurrido} </small></p>
                       </div>
                       ${!notifi.leido ?
-                `
+              `
                         <span id="notificacion_leida_${notifi.id}" style="display: block;" class="position-absolute top-0 start-100 translate-middle p-2 bg-success border border-light rounded-circle">
                         </span>`
-                :
-                `<span id="notificacion_leida_${notifi.id}" style="display: none;" class="position-absolute top-0 start-100 translate-middle p-2 bg-success border border-light rounded-circle">
+              :
+              `<span id="notificacion_leida_${notifi.id}" style="display: none;" class="position-absolute top-0 start-100 translate-middle p-2 bg-success border border-light rounded-circle">
                          </span>`
-              }
+            }
                   </div>
                   <div class="col-md-2 d-flex align-items-center">
                       <div class="btn-group ">
@@ -46,10 +42,10 @@ function notificacion() {
                                 <a id = "${notifi.id}" class="dropdown-item marca-leida"> 
                                   <i class="bi bi-check2"></i> 
                                   ${!notifi.leido ?
-                `Marcar como leída`
-                :
-                `Marcar como no leída`
-              }
+              `Marcar como leída`
+              :
+              `Marcar como no leída`
+            }
                                  
                                 </a>
                               </li>
@@ -64,21 +60,20 @@ function notificacion() {
                   </div>
               </div>
           </div>`
-              : ``}
-              `;
+            ;
+
           $("#contenido_notificaciones").append(contenido);
 
         });
 
-        marcar_leido();
         eliminar();
-
+        marcar_leido();
       }
     });
     $("#contenido_notificaciones").empty();
-
-
-
+    
+    
+    
   })
 }
 
@@ -120,6 +115,8 @@ function marcar_leido() {
 function eliminar() {
   var token = localStorage.getItem('jwt-token');
   let li = document.querySelectorAll('#eliminar');
+  const toastLiveExample = document.getElementById('liveToast')
+
 
   li.forEach((elementos) => {
     elementos.addEventListener('click', (event) => {
@@ -139,10 +136,14 @@ function eliminar() {
         },
         success: function (estado) {
           var eliminado = estado.eliminar;
+          elementoEliminado = contenedor_notificacion.cloneNode(true); // Clonar el elemento antes de eliminarlo
+          const toast = new bootstrap.Toast(toastLiveExample);
 
           if (eliminado) {
             contenedor_notificacion.remove();
+            toast.show();
           }
+
         }
       })
 

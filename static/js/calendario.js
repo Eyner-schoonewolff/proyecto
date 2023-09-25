@@ -81,6 +81,7 @@ Promise.all([
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
-
+        
+        notificacion();
         logout();
     });

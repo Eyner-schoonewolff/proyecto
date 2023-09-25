@@ -42,7 +42,8 @@ $(document).ready(function () {
                 document.getElementById("nombreContacto").value = contacto.nombre;
                 document.getElementById("emailContacto").value = contacto.usuario.correo;
                 document.getElementById("telefonoContacto").value = contacto.usuario.celular;
-              
+                
+                notificacion();
                 logout();
             }
             else if (contacto.tipo == "Cliente") {

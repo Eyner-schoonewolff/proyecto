@@ -207,9 +207,10 @@ $(document).ready(function () {
                 });
 
 
-
+                notificacion();
                 logout();
             }
+
             else if (trabajos.tipo == "Cliente") {
                 nvar.innerHTML = nvarCliente;
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');

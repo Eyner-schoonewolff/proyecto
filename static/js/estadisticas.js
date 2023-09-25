@@ -1,19 +1,18 @@
-
 var token = localStorage.getItem('jwt-token');
-function llenardatos(params) {
 
+function llenardatos() {
     $.ajax({
         url: 'http://localhost:3000/datosestadisticas',
         method: 'GET',
         async: false,
         contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
+        dataType: "json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
         success: function (datos) {
-         
+
             const ctx = document.getElementById('mychart');
             new Chart(ctx, {
                 type: 'bar',
@@ -46,24 +45,23 @@ function llenardatos(params) {
                 }
             });
         }
-
-    })
+    });
+  
 }
 
-function llenardatos1(params) {
-
+function llenardatos1() {
     $.ajax({
         url: 'http://localhost:3000/datosestadisticaslinea',
         method: 'GET',
         async: false,
         contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
+        dataType: "json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
         success: function (datos) {
-     
+
             const ctx = document.getElementById('mychart1');
             new Chart(ctx, {
                 type: 'line',
@@ -104,20 +102,19 @@ function llenardatos1(params) {
     })
 }
 
-function llenardatos2(params) {
-
+function llenardatos2() {
     $.ajax({
         url: 'http://localhost:3000/datosestadisticastorta',
         method: 'GET',
         async: false,
         contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
+        dataType: "json",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+        },
         success: function (datos) {
-        
+
             const ctx1 = document.getElementById('mychart2');
 
             new Chart(ctx1, {
@@ -156,11 +153,10 @@ function llenardatos2(params) {
                 }
             });
         }
-
-    })
+    });
 }
-
 
 llenardatos();
 llenardatos1();
 llenardatos2();
+

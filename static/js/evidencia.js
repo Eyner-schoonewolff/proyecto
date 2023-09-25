@@ -11,3 +11,4 @@ img.src = imagenURL;
 let descripcion_texto = document.querySelector('#evidencia-descripcion');
 descripcion_texto.innerHTML = 'Descripcion: ' + descripcion;
 
+notificacion();
