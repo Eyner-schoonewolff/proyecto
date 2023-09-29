@@ -11,6 +11,9 @@ from io import BytesIO
 
 class Solicitar_controlador():
 
+    def __init__(self) -> None:
+        ...
+
     def guardar_imagen(self, file):
         image = self.base64_to_image(file)
         extension = self.get_base64_extension(image)
@@ -26,6 +29,8 @@ class Solicitar_controlador():
         id_usuario = usuario.get('id')
         nombre = usuario.get('username')
         tipo_usuario = usuario.get('tipo_usuario')
+
+        # se obtiene la id del usuario que realiza una solicitud
 
         if request.method == 'POST':
             json = request.get_json()
@@ -55,8 +60,8 @@ class Solicitar_controlador():
 
             valor = solicitar.agregar()
 
-            if valor:
-                return {"numero": 1}
+            if valor.get('respuesta'):
+                return {"numero": 1,"id":contratista}
             else:
                 return {"numero": 0}
         else:

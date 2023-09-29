@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify,session
 from db.database import *
 from typing import Dict
 import datetime
@@ -6,7 +6,7 @@ from psycopg2 import extras
 import json
 from datetime import date, time
 import datetime
-from functools import partial
+from socket_notificacion.mostar_notificaciones import socketio
 
 
 class Solicitar:
@@ -39,15 +39,16 @@ class Solicitar:
             informacion.append(data)
 
         return json.dumps(informacion)
+    
 
-    def agregar(self) -> bool:
+    def agregar(self) -> dict:
         cursor = db.connection.cursor()
-        segundo = datetime.datetime.now()
+        tiempo = datetime.datetime.now()
 
         if self.hora is not None:
-            hora = self.hora + ':' + str(segundo.second)
+            hora = self.hora + ':' + str(tiempo.second)
         else:
-            hora = str(segundo.second)
+            hora = str(tiempo.second)
 
         informacion = (self.contratista, self.id_usuario, self.tipo_contratista,
                        self.fecha, hora, self.evidencia, self.problema)
@@ -70,11 +71,22 @@ class Solicitar:
                     (id_usuario, titulo, contenido)
                     VALUES (%s, %s, %s)
                 """
-        cursor.execute(query_notificacion, notificacion)
         
-        db.connection.commit()
+        notificacion_mensaje = {
+            "nombre" : self.nombre_usuario,
+            "tipo_servicio" : self.tipo_nombre_servicio,
+            "fecha_solicitud" : self.fecha,
+            "hora" : str(tiempo.hour) +' :' + str(tiempo.minute),
+            "id":self.id_usuario
+        }
+        print(self.contratista)
+        socketio.emit('mi_evento', notificacion_mensaje,room=int(self.contratista))
 
-        return True
+        # cursor.execute(query_notificacion, notificacion)
+        
+        # db.connection.commit()
+
+        return {'respuesta':True,'id':self.contratista}
 
     # eliminar solicitud
 
@@ -246,3 +258,5 @@ class Solicitar:
         db.connection.commit()
 
         return None
+
+

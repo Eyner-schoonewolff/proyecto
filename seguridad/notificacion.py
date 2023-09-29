@@ -13,6 +13,7 @@ class Noticacion():
 
     def convertir_a_formato_json(self, resultados):
         informacion = []
+        row:dict
 
         for row in resultados:
             data = {}
@@ -76,17 +77,19 @@ class Noticacion():
         cursor.close()
         return notificacion
 
-    def cantidad_notificaciones(self,id):
+    def cantidad_notificaciones(self,id_usuario):
         cursor = db.connection.cursor()
 
         query = """
             SELECT count(n.id) as notificaciones
                 FROM notificacion n
-                 WHERE n.id_usuario = %s and n.estado = false
+                 WHERE n.id_usuario = %s and n.leido = false
         """
 
-        cursor.execute(query,id)
-
-        return cursor.fetchone()[0]
+        cursor.execute(query,(id_usuario,))
+        return cursor.fetchone()
         
  
+
+    def enviar_notificacion(self,id_usuario):
+        ...

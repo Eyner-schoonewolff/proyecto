@@ -6,6 +6,8 @@ from controlador.c_notificaciones import Notificacion_controlador
 notificacion = Blueprint('notificacion', __name__, static_url_path='/static',
                   template_folder="templates")
 
+socket_bp = Blueprint('socket_bp', __name__)
+
 
 @notificacion.route('/notificacion', endpoint = 'notificacion', methods=['GET'])
 @cross_origin()
@@ -15,7 +17,7 @@ def notificaciones():
    return controlador.obtener_notificaciones()
 
 
-@notificacion.route('/leer_notificacion',endpoint ='notificaion_activar', methods=['POST'])
+@notificacion.route('/leer_notificacion',endpoint ='notificaion_activar', methods=['PUT'])
 @cross_origin()
 @jwt_required()
 def notificacion_leida():
@@ -23,7 +25,7 @@ def notificacion_leida():
    controlador = Notificacion_controlador()
    return controlador.leer_notificacion(id)
 
-@notificacion.route('/eliminar_notificacion',endpoint ='eliminar_notificacion', methods=['POST'])
+@notificacion.route('/eliminar_notificacion',endpoint ='eliminar_notificacion', methods=['PUT'])
 @cross_origin()
 @jwt_required()
 def notificacion_eliminada():
@@ -32,9 +34,16 @@ def notificacion_eliminada():
    return controlador.eliminar_notificacion(id)
 
 
-@notificacion.route('/cantidad_notificacion/<id>', endpoint = 'cantidad_notificacion', methods=['GET'])
+@notificacion.route('/cantidad_notificacion', endpoint = 'cantidad_notificacion', methods=['GET'])
 @cross_origin()
 @jwt_required()
-def numero_de_notificaciones(id):
+def numero_de_notificaciones():
     controlador = Notificacion_controlador()
-    return controlador.obtener_numero_de_notificacion(id)
+    return controlador.obtener_numero_de_notificacion()
+
+
+
+
+
+
+    

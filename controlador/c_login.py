@@ -6,19 +6,21 @@ from flask_jwt_extended import create_access_token
 import datetime
 
 class Login_controlador():
-    def validar_campos_vacios(self):
-        datos_usuario = DatosUsuario()
+    def validar_campos_vacios_usuario(self,id,tipo_usuario)->str:
+
+        datos_usuario = DatosUsuario(id_usuario=id,tipo_usuario=tipo_usuario)
+
         if datos_usuario.validar_campos_vacios():
-            return redirect(url_for('datos_personales.actualizar'))
+            return '/templates/actualizar.html'
         else:
-            return redirect(url_for('menus.home'))
+            return '/templates/home.html'
 
     def auth(self):
         json = request.get_json()
         email = json['email']
         contrasenia = json['contrasenia']
 
-        login = Login(email=email, contrasenia=contrasenia)
+        login = Login(email = email, contrasenia = contrasenia)
 
         try:
             if login.verificar_campos_vacios():
@@ -28,10 +30,8 @@ class Login_controlador():
                 raise EmailContraseniaIncorrecta(
                     "El email y/o contraseña ingresada es incorrecto")
             else:
-                # fecha_expiracion=datetime.datetime.utcnow()+ datetime.timedelta(seconds=30)
-                # unix_timestamp = int(fecha_expiracion.timestamp())
 
-                identificadores = {
+                usuario = {
                     'id': login.usuario['id'],
                     'id_udp': login.usuario['id_udp'],
                     'email': login.usuario['email'],
@@ -40,15 +40,19 @@ class Login_controlador():
                     'exp':datetime.datetime.utcnow()+ datetime.timedelta(minutes=30),
                     'exp_token_seg':str(datetime.timedelta(minutes=30))
                 }
-                
-                access_token = create_access_token(identity=identificadores)
+
+                access_token = create_access_token(identity=usuario)
+
+                home = self.validar_campos_vacios_usuario(login.usuario['id'],login.usuario["tipo"])
 
                 return jsonify({
                     "login": True,
+                    "nombre":login.usuario["nombre"].upper(),
+                    "id":login.usuario['id'],
                     "token": access_token,
-                    "exp":identificadores['exp'],
-                    "exp_token_seg":identificadores['exp_token_seg'],
-                    "home": "/templates/home.html",
+                    "exp":usuario['exp'],
+                    "exp_token_seg":usuario['exp_token_seg'],
+                    "home": home,
                 })
 
         except CamposVacios as mensaje:

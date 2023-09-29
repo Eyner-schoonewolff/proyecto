@@ -106,9 +106,9 @@ class DatosUsuario:
     def validar_campos_vacios(self) -> bool:
         dato = self.obtener()
         if any(valor == '' or valor == 0 or valor is None for valor in [dato['direccion'], dato['ocupaciones'], dato['descripcion'], dato['numero_celular']]) and self.tipo_usuario == 'Contratista':
-            return True
+            return True 
 
-        if any(valor == '' or valor == 0 for valor in [dato['direccion'], dato['numero_celular']]) and self.tipo_usuario == 'Cliente':
+        if any(valor == '' or valor == 0 or valor is None for valor in [dato['direccion']]) and self.tipo_usuario == 'Cliente':
             return True
 
         else:

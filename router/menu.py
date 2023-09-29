@@ -88,7 +88,6 @@ def actualizar_estado(id):
 # @proteccion_ruta_admin
 def evidencia_solicitud(id):
     c_menu = Menu_controlador()
-    print(id)
     return c_menu.evidencia(id)
 
 

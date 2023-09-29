@@ -13,14 +13,27 @@ def token_requeried(f):
              # Verifica el token aquí antes de obtener la identidad
             identificador: Dict = get_jwt_identity()
             token_id = identificador.get('id')
-            print(token_id)
             if not token_id:
                 return jsonify({'messague': 'Token is missing!'}), 403
-            print(token_id)
         except jwt.ExpiredSignatureError:
             return jsonify({'messague': 'Token has expired'}), 401
         return f(*args, **kwargs)
     return ruta_proteccion
+
+def usuario_id(f):
+    @wraps(f)
+    def validar_session(*args, **kwargs):
+        try:
+            usuario: Dict = get_jwt_identity()
+            usuario_id = usuario.get('id')
+            if not usuario_id:
+                return jsonify({'messague': 'no existe session'}), 403
+            else:
+                print(usuario_id)
+        except jwt.ExpiredSignatureError:
+            return jsonify({'messague': 'Token has expired'}), 401
+        return f(*args, **kwargs)
+    return validar_session
 
 
 # def token_requeried(f):

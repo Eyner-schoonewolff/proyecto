@@ -8,7 +8,7 @@ class Login:
     def __init__(self, email="", contrasenia="") -> None:
         self.email = email
         self.contrasenia = contrasenia
-        self.usuario = self.obtener_usuario()
+        self.usuario:str = self.obtener_usuario()
 
     # obtener_informacion
     def obtener_usuario(self) -> Dict:
@@ -39,8 +39,9 @@ class Login:
             return False
 
         hashed_password = self.usuario['contraseña']
+        
         if hashed_password[0:1]=='$':
-            hashed_password=hashed_password.encode('utf-8')
+            hashed_password = hashed_password.encode('utf-8')
         else:
             hashed_password = bytes.fromhex(hashed_password[2:])
 

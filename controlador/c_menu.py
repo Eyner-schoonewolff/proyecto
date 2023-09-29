@@ -11,12 +11,11 @@ from seguridad.login import *
 class Menu_controlador():
 
     def home(self):
-        identificadores = get_jwt_identity()
+        identificadores:dict = get_jwt_identity()
         nombre = identificadores.get('username')
         tipo = identificadores.get('tipo_usuario')
 
         if not nombre == 'Contratista':
-
             return jsonify({'nombre': nombre, 'tipo': tipo})
 
         return jsonify({'nombre': nombre, 'tipo': tipo})

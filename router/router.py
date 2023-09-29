@@ -34,8 +34,7 @@ def inicio():
 @cross_origin()
 # @login_required_home
 def index():
-    c_login=Login_controlador()
-    return c_login.validar_campos_vacios()
+    return jsonify({'Api':'Bienvenido a mi Api'})
 
 @login.route("/auth", methods=["POST","GET"])
 @cross_origin()

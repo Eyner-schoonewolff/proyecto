@@ -37,13 +37,26 @@ class Notificacion_controlador():
             'eliminar':eliminar
         })
     
-    def obtener_numero_de_notificacion(self,id):
+    def obtener_numero_de_notificacion(self):
+        usuario : dict = get_jwt_identity()
+        id_usuario = usuario.get('id')
+
         notificacion = Noticacion()
 
-        cantidad = notificacion.cantidad_notificaciones(id)
+        cantidad = notificacion.cantidad_notificaciones(id_usuario)[0]
 
         return jsonify({
-            'cantidad': cantidad
+            'numero_notificaciones': cantidad
         })
         
- 
+    
+    def enviar_notificacion_mensaje(self):
+        usuario: dict = get_jwt_identity()
+        id_usuario = usuario.get('id')
+
+        notificacion = Noticacion()
+
+        obtener = notificacion.enviar_notificacion()
+
+
+    

@@ -48,4 +48,5 @@ try:
 
 
 except (Exception, psycopg2.Error) as error :
+    db.disconnect()
     print ("Error while connecting to PostgreSQL", error)
