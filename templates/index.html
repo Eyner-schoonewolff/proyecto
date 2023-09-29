@@ -19,8 +19,9 @@
 
 <body class="bg-info d-flex justify-content-center vh-100 body">
 
-  <div id="login" class="bg-white p-5 rounded-5 text-secondary shadow d-flex flex-column align-items-center justify-content-center mx-auto" 
-  style="width: 32rem; height:40rem; position: fixed; top: 5rem; right: 0; bottom: 0; left: 0;">
+  <div id="login"
+    class="bg-white p-5 rounded-5 text-secondary shadow d-flex flex-column align-items-center justify-content-center mx-auto"
+    style="width: 32rem; height:40rem; position: fixed; top: 5rem; right: 0; bottom: 0; left: 0;">
 
     <div class="d-flex justify-content-center">
       <img src="../static/icons/login-icon.svg" alt="login-icon" style="height: 7rem" />
@@ -30,16 +31,14 @@
 
     <div class="input-group mt-4">
       <div class="input-group-text bg-success">
-        <img src="../static/icons/username-icon.svg" alt="username-icon"
-          style="height: 1rem" />
+        <img src="../static/icons/username-icon.svg" alt="username-icon" style="height: 1rem" />
       </div>
       <input id="inputEmail" class="form-control bg-light" type="text" placeholder="Usuario" />
     </div>
 
     <div class="input-group mt-1">
       <div class="input-group-text bg-success">
-        <img src="../static/icons/password-icon.svg" alt="password-icon"
-          style="height: 1rem" />
+        <img src="../static/icons/password-icon.svg" alt="password-icon" style="height: 1rem" />
       </div>
       <input id="inputcontrasenia" class="form-control bg-light" type="password" placeholder="contraseña" />
     </div>
@@ -47,10 +46,10 @@
     <div class="d-flex justify-content-around mt-1">
       <div class="d-flex align-items-center gap-1">
         <div class="pt-1" style="font-size: 0.9rem">
-  
+
         </div>
       </div>
-     
+
     </div>
 
     <button id="BotonLogin" class="btn btn-success text-white w-100 mt-4 fw-semibold shadow-sm">
@@ -61,14 +60,16 @@
       <div>No tienes una cuenta?</div>
       <a href="../templates/registrar.html" class="text-decoration-none text-info fw-semibold">Registrarse</a>
     </div>
-   
+
   </div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+  integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+  crossorigin="anonymous"></script>
 
+<script type="text/javascript" src="../static/js/socket_notificacion.js"></script>
 <script type="text/javascript" src="../static/js/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
 </html>
-
-

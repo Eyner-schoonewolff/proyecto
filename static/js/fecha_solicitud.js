@@ -22,6 +22,8 @@ async function Main() {
 
 
 async function guardarsolicitud() {
+
+
     let request = {
         fecha: $("#fecha").val(),
         hora: $("#hora").val(),
@@ -46,6 +48,9 @@ async function guardarsolicitud() {
         });
 
         if (respuesta.numero == 1) {
+            
+            enviar_notificacion(respuesta.id);
+
             Swal.fire({
                 title: "¡Éxito!",
                 text: "Se ha realizado correctamente la solicitud",
@@ -59,6 +64,7 @@ async function guardarsolicitud() {
                 $("#formFileSm").val('');
                 $("#carta").val('');
             });
+
         } else {
             alert('Error')
         }

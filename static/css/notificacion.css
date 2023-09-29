@@ -48,12 +48,19 @@
 }
 
 .btn-circle {
-    width: 50px; /* Establece el ancho deseado */
-    height: 50px; /* Establece la altura deseada (debe ser igual al ancho para que sea un círculo) */
-    border-radius: 50%; /* Hace que el botón sea circular */
+    width: 40px; /* Establece el ancho deseado */
+    height: 40px; /* Establece la altura deseada (debe ser igual al ancho para que sea un círculo) */
+    border-radius: 60%; /* Hace que el botón sea circular */
     text-align: center; /* Centra el contenido del botón verticalmente */
     padding: 0; /* Elimina el relleno del botón */
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+
+
+  #span_notificacion{
+    height: 50%;
+    width: 40%;
+  }

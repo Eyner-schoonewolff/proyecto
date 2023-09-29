@@ -68,12 +68,12 @@ function notificacion() {
 
         eliminar();
         marcar_leido();
+     
       }
     });
     $("#contenido_notificaciones").empty();
-    
-    
-    
+
+
   })
 }
 
@@ -88,7 +88,7 @@ function marcar_leido() {
 
       $.ajax({
         url: 'http://localhost:3000/leer_notificacion',
-        method: 'POST',
+        method: 'PUT',
         data: JSON.stringify(id_notificacion),
         dataType: 'json',
         contentType: 'application/json',
@@ -105,6 +105,7 @@ function marcar_leido() {
             $(`#${id_notificacion}`).text("Marcar como leída");
             span.style.display = 'block';
           }
+          mostrar_notificacion();
         }
       });
     });
@@ -126,7 +127,7 @@ function eliminar() {
 
       $.ajax({
         url: 'http://localhost:3000/eliminar_notificacion',
-        method: 'POST',
+        method: 'PUT',
         data: JSON.stringify(id_eliminar_notificacion),
         dataType: 'json',
         contentType: 'application/json',
@@ -136,7 +137,6 @@ function eliminar() {
         },
         success: function (estado) {
           var eliminado = estado.eliminar;
-          elementoEliminado = contenedor_notificacion.cloneNode(true); // Clonar el elemento antes de eliminarlo
           const toast = new bootstrap.Toast(toastLiveExample);
 
           if (eliminado) {
@@ -152,3 +152,37 @@ function eliminar() {
   })
 
 }
+
+
+function mostrar_notificacion() {
+  var token = localStorage.getItem('jwt-token');
+
+  $.ajax({
+    url: 'http://localhost:3000/cantidad_notificacion',
+    method: 'GET',
+    dataType: 'json',
+    contentType: 'application/json',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + token
+    },
+    success: function (activo) {
+      let cantidad = activo.numero_notificaciones;
+      let spanElement = document.querySelector('#span_notificacion');
+      let numero_notificaciones = document.querySelector('#numero_notificaciones');
+      numero_notificaciones.innerHTML = cantidad;
+
+      if (cantidad == 0) {
+        spanElement.classList.remove('bg-danger','border-danger','rounded-circle','border');
+        numero_notificaciones.innerHTML = '';
+
+        
+      } else {
+        spanElement.classList.add('bg-danger','border-danger','rounded-circle','border');
+        numero_notificaciones.innerHTML = cantidad;
+      }
+    
+    }
+  })
+}
+
