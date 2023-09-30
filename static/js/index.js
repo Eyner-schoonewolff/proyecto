@@ -41,9 +41,10 @@ btn_login.addEventListener('click', async () => {
 
             window.location.href = data.home;
             localStorage.setItem("jwt-token", data.token);
+            localStorage.setItem("id", data.id);
             localStorage.setItem("exp", data.exp);
             localStorage.setItem("exp_seg", data.exp_token_seg);
-            socket.emit('join', { username: data.nombre, room: data.id });
+            // socket.emit("join", { username: data.nombre, room: data.id });
             return data;
 
         } else {

@@ -1,6 +1,7 @@
 $(document).ready(function () {
   var respuesta = { nombre: "", tipo_usuario: "" };
   var token = localStorage.getItem('jwt-token');
+  var id = localStorage.getItem('id');
 
   Promise.all([
     $.ajax({ url: '../templates/NvarContratista.html', type: 'GET', dataType: 'html' }),
@@ -23,7 +24,6 @@ $(document).ready(function () {
       let data = responses[2]
       let tipo_usuario = data.tipo;
 
-
       if (tipo_usuario === 'Contratista') {
         let nvar = document.getElementById('nvar');
         nvar.innerHTML = nvarContratista;
@@ -41,6 +41,9 @@ $(document).ready(function () {
         h5_nombre_usuario.appendChild(nombre_texto);
 
         // enviar_notificacion(a_tipo_usuario);
+        socket.emit("join", { username: data.nombre, room: id });
+      
+
         notificacion();
         mostrar_notificacion();
         logout();
@@ -48,7 +51,6 @@ $(document).ready(function () {
       } else if (tipo_usuario === 'Cliente') {
         let nvar = document.getElementById('nvar');
         nvar.innerHTML = nvarCliente;
-
         let a_tipo_usuario = document.querySelector('#tipo_usuario');
         let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
@@ -60,6 +62,8 @@ $(document).ready(function () {
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
+
+        socket.emit("join", { username: data.nombre, room: id });
 
         logout();
       }

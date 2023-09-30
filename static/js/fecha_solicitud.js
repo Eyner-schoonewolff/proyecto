@@ -1,4 +1,5 @@
 let token = localStorage.getItem('jwt-token');
+let id = localStorage.getItem('id');
 let respuesta = { nombre: "", tipo: "" };
 
 const fileInput = document.querySelector('#formFileSm');
@@ -48,8 +49,12 @@ async function guardarsolicitud() {
         });
 
         if (respuesta.numero == 1) {
-            
-            enviar_notificacion(respuesta.id);
+
+            enviar_notificacion({
+                room: request.contratista,
+                servicio: request.servicio, nombre_servicio: request.nombre_servicio,
+                hora: request.hora, fecha: request.fecha, problema: request.problema
+            });
 
             Swal.fire({
                 title: "¡Éxito!",
