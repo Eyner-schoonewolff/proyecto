@@ -72,15 +72,8 @@ class Solicitar:
                     VALUES (%s, %s, %s)
                 """
         
-        notificacion_mensaje = {
-            "nombre" : self.nombre_usuario,
-            "tipo_servicio" : self.tipo_nombre_servicio,
-            "fecha_solicitud" : self.fecha,
-            "hora" : str(tiempo.hour) +' :' + str(tiempo.minute),
-            "id":self.id_usuario
-        }
-        print(self.contratista)
-        socketio.emit('mi_evento', notificacion_mensaje,room=int(self.contratista))
+        
+        # socketio.emit('mi_evento', notificacion_mensaje)
 
         # cursor.execute(query_notificacion, notificacion)
         
@@ -258,5 +251,4 @@ class Solicitar:
         db.connection.commit()
 
         return None
-
 

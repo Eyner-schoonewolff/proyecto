@@ -261,7 +261,7 @@ class DatosUsuario:
     
     def datosestadisticaslinea(self, id):
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
-        query = """ SELECT  count(s.id) as contador,
+        query = """SELECT  count(s.id) as contador,
         case when TO_CHAR(s.horario,'MM') = '01' then 'Enero' 
         when TO_CHAR(s.horario,'MM') = '02' then 'Febrero'
         when TO_CHAR(s.horario,'MM') = '03' then 'Marzo' 

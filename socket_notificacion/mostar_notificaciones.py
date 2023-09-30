@@ -13,21 +13,22 @@ def handle_connect():
 def handle_disconnect():
     print('Cliente desconectado')
 
-@socketio.on('join')
+@socketio.on("join")
 def on_join(data):
-    username = data['username']
-    room = data['room']
-    print(username)
-    print(room)
+    user = data["username"]
+    room = data["room"]
+    print(f"client {user} wants to join: {room}")
     join_room(room)
-    emit('message', username + ' ha ingresado a la sala ' + room)
+    emit("join",{'id':room,'nombre':user},room=room)
+
 
 @socketio.on('mi_evento')
 def handle_mi_evento(data):
-    emit('mi_evento', data,room = int(data))
+    room = data["room"]
+    join_room(room)
+    emit('mi_evento',
+         {'servicio':data['servicio'],'nombre_servicio':data['nombre_servicio'],
+          'hora':data['hora'],'fecha':data['fecha'],'problema':data['problema']}
+         ,room=room)
     
-
-
-
  
-

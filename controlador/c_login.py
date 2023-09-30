@@ -3,7 +3,10 @@ from seguridad.datos_usuario import DatosUsuario
 from decorador.decoradores import *
 from flask import redirect, url_for, request, jsonify
 from flask_jwt_extended import create_access_token
+from socket_notificacion.mostar_notificaciones import socketio
 import datetime
+from flask_socketio import SocketIO, emit,join_room,leave_room
+
 
 class Login_controlador():
     def validar_campos_vacios_usuario(self,id,tipo_usuario)->str:
@@ -42,7 +45,6 @@ class Login_controlador():
                 }
 
                 access_token = create_access_token(identity=usuario)
-
                 home = self.validar_campos_vacios_usuario(login.usuario['id'],login.usuario["tipo"])
 
                 return jsonify({
