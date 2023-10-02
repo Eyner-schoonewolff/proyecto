@@ -72,8 +72,6 @@ class Solicitar:
                     VALUES (%s, %s, %s)
                 """
         
-        
-        # socketio.emit('mi_evento', notificacion_mensaje)
 
         # cursor.execute(query_notificacion, notificacion)
         

@@ -1,6 +1,5 @@
 from flask_socketio import SocketIO, emit,join_room,leave_room
 from flask import session,request
-from flask_jwt_extended import get_jwt_identity, jwt_required
 from decorador.decoradores import  *
 
 socketio = SocketIO(cors_allowed_origins="*")
@@ -19,8 +18,14 @@ def on_join(data):
     room = data["room"]
     print(f"client {user} wants to join: {room}")
     join_room(room)
-    emit("join",{'id':room,'nombre':user},room=room)
+    emit("join",{'id':room,'nombre':user},room = room)
 
+@socketio.on('leave')
+def leave_sesion(id):
+    room = id
+    print(f"Usuario con el id: {room} finalizo la sala")
+    leave_room(room)
+    emit("leave", data = id , room = id)
 
 @socketio.on('mi_evento')
 def handle_mi_evento(data):
@@ -29,6 +34,6 @@ def handle_mi_evento(data):
     emit('mi_evento',
          {'servicio':data['servicio'],'nombre_servicio':data['nombre_servicio'],
           'hora':data['hora'],'fecha':data['fecha'],'problema':data['problema']}
-         ,room=room)
+         ,room = room)
     
  

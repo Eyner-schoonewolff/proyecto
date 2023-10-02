@@ -44,7 +44,7 @@ class Login_controlador():
                     'exp_token_seg':str(datetime.timedelta(minutes=30))
                 }
 
-                access_token = create_access_token(identity=usuario)
+                access_token = create_access_token(identity = usuario)
                 home = self.validar_campos_vacios_usuario(login.usuario['id'],login.usuario["tipo"])
 
                 return jsonify({
