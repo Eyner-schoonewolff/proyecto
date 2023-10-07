@@ -110,7 +110,6 @@ $(document).ready(function () {
                 const objetos = JSON.parse(consultas);
                 paginacion_datatable();
                 objetos.forEach((consulta) => {
-                    let html = "";
                     let modal = "";
                     agregarFilaConsulta(consulta);
            
@@ -183,6 +182,7 @@ $(document).ready(function () {
                 });
                 table.draw();
 
+                mostrar_notificacion();
                 notificacion();
                 logout();
             }

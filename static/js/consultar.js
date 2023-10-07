@@ -28,7 +28,7 @@ $(document).ready(function () {
 
             if (trabajos.tipo == "Contratista") {
                 nvar.innerHTML = nvarContratista;
-                // notificacion();
+
                 let a_tipo_usuario = document.querySelector('#tipo_usuario');
                 let h5_nombre_usuario = document.querySelector('#nombre_usuario');
 
@@ -206,7 +206,7 @@ $(document).ready(function () {
                     });
                 });
 
-
+                mostrar_notificacion();
                 notificacion();
                 logout();
             }

@@ -43,6 +43,7 @@ $(document).ready(function () {
                 document.getElementById("emailContacto").value = contacto.usuario.correo;
                 document.getElementById("telefonoContacto").value = contacto.usuario.celular;
                 
+                mostrar_notificacion();
                 notificacion();
                 logout();
             }

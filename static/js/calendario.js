@@ -2,9 +2,9 @@ let respuesta = ''
 var token = localStorage.getItem('jwt-token');
 
 
-document.addEventListener('DOMContentLoaded', function () {
+function calendario_eventos() {
     var calendarEl = document.getElementById('calendar');
-    var evento = eventos();
+    let evento = eventos();
     let arry = new Array();
 
     for (let index = 0; index < evento.length; index++) {
@@ -28,7 +28,8 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     calendar.render();
-});
+
+}
 
 function eventos() {
     var token = localStorage.getItem('jwt-token');
@@ -81,7 +82,9 @@ Promise.all([
         // Agrega los nodos de texto a los elementos del DOM
         a_tipo_usuario.appendChild(tipo_usuario_texto);
         h5_nombre_usuario.appendChild(nombre_texto);
-        
+
+        mostrar_notificacion();
+        calendario_eventos();
         notificacion();
         logout();
     });

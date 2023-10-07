@@ -70,6 +70,7 @@ $(document).ready(function () {
                     </div>
                   `;
                 }
+                mostrar_notificacion();
                 notificacion();
                 logout();
 

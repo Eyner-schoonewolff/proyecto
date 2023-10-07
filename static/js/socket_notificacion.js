@@ -38,11 +38,15 @@ socket.on('connect', function () {
             myToast.show();
 
         });
-
         socket.on('numero_notificacion', function (numero) {
             console.log('numero de notificaciones:', numero.cantidad);
-            const cantidad = document.querySelector('#numero_notificaciones')
-            console.log(cantidad);
+            const cantidad = document.querySelector('#numero_notificaciones');
+            let spanElement = document.querySelector('#span_notificacion');
+
+            if (numero.cantidad == 1) {
+                spanElement.classList.add('bg-danger', 'border-danger', 'rounded-circle', 'border');
+            }
+            
             cantidad.innerHTML = numero.cantidad;
         });
 

@@ -244,7 +244,7 @@ $(document).ready(function () {
 
                 actuzalizar();
                 mostrar_ocupaciones();
-
+                mostrar_notificacion();
                 notificacion();
                 logout();
 
