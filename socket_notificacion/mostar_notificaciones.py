@@ -1,7 +1,7 @@
 from flask_socketio import SocketIO, emit,join_room,leave_room
-from flask import session,request
 from decorador.decoradores import  *
 from seguridad.notificacion import Noticacion
+
 socketio = SocketIO(cors_allowed_origins="*")
 
 @socketio.on('connect')
@@ -44,6 +44,6 @@ def conteo_notificacion(info):
     join_room(room)
     notificacion = Noticacion()
     numero = notificacion.cantidad_notificaciones(room)[0]
-    emit('numero_notificacion', {'cantidad':numero}, room=room)
+    emit('numero_notificacion', {'cantidad':numero}, room = room)
     
  

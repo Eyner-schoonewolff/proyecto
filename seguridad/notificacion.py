@@ -90,6 +90,3 @@ class Noticacion():
         return cursor.fetchone()
         
  
-
-    def enviar_notificacion(self,id_usuario):
-        ...
