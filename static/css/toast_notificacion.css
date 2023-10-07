@@ -1,12 +1,5 @@
 :root {
 	--exito: #3ab65c;
-	--error: #bf333b;
-	--info: #1898c0;
-	--warning: #bc8c12;
-	--exito-hover: #2d8a46;
-	--error-hover: #962a31;
-	--info-hover: #147fa0;
-	--warning-hover: #9b7512;
 }
 
 * {
@@ -15,80 +8,17 @@
 	box-sizing: border-box;
 }
 
-body {
-	background: #1c1b20;
-	color: #fff;
-	font-family: 'Inter', sans-serif;
-}
-
-.contenedor {
-	width: 90%;
-	max-width: 1000px;
-	margin: 80px auto;
-}
-
-.hero .titulo {
-	font-weight: 800;
-	font-size: 100px;
-	margin-bottom: 40px;
-}
-
-.hero .contenedor-botones {
+/* Toast */
+.contenedor-toast {
+	position: fixed;
+	right: 40px;
+	bottom: 40px;
+	width: 100%;
+	max-width: 400px;
 	display: flex;
+	flex-direction: column-reverse;
 	gap: 20px;
 }
-
-.btn {
-	padding: 10px 20px;
-	font-size: 20px;
-	background: #000;
-	border: none;
-	cursor: pointer;
-	color: #fff;
-	border-radius: 5px;
-	transition: 0.3s ease all;
-}
-
-.btn.exito {
-	background: var(--exito);
-}
-.btn.error {
-	background: var(--error);
-}
-.btn.info {
-	background: var(--info);
-}
-.btn.warning {
-	background: var(--warning);
-}
-
-/* Hover */
-.btn.exito:hover {
-	background: var(--exito-hover);
-}
-.btn.error:hover {
-	background: var(--error-hover);
-}
-.btn.info:hover {
-	background: var(--info-hover);
-}
-.btn.warning:hover {
-	background: var(--warning-hover);
-}
-
-
-.contenedor-toast {
-    position: fixed;
-    left: 40px;
-    top: 40px;
-    width: 100%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    z-index: 9999; /* Ajusta el valor de z-index según sea necesario */
-}
-
 
 .toast {
 	background: #ccc;
@@ -105,15 +35,7 @@ body {
 .toast.exito {
 	background: var(--exito);
 }
-.toast.error {
-	background: var(--error);
-}
-.toast.info {
-	background: var(--info);
-}
-.toast.warning {
-	background: var(--warning);
-}
+
 
 .toast .contenido {
 	display: grid;

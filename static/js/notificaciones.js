@@ -125,6 +125,8 @@ function eliminar() {
       let id_eliminar_notificacion = event.target.id;
       let contenedor_notificacion = document.querySelector(`#contenedor_notificacion_${id_eliminar_notificacion}`);
 
+
+
       $.ajax({
         url: 'http://localhost:3000/eliminar_notificacion',
         method: 'PUT',
@@ -142,6 +144,7 @@ function eliminar() {
           if (eliminado) {
             contenedor_notificacion.remove();
             toast.show();
+            mostrar_notificacion()
           }
 
         }
@@ -171,7 +174,6 @@ function mostrar_notificacion() {
       let spanElement = document.querySelector('#span_notificacion');
       let numero_notificaciones = document.querySelector('#numero_notificaciones');
       numero_notificaciones.innerHTML = cantidad;
-
       if (cantidad == 0) {
         spanElement.classList.remove('bg-danger','border-danger','rounded-circle','border');
         numero_notificaciones.innerHTML = '';

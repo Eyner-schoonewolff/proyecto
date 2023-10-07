@@ -26,6 +26,7 @@ async function guardarsolicitud() {
 
 
     let request = {
+        nombre_usuario: $("#nombre_usuario").text(),
         fecha: $("#fecha").val(),
         hora: $("#hora").val(),
         servicio: $("#opciones").val(),
@@ -52,9 +53,12 @@ async function guardarsolicitud() {
 
             enviar_notificacion({
                 room: request.contratista,
-                servicio: request.servicio, nombre_servicio: request.nombre_servicio,
-                hora: request.hora, fecha: request.fecha, problema: request.problema
+                servicio_usuario: request.nombre_servicio,
+                hora: request.hora, fecha: request.fecha, problema: request.problema,
+                nombre: request.nombre_usuario
             });
+
+            cantidad_notificaiones(request.contratista);
 
             Swal.fire({
                 title: "¡Éxito!",

@@ -42,7 +42,6 @@ $(document).ready(function () {
 
         // enviar_notificacion(a_tipo_usuario);
         socket.emit("join", { username: data.nombre, room: id });
-      
 
         notificacion();
         mostrar_notificacion();

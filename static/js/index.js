@@ -20,7 +20,6 @@ contrasenia.addEventListener("keydown", function (event) {
 
 
 btn_login.addEventListener('click', async () => {
-
     const datos = {
         email: email.value,
         contrasenia: contrasenia.value
