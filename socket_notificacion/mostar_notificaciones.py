@@ -1,7 +1,7 @@
 from flask_socketio import SocketIO, emit,join_room,leave_room
 from flask import session,request
 from decorador.decoradores import  *
-
+from seguridad.notificacion import Noticacion
 socketio = SocketIO(cors_allowed_origins="*")
 
 @socketio.on('connect')
@@ -32,8 +32,18 @@ def handle_mi_evento(data):
     room = data["room"]
     join_room(room)
     emit('mi_evento',
-         {'servicio':data['servicio'],'nombre_servicio':data['nombre_servicio'],
-          'hora':data['hora'],'fecha':data['fecha'],'problema':data['problema']}
+         {'titulo':f'Nueva solicitud del usuario {data["nombre"]}',
+          'horario': f'{data["fecha"]} - {data["hora"]}',
+          'contenido': f"El usuario necesita de un {data['servicio_usuario']} para {data['problema']}",
+            }
          ,room = room)
+    
+@socketio.on('numero_notificacion')
+def conteo_notificacion(info):
+    room = info
+    join_room(room)
+    notificacion = Noticacion()
+    numero = notificacion.cantidad_notificaciones(room)[0]
+    emit('numero_notificacion', {'cantidad':numero}, room=room)
     
  

@@ -49,14 +49,6 @@ class Notificacion_controlador():
             'numero_notificaciones': cantidad
         })
         
-    
-    def enviar_notificacion_mensaje(self):
-        usuario: dict = get_jwt_identity()
-        id_usuario = usuario.get('id')
-
-        notificacion = Noticacion()
-
-        obtener = notificacion.enviar_notificacion()
 
 
     

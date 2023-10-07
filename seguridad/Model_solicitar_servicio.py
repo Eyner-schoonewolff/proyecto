@@ -71,11 +71,10 @@ class Solicitar:
                     (id_usuario, titulo, contenido)
                     VALUES (%s, %s, %s)
                 """
-        
 
-        # cursor.execute(query_notificacion, notificacion)
+        cursor.execute(query_notificacion, notificacion)
         
-        # db.connection.commit()
+        db.connection.commit()
 
         return {'respuesta':True,'id':self.contratista}
 

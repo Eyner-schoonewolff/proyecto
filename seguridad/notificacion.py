@@ -52,7 +52,7 @@ class Noticacion():
     def eliminar_notificacion(self,id_notificacion)->bool:
         cursor = db.connection.cursor()
         query = 'UPDATE notificacion SET estado = TRUE WHERE id = %s'
-        cursor.execute(query,id_notificacion)
+        cursor.execute(query,(id_notificacion,))
         db.connection.commit()
         cursor.close()
         return True
@@ -62,7 +62,7 @@ class Noticacion():
         cursor = db.connection.cursor()
 
         query='SELECT n.leido FROM notificacion n WHERE id = %s'
-        cursor.execute(query, id_notificacion)
+        cursor.execute(query, (id_notificacion,))
         notificacion_activa = cursor.fetchone()[0]
 
         if notificacion_activa:
@@ -72,7 +72,7 @@ class Noticacion():
             query = 'UPDATE notificacion SET leido = TRUE WHERE id = %s'
             notificacion = True
 
-        cursor.execute(query, id_notificacion)
+        cursor.execute(query, (id_notificacion,))
         db.connection.commit()
         cursor.close()
         return notificacion
@@ -83,7 +83,7 @@ class Noticacion():
         query = """
             SELECT count(n.id) as notificaciones
                 FROM notificacion n
-                 WHERE n.id_usuario = %s and n.leido = false
+                 WHERE n.id_usuario = %s and n.leido = false and n.estado = false
         """
 
         cursor.execute(query,(id_usuario,))
