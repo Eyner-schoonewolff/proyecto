@@ -90,9 +90,9 @@ class Usuario:
         usuario_nuevo = (self.email,self.encriptar_contraseña(),
                          self.rol,id_datos_personales)
         
-        cursor.execute(query, (usuario_nuevo))
+        # cursor.execute(query, (usuario_nuevo))
 
-        db.connection.commit()
+        # db.connection.commit()
 
         return None
     
@@ -108,6 +108,13 @@ class Usuario:
 class CorreoExistenteException(Exception):
     """
     Excepción personalizada para indicar que el correo electrónico ya existe.
+    """
+    pass
+
+class CorreoNoValido(Exception):
+    """
+    Excepción personalizada para indicar que el correo que se asigno no es correcto ya que no tiene la determinacion
+    @example.com .
     """
     pass
 
