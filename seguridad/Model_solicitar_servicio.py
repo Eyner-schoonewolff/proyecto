@@ -78,7 +78,7 @@ class Solicitar:
 
         return {'respuesta':True,'id':self.contratista}
 
-    # eliminar solicitud
+    # cancelar solicitud
 
     def cancelar(self, id) -> bool:
         cursor = db.connection.cursor()

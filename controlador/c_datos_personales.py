@@ -12,9 +12,8 @@ class Datos_personales_controlador():
 
     def c_actualizar_ocupaciones(self):
 
-        identificadores = get_jwt_identity()
+        identificadores:dict = get_jwt_identity()
         id = identificadores.get('id')
-        nombre = identificadores.get('username')
         tipo = identificadores.get('tipo_usuario')
         email = identificadores.get('email')
 
@@ -22,9 +21,8 @@ class Datos_personales_controlador():
 
         ocupaciones = datos_usuario.ocupaciones()
 
-        session['login'] = True
-
         usuario = datos_usuario.obtener()
+
         if tipo == 'Contratista':
             return jsonify({'datos':
                             [
@@ -127,6 +125,7 @@ class Datos_personales_controlador():
         identificadores = get_jwt_identity()
         id = identificadores.get('id')
         json_ = request.get_json()
+
         ocupaciones = json_['datos']
         datos_usuario = DatosUsuario()
         datos = datos_usuario.ocupaciones_contratista(id)

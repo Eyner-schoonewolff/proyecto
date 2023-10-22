@@ -4,7 +4,7 @@ import bcrypt
 from flask import request
 from psycopg2 import extras
 
-class Usuario:
+class Usuario: # usuario Model
     def __init__(self, email: str, contrasenia: str, rol: int, nombre: str, tipo_documento: int, numero_documento: int,descripcion:str) -> None:
         self.email = email
         self.contrasenia = contrasenia
@@ -12,7 +12,7 @@ class Usuario:
         self.nombre = nombre
         self.tipo_documento = tipo_documento
         self.numero_documento = numero_documento
-        self.descripcion=descripcion
+        self.descripcion = descripcion
 
     def datos_unico_documento(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
@@ -27,7 +27,6 @@ class Usuario:
     
     def datos_unico_correo(self) -> Dict:
         cursor = db.connection.cursor(cursor_factory=extras.RealDictCursor)
-        #revisar
         query = """SELECT u.id
             FROM usuarios u
             INNER JOIN usuario_datos_personales dp 
@@ -45,7 +44,7 @@ class Usuario:
         dato_unico = self.datos_unico_correo()
         if dato_unico is None:
             return False
-        if dato_unico:
+        elif dato_unico:
              return True
         else:
             return True

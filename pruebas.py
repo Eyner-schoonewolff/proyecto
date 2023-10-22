@@ -8,3 +8,8 @@
     #             WHERE s.id_usuario_cliente=2 and e.nombre='Finalizada' and c.id_numero_estrellas is null c. and id_usuario = 2;
 
 
+usuario = {
+    "edad": 3,
+    "nombre": "ene"
+}
+
