@@ -1,4 +1,5 @@
 import psycopg2
+from decouple import config
 
 class DataBaseConnector:
     def __init__(self, host, user, password, database,port):
@@ -29,11 +30,11 @@ class DataBaseConnector:
 
 
 try:
-    db = DataBaseConnector(user = "postgres",
-                                  password = "1001781662proyect",
-                                  host = "db.nbdocmgfggiqmjxxwred.supabase.co",
-                                  port = "5432",
-                                  database = "postgres",)
+    db = DataBaseConnector(user = config('USER_DB'),
+                                  password = config('PASSWORD'),
+                                  host = config('HOST'),
+                                  port = config('PORT'),
+                                  database = config('DATABASE'),)
     
     db.connect()
 

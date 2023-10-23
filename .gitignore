@@ -1,4 +1,7 @@
 env
+.env
 ejemplo.py
 ejemplo.html
+pruebas.py
+setup.py
 __pycache__

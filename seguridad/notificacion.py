@@ -52,9 +52,9 @@ class Noticacion():
     def eliminar_notificacion(self,id_notificacion)->bool:
         cursor = db.connection.cursor()
         query = 'UPDATE notificacion SET estado = TRUE WHERE id = %s'
-        cursor.execute(query,(id_notificacion,))
-        db.connection.commit()
-        cursor.close()
+        # cursor.execute(query,(id_notificacion,))
+        # db.connection.commit()
+        # cursor.close()
         return True
 
     
